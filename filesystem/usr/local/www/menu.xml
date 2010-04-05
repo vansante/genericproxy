@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<menu>
+	<!-- Example. Needed test data. -->
+	<category order="0" name="System">
+		<item order="0" module="Httpd" page="status">Httpd</item>
+	</category>
+	<category order="1" name="Firewall">
+		<item order="0" module="Firewall" page="rules" name="Rules">
+			<tabs>
+				<tab name="Lan" order="0" var="if" value="ext" />
+				<tab name="Wan" order="1" var="if" value="ext" />
+				<tab name="Ext" order="2" var="if" value="ext" />
+			</tabs>
+		</item>
+		<item order="1" module="Nat" page="" name="NAT">
+			<tabs>
+				<tab name="Inbound" order="0" var="page" value="inbound" />
+				<tab name="Outbound" order="1" var="page" value="outbound" />
+				<tab name="Server" order="2" var="page" value="server" />
+				<tab name="1on1" order="3" var="page" value="1on1" />
+			</tabs>
+		</item>
+	</category>
+</menu>

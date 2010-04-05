@@ -1,0 +1,96 @@
+
+---Requirements---
+To run GenericProxy on FreeBSD the following things need to be present:
+
+--ports--
+-PluginFramework:
+	lang/php5
+	
+	lang/php5-extensions 
+	note: does not play nice with nanobsd so install the following ports instead:
+		devel/php5-pcre
+		devel/php5-spl
+		textproc/php5-xml
+		textproc/php5-xmlreader
+		net/php5-xmlrpc
+		www/php5-session
+			
+-Httpd:
+	www/lighttpd
+-Dhcp
+	net/isc-dhcp30-server
+-Ipsec
+	security/ipsec-tools
+-Proxy
+	www/tinyproxy
+-DNS masq
+	dns/dnsmasq
+	
+	
+Dependencies:
+NanoBSD does not auto-resolve dependencies (or so it seems) 
+
+www/spawn-fcgi
+converters/libiconv
+devel/gettext
+devel/pcre
+dns/libidn
+textproc/libxml2
+devel/pkg_config
+
+--Kernel settings--
+There are some kernel settings needed for some GenericProxy plugins. If these settings are not present,
+ disable the related plugins.
+ 
+-Dhcp
+	device    bpf          #Part of the GENERIC kernel
+-Ipsec
+	options   IPSEC        #IP security
+	options   IPSEC_NAT_T
+	device    crypto	
+- Traffic shaping / queuing
+	options ALTQ
+	options ALTQ_CBQ
+	options ALTQ_PRIQ
+	options ALTQ_RED
+	options ALTQ_RIO
+
+---hosts file ---
+Currently the DNS forwarder writes out a hosts file, should any other plugin wish to alter or append to
+this file it would warrant a separate plugin to keep records from conflicting or overwriting one another.
+
+
+---Scripts and commands---
+
+--genericproxy--
+locaiton: /usr/local/lib/genericproxy
+syntax: '/usr/local/lib/genericproxy/genericproxy [<module name> <function>]'.
+Log settings: logger.cli.properties
+
+With the script it is possible to directly call a plugin's function, without starting all plugins, 
+like rc does. This way plugins and functions can be tested without booting the system or calling /etc/rc.
+
+Args: 
+-<module name> must be a plugin that is enabled and exist.
+-<function> can be of 'config', 'start', 'stop', 'boot', or name of a class function the plugin has.
+-When no arguments are given, a list will be shown with all active plugins and their statuses.
+
+Examples:
+'genericproxy' Shows a list of started plugins.
+'genericproxy Firewall stop' stops the plugin.
+'genericproxy Firewall isService' directly calls a function like so: getPlugin(Httpd)->isService()
+'genericproxy Firewall addRule' fails as it is not possible to give args to the function
+
+--AjaxServer--
+Location: /usr/local/www/AjaxServer.php
+Log settings: logger.browser.properties
+
+Tell something about /usr/local/www/AjaxServer.php here.  
+
+--Boot--
+Location: /etc/rc /etc/rc.php
+Log settings: logger.boot.properties
+
+--Shutdown--
+Location: /etc/rc /etc/rc.shutdown.php
+Log settings: logger.shutdown.properties
