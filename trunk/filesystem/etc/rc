@@ -1,0 +1,54 @@
+#!/bin/sh
+
+#It is not possible to run rc with #!/usr/local/bin/php.
+#To bypass this limitation, a second script is made that runs under php.
+#It seems that /etc/rc always runs under /bin/sh or /bin/csh.
+
+#set needed paths
+HOME=/
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
+#LD_LIBRARY_PATH= #Don't think it's needed so LD_LIBRARY_PATH is not set.
+export HOME PATH
+
+echo "Starting rc script."
+
+echo "Executing rc startup commands"
+#mounting filesystems
+/sbin/fsck -p
+
+#Remove this later, mount -a does everything we do not want
+#/sbin/mount -a
+echo "Starting rc.initdiskless"
+./etc/rc.initdiskless
+
+#generating /tmp ram disk
+mdconfig -a -t swap -s 256M -u 10
+newfs -U /dev/md10
+mount /dev/md10 /tmp
+
+mount /cfg
+echo "copying /cfg to /etc"
+cp -r /cfg/* /etc
+umount /cfg
+
+#/sbin/devd
+#config lo0
+/sbin/ifconfig lo0 127.0.0.1
+/usr/sbin/syslogd -s
+/usr/sbin/usbd
+
+#create /var/tmp directory if it does not exist. 
+if [ ! -d /var/tmp ]; then
+   mkdir -m 1777 /var/tmp
+fi
+
+#give needed files execute rights.
+#/bin/chmod u+x /etc/rc.php 
+#/bin/chmod u+x /etc/rc.shutdown
+#/bin/chmod u+x /etc/rc.shutdown.php
+
+#Run php rc script to startup the framework.
+echo "Starting rc.php script."
+./etc/rc.php
+
+exit 0

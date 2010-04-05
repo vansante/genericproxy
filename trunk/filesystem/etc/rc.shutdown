@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#It is not possible to run rc with #!/usr/local/bin/php.
+#To bypass this limitation, a second script is made that runs under php.
+#It seems that /etc/rc always runs under /bin/sh or /bin/csh.
+
+echo "Starting rc shutdown script."
+
+./etc/rc.shutdown.php

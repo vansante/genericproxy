@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log4php:configuration xmlns:log4php="http://logging.apache.org/log4php/"
+	threshold="all" debug="false">
+	<appender name="default" class="LoggerAppenderFile" filename="/var/log/www.boot.log">
+		<layout class="LoggerLayoutSimple" />
+	</appender>
+	<appender name="default" class="LoggerAppenderEcho"> -->
+		<layout class="LoggerLayoutSimple" />
+	</appender>
+	<root>
+		<level value="DEBUG" />
+		<appender_ref ref="default" />
+	</root>
+</log4php:configuration>
