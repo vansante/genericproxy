@@ -279,7 +279,7 @@ EOD;
 		//Write away the HTTPD config.
 		$fd = fopen ( self::CONFIG_PATH, "w" );
 		if (! $fd) {
-			Logger::getRootLogger ()->error ( "Error: Could not write HTTPD conifg to " . self::CONFIG_PATH );
+			Logger::getRootLogger ()->error ( "Error: Could not write HTTPD config to " . self::CONFIG_PATH );
 		} else {
 			fwrite ( $fd, $lighty_config );
 			fclose ( $fd );

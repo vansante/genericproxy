@@ -169,7 +169,7 @@ class Update implements Plugin{
 			else{
 				//	No update was found
 				if($returnXML){
-					echo '<reply action="ok"><message>There are no firmware updates available</message></reply>';
+					echo '<reply action="ok" />';
 				}
 				return false;
 			}
