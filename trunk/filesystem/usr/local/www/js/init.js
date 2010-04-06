@@ -138,6 +138,7 @@ gp.checkForUpdates = function() {
             url: 'testxml/update.xml',
             module: 'Update',
             page: 'check',
+            error_element: $('#system_upgrade_auto_form_error'),
             successFn: function(json) {
                 if (json.release) {
                     gp.data.new_release = json.release;

@@ -61,4 +61,20 @@
             $('#system_upgrade_auto_warning, #system_upgrade_auto_form').slideDown(500);
         }
     };
+
+    $(function() {
+        $('#system_upgrade_auto_form').submit(function(){
+            gp.confirm("Are you sure?", "Are you sure you want to upgrade the devices firmware?", function() {
+                gp.doFormAction({
+                    url: 'testxml/reply.xml',
+                    form_id: 'system_upgrade_auto_form',
+                    error_element: $('#system_upgrade_auto_form_error'),
+                    successFn: function(json) {
+                        gp.rebootNotice();
+                    }
+                });
+            });
+            return false;
+        });
+    });
 </script>
