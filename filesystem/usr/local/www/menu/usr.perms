@@ -1,0 +1,12 @@
+status
+system
+assign
+lan
+wan
+nat
+firewall
+dhcpd
+dyndns
+ntp
+sharing
+diagnostics

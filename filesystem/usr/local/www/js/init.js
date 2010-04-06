@@ -57,19 +57,11 @@ $(function() {
             contentpart.parent().show();
 
             $('#menu').accordion('activate' , '#'+urlStr[0]);
-        } else {
-            // Show default homepage: System status
-            $('#cp_status_system').show().parent().show();
-            $('#status_system').addClass('active');
-            $('#menu').accordion('activate' , '#status');
-            gp.status.system.clickHandler();
+        } else if (gp.status) {
+            gp.showHomepage();
         }
-    } else {
-        // Show default homepage: System status
-        $('#cp_status_system').show().parent().show();
-        $('#status_system').addClass('active');
-        $('#menu').accordion('activate' , '#status');
-        gp.status.system.clickHandler();
+    } else if (gp.status) {
+        gp.showHomepage();
     }
 
     // Build help icons
@@ -140,6 +132,16 @@ $(function() {
  *  - errorFn:  function that gets called when the request fails (optional)
  *  - url: Can be overridden for testing purposes, default 'ajaxserver.php'
  */
+gp.showHomepage = function() {
+    // Show default homepage: System status
+    var cp = $('#cp_status_system');
+    cp.show();
+    cp.parent().show();
+    $('#status_system').addClass('active');
+    $('#menu').accordion('activate' , '#status');
+    gp.status.system.clickHandler();
+}
+
 gp.doAction = function(opts) {
     if (opts.error_element) {
         if ($.isArray(opts.error_element)) {
