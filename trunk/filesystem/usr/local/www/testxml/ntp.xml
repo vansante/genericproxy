@@ -1,0 +1,14 @@
+<reply action="ok">
+	<ntp>
+		<timezones>
+			<zone id="GMT-1"/>
+			<zone id="GMT+0"/>
+			<zone id="GMT+1"/>
+			<zone id="GMT+2"/>
+			<zone id="GMT+3"/>
+		</timezones>
+		<current>GMT+1</current>
+		<update_interval>86400</update_interval>
+		<server>time.time.com</server>
+	</ntp>
+</reply>

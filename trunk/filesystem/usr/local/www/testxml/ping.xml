@@ -1,0 +1,23 @@
+﻿<reply action="ok">
+	<ping>
+		<result><![CDATA[PING kernel.org (204.152.191.37) 56(84) bytes of data.
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=1 ttl=53 time=177 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=2 ttl=53 time=173 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=3 ttl=53 time=173 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=4 ttl=53 time=172 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=5 ttl=53 time=177 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=6 ttl=53 time=177 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=7 ttl=53 time=172 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=8 ttl=53 time=172 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=10 ttl=53 time=176 ms
+64 bytes from pub2.kernel.org (204.152.191.37): icmp_seq=11 ttl=53 time=173 ms
+--- kernel.org ping statistics ---
+11 packets transmitted, 10 received, 9% packet loss, time 10036ms
+rtt min/avg/max/mdev = 172.700/174.719/177.581/2.214 ms
+]]></result>
+	</ping>
+</reply>
+<!--
+
+<reply action="error"><message type="error">Errormessage</message></reply>
+-->

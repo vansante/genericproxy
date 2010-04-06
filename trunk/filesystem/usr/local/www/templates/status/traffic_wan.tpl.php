@@ -1,0 +1,1 @@
+<h2>Traffic on WAN interface</h2>

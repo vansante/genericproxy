@@ -1,0 +1,13 @@
+<reply action="ok">
+	<services>
+		<service status="started">
+			<name>Service name 1</name>
+		</service>
+		<service status="error">
+			<name>Service errorname 2</name>
+		</service>
+		<service status="stopped">
+			<name>Service stoppedname 3</name>
+		</service>
+	</services>
+</reply>

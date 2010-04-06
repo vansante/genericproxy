@@ -1,0 +1,8 @@
+<reply action="ok">
+	<httpd>
+		<protocol>http</protocol> <!-- valid options: http or https -->
+		<port>80</port> <!-- Can be left blank for default. 80 for http, 443 for https -->
+		<certificate></certificate>
+		<private-key></private-key>
+	</httpd>
+</reply>

@@ -1,0 +1,19 @@
+<reply action="ok">
+	<traceroute>
+		<result><![CDATA[
+traceroute to kernel.org (204.152.191.37), 30 hops max, 40 byte packets
+ 1  53563801.cable.casema.nl (83.86.56.1)  8.631 ms  12.554 ms  12.407 ms
+ 2  gv-rc0011-cr101-ae12-216.core.as9143.net (213.51.161.193)  12.226 ms  12.017 ms  11.833 ms
+ 3  asd-lc0006-cr101-ae8-0.core.as9143.net (213.51.158.12)  12.506 ms  12.109 ms  12.075 ms
+ 4  20gigabitethernet1-3.core1.ams1.he.net (195.69.145.150)  12.374 ms  12.221 ms  12.035 ms
+ 5  10gigabitethernet4-1.core1.nyc4.he.net (216.66.24.153)  107.727 ms  107.613 ms  107.438 ms
+ 6  10gigabitethernet3-1.core1.sjc2.he.net (72.52.92.25)  175.406 ms 10gigabitethernet1-2.core1.chi1.he.net (72.52.92.102)  115.634 ms  114.154 ms
+ 7  10gigabitethernet3-2.core1.pao1.he.net (72.52.92.69)  177.748 ms  175.827 ms  175.713 ms
+ 8  10gigabitethernet3-2.core1.pao1.he.net (72.52.92.69)  177.198 ms  175.284 ms  176.584 ms
+ 9  he.pao1.isc.org (72.52.94.70)  181.929 ms  181.528 ms pub2.kernel.org (204.152.191.37)  177.889 ms]]></result>
+	</traceroute>
+</reply>
+<!--
+
+<reply action="error"><message type="error">Errormessage</message></reply>
+-->

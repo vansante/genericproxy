@@ -1,0 +1,59 @@
+<reply action="ok">
+	<ipsec enable="true">
+		<tunnels>
+			<tunnel enable="false" id="1">
+				<description></description>
+				<local>
+					<public_ip>195.169.160.2</public_ip>
+					<type>lan_subnet | network | ipaddr</type>
+					<private_ip></private_ip>
+					<private_subnet></private_subnet>
+				</local>
+				<remote>
+					<public_ip>124.15.16.25</public_ip>
+					<type>ipaddr | network</type>
+					<private_ip></private_ip>
+					<private_subnet></private_subnet>
+				</remote>
+				<keepalive_ip>5.5.5.5</keepalive_ip>
+				<phase1>
+					<mode></mode>
+					<identifier type="my_ip, ipaddr, domainname, fqdn, dyndns">192.168.2.1</identifier>
+					<encryption_algorithm>des|3des|blowfish|cast128|aes|aes256</encryption_algorithm>
+					<hash_algorithm>md5|sha1|sha256|sha384|sha512</hash_algorithm>
+					<dhgroup>2</dhgroup>
+					<lifetime></lifetime>
+					<authentication-method type="rsasig">56</authentication-method>
+				</phase1>
+				<phase2>
+					<protocol></protocol>
+					<pfsgroup></pfsgroup>
+					<lifetime></lifetime>
+					<encryption_algorithm>des|3des|blowfish|cast128|aes|aes256</encryption_algorithm>
+					<hash_algorithm>md5|sha1|sha256|sha384|sha512</hash_algorithm>
+					<authentication-method type="psk|rsasig">identifier</authentication-method>
+				</phase2>
+			</tunnel>
+		</tunnels>
+		<keys>
+            <key id="4" description="blablabla">
+                <content>key 1</content>
+            </key>
+			<key id="2" description="Description!">
+                <content>key 2</content>
+            </key>
+        </keys>
+		<certificates>
+			<certificate id="1" description="descr1">
+				<private>/bla/bla/myrsakey.priv</private>
+				<!-- <key></key> -->
+				<public>/bla/bla/yourrsakey.pub</public>
+			</certificate>
+			<certificate id="56" description="descr2">
+				<private>/bla/bla/myrsakey.priv</private>
+				<!-- <key></key> -->
+				<public>/bla/bla/yourrsakey.pub</public>
+			</certificate>
+		</certificates>
+	</ipsec>
+</reply>

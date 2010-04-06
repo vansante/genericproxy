@@ -1,0 +1,32 @@
+<reply action="ok">
+	<dhcpd enable="true">
+		<chroot_path>/var/dhcpd</chroot_path>
+		<netmask>255.255.255.0</netmask>
+		<range>
+			<from>192.168.2.100</from>
+			<to>192.168.2.199</to>
+		</range>
+		<defaultleasetime>1600</defaultleasetime>
+		<maxleasetime>1600</maxleasetime>
+		
+		<deny_unknown>true</deny_unknown>
+		
+		<winsservers>
+			<winsserver ip="192.168.2.1"/>
+			<winsserver ip="192.168.2.2"/>
+		</winsservers>
+		
+		
+		<!-- <next-server filename=""></next-server>-->
+
+		<staticmaps>
+			<map id="1" mac="xx:xx:xx:xx:xx:xx" ipaddr="xxx.xxx.xxx.xxx" hostname="host">
+				<description>desc</description>
+			</map>
+			<map id="2" mac="xx:xx:xx:xx:xx:xx" ipaddr="xxx.xxx.xxx.xxx" hostname="host">
+				<description>desc traalalla</description>
+			</map>
+		</staticmaps>
+	</dhcpd>
+</reply>
+	

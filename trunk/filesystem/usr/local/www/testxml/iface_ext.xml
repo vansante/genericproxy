@@ -1,0 +1,16 @@
+<reply action="ok">
+	<interface type="Ext">
+		<if>sis2</if>
+		<mtu></mtu>
+		<ipaddr>dhcp</ipaddr>
+		<mac></mac>
+		<subnet></subnet>
+		<gateway></gateway>
+		<blockpriv />
+		<blockbogons />
+		<disableftpproxy />
+		<dhcphostname></dhcphostname>
+		<bandwidth>100</bandwidth>
+		<bandwidthtype>Mb</bandwidthtype>
+	</interface>
+</reply>

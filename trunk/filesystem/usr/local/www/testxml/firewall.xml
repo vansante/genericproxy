@@ -1,0 +1,168 @@
+
+
+
+<reply action="ok">
+    <firewall>
+		<rule order="0" enable="true" addedBy="user">
+            <action>pass</action>
+            <direction>in</direction>
+            <protocol>tcp</protocol>
+            <icmptype>any</icmptype>
+            <description>Rule order 0000</description>
+            <interface>wan</interface>
+            <source>
+                <type invert="true">Wan</type>
+                <port>12</port>
+                <address>192.168.19.2</address>
+                <network>lan</network>
+            </source>
+            <destination>
+                <type invert="true">Wan</type>
+                <port>21</port>
+                <address>192.168.19.2</address>
+            </destination>
+            <fragments>enabled</fragments>
+            <log>enabled</log>
+        </rule>
+		<rule order="3" enable="true" addedBy="user">
+            <action>pass</action>
+            <direction>in</direction>
+            <protocol>tcp</protocol>
+            <icmptype>any</icmptype>
+            <description>Rule order 3333</description>
+            <interface>wan</interface>
+            <source>
+                <type invert="true">Wan</type>
+                <port>12</port>
+                <address>192.168.19.2</address>
+                <network>lan</network>
+            </source>
+            <destination>
+                <type invert="true">Wan</type>
+                <port>21</port>
+                <address>192.168.19.2</address>
+            </destination>
+            <fragments>enabled</fragments>
+            <log>enabled</log>
+        </rule>
+		<rule order="1" enable="false" addedBy="user">
+            <action>pass</action>
+            <direction>in</direction>
+            <protocol>tcp</protocol>
+            <icmptype>any</icmptype>
+            <description>Rule order 1111</description>
+            <interface>wan</interface>
+            <source>
+                <type invert="true">Wan</type>
+                <port>12:34</port>
+                <address>192.168.19.2</address>
+                <network>lan</network>
+            </source>
+            <destination>
+                <type invert="true">Wan</type>
+                <port>21:45</port>
+                <address>192.168.19.2</address>
+            </destination>
+            <fragments>enabled</fragments>
+            <log>enabled</log>
+        </rule>
+		<rule order="9" enable="true" addedBy="user">
+            <action>pass</action>
+            <direction>in</direction>
+            <protocol>tcp</protocol>
+            <icmptype>any</icmptype>
+            <description>Rule order 9999</description>
+            <interface>wan</interface>
+            <source>
+                <type invert="true">Wan</type>
+                <port>12</port>
+                <address>192.168.19.2</address>
+                <network>lan</network>
+            </source>
+            <destination>
+                <type invert="true">Wan</type>
+                <port>21</port>
+                <address>192.168.19.2</address>
+            </destination>
+            <fragments>enabled</fragments>
+            <log>enabled</log>
+        </rule>
+        <rule order="2" enable="true" addedBy="user">
+            <action>pass</action>
+            <direction>in</direction>
+            <protocol>tcp</protocol>
+            <icmptype>any</icmptype>
+            <description>Rule order 2222</description>
+            <interface>Lan</interface>
+            <source>
+                <type invert="true">Lan</type>
+                <port>22</port>
+                <address>192.168.19.2</address>
+                <network>lan</network>
+            </source>
+            <destination>
+                <type invert="true">Lan</type>
+                <port>25</port>
+                <address>192.168.19.2</address>
+            </destination>
+            <fragments>enabled</fragments>
+            <log>enabled</log>
+        </rule>
+    </firewall>
+</reply>
+
+
+<!--
+<reply action="ok">
+    <message type="form-error" name=""></message>
+    <message type="error"></message>
+    <message type="warning"></message>
+    <message></message>
+
+    <firewall enable="true">
+        <rule id="3" order="1" enable="true" addedBy="user">
+            <action>pass</action>
+            <direction>in</direction>
+            <protocol>tcp</protocol>
+            <icmptype>any</icmptype>
+            <description>Default WAN -&gt; any</description>
+            <interface>wan</interface>
+            <source>
+                <type invert="true">Wan</type>
+                <port>12</port>
+                <address>192.168.19.2</address>
+                <network>lan</network>
+            </source>
+            <destination>
+                <type invert="true">Wan</type>
+                <port>21</port>
+                <address>192.168.19.2</address>
+            </destination>
+            <fragments>enabled</fragments>
+            <log>enabled</log>
+        </rule>
+
+        <rule id="5" order="3" enable="false" addedBy="user">
+            <action>pass</action>
+            <direction>in</direction>
+            <protocol>tcp</protocol>
+            <icmptype>any</icmptype>
+            <description>Default LAN -&gt; any</description>
+            <interface>lan</interface>
+            <source>
+                <type invert="true">Lan</type>
+                <port>12</port>
+                <address>192.168.19.2</address>
+                <network>lan</network>
+            </source>
+            <destination>
+                <type invert="true">Lan</type>
+                <port>21</port>
+                <address>192.168.19.2</address>
+            </destination>
+            <fragments>enabled</fragments>
+            <log>enabled</log>
+        </rule>
+    </firewall>
+</reply>
+-->
