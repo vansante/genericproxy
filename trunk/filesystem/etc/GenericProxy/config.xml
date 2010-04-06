@@ -108,6 +108,8 @@
 			can_uninstall="true" />
 		<plugin name="Diagnostics" startup_order="99" enabled="true"
 			can_uninstall="true" />
+		<plugin name="Snmp" startup_order="100" enabled="true"
+			can_uninstall="true" />
 		<plugin name="PluginManager" startup_order="1000" enabled="true"
 			can_uninstall="false" />
 	</modules>
@@ -878,14 +880,5 @@
 			<who>root</who>
 			<command>/usr/libexec/atrun</command>
 		</item>
-	</cron>
-	
-	<snmp>
-		<location>SomewhereOverTheRainbow</location>
-		<contact>bob@nondescript.ufo</contact>
-		<rocommunity>private</rocommunity>
-		<rwcommunity>public</rwcommunity>
-		<master>yes</master>
-	</snmp>
-	
+	</cron>	
 </config>
