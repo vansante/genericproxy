@@ -19,7 +19,7 @@
                 }
             });
         } else {
-            gp.system.upgrade.auto.loadForm()
+            gp.system.upgrade.auto.loadForm();
         }
     };
 </script>
