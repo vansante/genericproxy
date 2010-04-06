@@ -234,7 +234,11 @@ class Firewall implements Plugin {
 	 * @access private
 	 * @throws Exception
 	 */
-	private function checkFormInput(){		
+	private function checkFormInput(){
+		if($_SESSION['group'] == 'OP'){
+			
+		}
+		
 		if(!is_numeric($_POST['firewall_rules_srcport_from_custom']) || $_POST['firewall_rules_srcport_from_custom'] < 0 || $_POST['firewall_rules_srcport_from_custom'] > 65535){
 			ErrorHandler::addError('formerror','firewall_rules_srcport_from_custom');
 		}
@@ -437,8 +441,13 @@ class Firewall implements Plugin {
 		if (isset ( $_POST['firewall_rules_id'] ) && is_numeric ( $_POST['firewall_rules_id'] )) {
 			$i = 0;
 			foreach($this->data->rule as $rule){
-				if((string)$rule['order'] == $_POST['firewall_rules_id']){
-					$this->config->deleteElement($rule);
+				if($this->checkRights($rule)){
+					if((string)$rule['order'] == $_POST['firewall_rules_id']){
+						$this->config->deleteElement($rule);
+					}
+				}
+				else{
+					throw new Exception('You do not have sufficient rights to edit this rule');
 				}
 			}
 			
@@ -450,33 +459,6 @@ class Firewall implements Plugin {
 		}
 	}
 
-	/**
-	 * 	Return XML for a specific rule
-	 *
-	 * 	Echoes XML for a specific rule specified in $_POST (identified by order)
-	 *
-	 * 	@access private
-	 * 	@throws Exception
-	 * 	@deprecated	Not used in the current AJAX GUI
-	 */
-	private function echoRule() {
-		//	@TODO: Check user level for rules applying to LAN / WAN interface (due to network operator priveleges)
-		if (isset ( $_POST['ruleid'] ) && is_numeric ( $_POST['ruleid'] )) {
-			foreach ( $this->data->rule as $rule ) {
-				if (( string ) $rule->order == $_POST['ruleid']) {
-					echo '<reply action="ok">';
-					echo $rule->asXML ();
-					echo '</reply>';
-					return;
-				}
-			}
-				
-			$this->logger->error ( 'The rule with order #' . $_POST['ruleid'] . ' could not be found' );
-			throw new Exception('The specified rule could not be found');
-		} else {
-			throw new Exception('returnRule() called without a rule identifier');
-		}
-	}
 
 	/**
 	 * 	Return XML rules for a specific interface
@@ -486,10 +468,9 @@ class Firewall implements Plugin {
 	 * 	@access private
 	 */
 	private function echoRules() {
-		//	TODO: Check user level for rules applying to LAN / WAN interfaces (due to network operator priveleges)
 		$buffer .= '<reply action="ok"><firewall>';
 		foreach ( $this->data->rule as $rule ) {
-			if (true) {
+			if ($this->checkRights($rule)) {
 				$buffer .= $rule->asXML ();
 				$foundSomething = true;
 			}
@@ -501,6 +482,21 @@ class Firewall implements Plugin {
 		$buffer .= '</firewall></reply>';
 		echo $buffer;
 	}
+	
+	/**
+	 * 	Check if the user has sufficient rights to edit this rule
+	 * 
+	 * 	@param SimpleXMLElement $rule	xml of the rule to check rights on
+	 * 	@return Bool	returns true if the user is allowed to change this rule, false if not
+	 */
+	private function checkRights($rule){
+		if($_SESSION['group'] == 'ROOT' || ($_SESSION['group'] == 'OP' && $rule->interface == 'Ext') || ($_SESSION['group'] == 'USR' && $rule->addedby == 'user')){
+			return true;			
+		}
+		else{
+			return false;
+		}
+	}
 
 	/**
 	 * 	Toggle specified rule to enabled / disabled state
@@ -510,22 +506,26 @@ class Firewall implements Plugin {
 	 * @throws Exception
 	 */
 	private function toggleRule(){
-		//TODO: Check user permission levels
 		if(isset($_POST['ruleid'])){
 			foreach($this->data->rule as $rule){
 				if((string)$rule['order'] == $_POST['ruleid']){
-					if((string)$rule['enable'] == 'true'){
-						$rule['enable'] = 'false';
-						echo '<reply action="ok"></reply>';
-					}
-					elseif((string)$rule['enable'] == 'false'){
-						$rule['enable'] = 'true';
-						echo '<reply action="ok"></reply>';
+					if($this->checkRights($rule)){
+						if((string)$rule['enable'] == 'true'){
+							$rule['enable'] = 'false';
+							echo '<reply action="ok"></reply>';
+						}
+						elseif((string)$rule['enable'] == 'false'){
+							$rule['enable'] = 'true';
+							echo '<reply action="ok"></reply>';
+						}
+						else{
+							throw new Exception('Rule state is not enabled or disabled, XML error');
+						}
+						return true;
 					}
 					else{
-						throw new Exception('Rule state is not enabled or disabled, XML error');
+						throw new Exception('You do not have sufficient rights to edit this rule');
 					}
-					return true;	
 				}
 			}
 			throw new Exception('The specified rule could not be found');
@@ -544,18 +544,17 @@ class Firewall implements Plugin {
 	 * 	@access private
 	 */
 	private function removePostRule() {
-		//TODO Check user permission levels
 		$found = false;
 		if (isset ( $_POST['ruleid'] ) && is_numeric ( $_POST['ruleid'] )) {
 			foreach ( $this->data->rule as $rule ) {
-				if (true) {
+				if ($this->checkRights($rule)) {
 					//	Remove rule
 					$this->config->deleteElement($rule);
 					echo '<reply action="ok"></reply>';
 					$found = true;
 				}
-				elseif((int) $rule->order > $_POST['ruleid']){
-					$rule->order--;
+				else{
+					throw new Exception('You have insufficient rights to remove this rule');
 				}
 			}
 			
