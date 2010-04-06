@@ -1,0 +1,1 @@
+<reply action="ok"><firewall><rule enable="true" addedBy="User" order="4"><action>pass</action><direction>in</direction><log>disabled</log><interface>lan</interface><protocol>tcp</protocol><description>blat</description><fragments>disabled</fragments><source><type/><port>-1:1</port></source><destination><type>any</type><port>-1:1</port></destination></rule></firewall></reply>

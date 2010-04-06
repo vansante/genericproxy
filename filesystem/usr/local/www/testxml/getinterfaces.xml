@@ -1,0 +1,11 @@
+<reply action="ok">
+	<interface current="ext">
+		<name>interface1</name>
+	</interface>
+	<interface current="wan">
+		<name>interface2</name>
+	</interface>
+	<interface current="lan">
+		<name>interface3</name>
+	</interface>
+</reply>

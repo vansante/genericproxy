@@ -1,0 +1,46 @@
+<reply action="ok">
+	<system>
+		<optimization>normal</optimization>
+
+		<hostname>GenericProxy</hostname>
+		<domain>local</domain>
+		<dnsservers>
+			<dnsserver ip="8.8.8.8"/>
+			<dnsserver ip="192.168.1.1"/>
+		</dnsservers>
+		<dnsoverride>allow</dnsoverride>
+		
+		<!-- 
+		group= OP|SOP|NOOB -->
+		<users>
+			<user name="admin" password="bob" group="SOP" />
+			<default-user name="admin" password="" group="" />
+		</users>
+		
+		<!--<username>admin</username>
+		<password>$1$dSJImFph$GvZ7.1UbuWu.Yb8etC0re.</password>
+		<default-username>admin</default-username>
+		<default-password>blaat</default-password>-->
+
+		<timezone>Etc/UTC</timezone>
+		<time-update-interval>300</time-update-interval><!-- Values: -1 does update time. 0 only updates at boot. >0 updates using the interval and at boot-->
+		<timeservers>0.pfsense.pool.ntp.org</timeservers>
+
+		<consolemenu>enabled</consolemenu>
+		<firmwarecheck>disabled</firmwarecheck>
+		<harddiskstandby>100</harddiskstandby>
+
+		<!-- Commands to be executed before plugins are loaded -->
+		<earlyshellcmd>
+			<!--Example: <command>ps -aux | grep radiusd</command> -->
+		</earlyshellcmd>
+		
+		<!-- Commands to be executed after booting is complete -->
+		<shellcmd>
+			<!--Example: <command>ps -aux | grep radiusd</command> -->
+		</shellcmd>
+	</system>
+</reply>
+<!--
+<reply action="ok"><system><hostname>GenericProxy</hostname><domain>local</domain><dnsserver/><dnsoverride>allow</dnsoverride></system></reply>
+-->

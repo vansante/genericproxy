@@ -1,0 +1,6 @@
+<reply action="error">
+	<message text="Invalid blabla" />
+	<message text="Invalid blabla" />
+	<formfield id="firewall_rules_descr" />
+	<formfield id="firewall_rules_interface" />
+</reply>

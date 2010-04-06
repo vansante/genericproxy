@@ -1,0 +1,1 @@
+<h2>Traffic on LAN interface</h2>

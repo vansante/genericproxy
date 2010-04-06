@@ -1,0 +1,37 @@
+<reply action="ok">
+	<interfaces>
+		<wan>
+			<device>sis1</device>
+			<status><![CDATA[
+	Link encap:Ethernet  HWaddr 00:50:bf:59:bb:f3
+	inet addr:83.86.57.130  Bcast:255.255.255.255  Mask:255.255.254.0
+	UP BROADCAST RUNNING MULTICAST  MTU:576  Metric:1
+	RX packets:199280973 errors:716 dropped:679 overruns:374 frame:0
+	TX packets:112088524 errors:0 dropped:0 overruns:3 carrier:0
+	collisions:0 txqueuelen:1000
+	RX bytes:2306436609 (2.1 GiB)  TX bytes:2314490453 (2.1 GiB)
+	Interrupt:12 Base address:0x6c00
+		]]></status>
+		</wan>
+		
+		<lan>
+			<device>sis2</device>
+			<status><![CDATA[
+	Link encap:Ethernet  HWaddr 00:e0:4c:69:f2:ee
+	inet addr:192.168.1.1  Bcast:192.168.1.255  Mask:255.255.255.0
+	inet6 addr: fe80::2e0:4cff:fe69:f2ee/64 Scope:Link
+	UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+	RX packets:106789952 errors:1260 dropped:3804 overruns:914 frame:0
+	TX packets:192022481 errors:0 dropped:0 overruns:5 carrier:0
+	collisions:0 txqueuelen:1000
+	RX bytes:1076499908 (1.0 GiB)  TX bytes:1755530329 (1.6 GiB)
+	Interrupt:11 Base address:0x6800
+		]]></status>
+		</lan>
+		
+		<ext>
+			<device>sis3</device>
+			<status></status>
+		</ext>
+	</interfaces>
+</reply>

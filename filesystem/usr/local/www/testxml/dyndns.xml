@@ -1,0 +1,14 @@
+<reply action="ok">
+	<dyndns enable="true">
+		<client>
+			<type>dyndns</type>
+			<username>username</username>
+			<password>password</password>
+			<server>server.com</server>
+			<port>56</port>
+			<host>host.com</host>
+			<mx>mail.example.com</mx>
+			<wildcards>enable</wildcards>
+		</client>
+	</dyndns>
+</reply>

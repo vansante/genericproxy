@@ -1,0 +1,28 @@
+<reply action="ok">
+	<dnsmasq enable="true" regdhcp='true'>
+		<hosts>
+			<host id="1" name="myhost">
+				<domain>domain.com</domain>
+				<ip>192.168.1.1</ip>
+				<description>zomaar een dns</description>
+			</host>
+			<host id="8" name="yourhost">
+				<domain>domain.co.uk</domain>
+				<ip>192.168.14.11</ip>
+				<description>Wieuu</description>
+			</host>
+		</hosts>
+		<overrides>
+			<override id="6">
+				<domain>over.com</domain>
+				<ip>5.5.5.5</ip>
+				<description>omschrijving</description>
+			</override>
+			<override id="23">
+				<domain>ride.com</domain>
+				<ip>88.88.88.88</ip>
+				<description>vroa</description>
+			</override>
+		</overrides>
+	</dnsmasq>
+</reply>

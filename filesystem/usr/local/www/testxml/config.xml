@@ -1,0 +1,411 @@
+<?xml version="1.0"?>
+<config version="2.9" lastchange="">
+	<system>
+		<optimization>normal</optimization>
+
+		<hostname>GenericProxy</hostname>
+		<domain>local</domain>
+		<dnsserver></dnsserver>
+		<dnsoverride>allow</dnsoverride>
+		
+		<!-- 
+		group= OP|SOP|NOOB -->
+		<users>
+			<user name="admin" password="bob" group="SOP" />
+			<default-user name="admin" password="" group="" />
+		</users>
+		
+		<!--<username>admin</username>
+		<password>$1$dSJImFph$GvZ7.1UbuWu.Yb8etC0re.</password>
+		<default-username>admin</default-username>
+		<default-password>blaat</default-password>-->
+
+		<timezone>Etc/UTC</timezone>
+		<time-update-interval>300</time-update-interval><!-- Values: -1 does update time. 0 only updates at boot. >0 updates using the interval and at boot-->
+		<timeservers>0.pfsense.pool.ntp.org</timeservers>
+
+		<consolemenu>enabled</consolemenu>
+		<firmwarecheck>disabled</firmwarecheck>
+		<harddiskstandby>100</harddiskstandby>
+
+		<!-- Commands to be executed before plugins are loaded -->
+		<earlyshellcmd>
+			<!--Example: <command>ps -aux | grep radiusd</command> -->
+		</earlyshellcmd>
+		
+		<!-- Commands to be executed after booting is complete -->
+		<shellcmd>
+			<!--Example: <command>ps -aux | grep radiusd</command> -->
+		</shellcmd>
+	</system>
+
+	<!-- This controls the HTTP server. -->
+	<httpd>
+		<protocol>http</protocol> <!-- valid options: http or https -->
+		<port>80</port> <!-- Can be left blank for default. 80 for http, 443 for https -->
+		<certificate></certificate>
+		<private-key></private-key>
+	</httpd>
+
+	<modules>
+		<!-- All plugins are listed here. Each plugin has space for its own configugration. 
+		If a plugin is installed and not in this list, it counts as disabled and will not be started. 
+		
+		Each plugin can have configuration options as other elements.-->
+		<plugin name="System" startup_order="9" enabled="true" can_uninstall="false" />
+		<plugin name="Cron" startup_order="10" enabled="true" can_uninstall="false" />
+
+		<plugin name="AssignInterfaces" startup_order="15" enabled="true" can_uninstall="true"/>
+		<plugin name="Lan" startup_order="20" enabled="true" can_uninstall="true"/>
+		<plugin name="Wan" startup_order="30" enabled="true" can_uninstall="true"/>
+		<plugin name="Ext" startup_order="40" enabled="true" can_uninstall="true"/>
+		
+		<plugin name="Nat" startup_order="41" enabled="true" can_uninstall="true"/>
+		<plugin name="Dhcpd" startup_order="41" enabled="true" can_uninstall="true"/>
+		<plugin name="Ipsec" startup_order="41" enabled="true" can_uninstall="true"/>
+		<plugin name="DnsForward" startup_order="41" enabled="false" can_uninstall="true"/>
+		
+		<plugin name="Firewall" startup_order="50" enabled="true" can_uninstall="true"/>
+				
+		<plugin name="Ssh" startup_order="60" enabled="true" can_uninstall="true"/>
+		<plugin name="Httpd" startup_order="70" enabled="true" can_uninstall="false"/>
+		<plugin name="Proxy" startup_order="80" enabled="false" can_uninstall="true"/>		
+		<plugin name="Dyndns" startup_order="90" enabled="false" can_uninstall="true"/>
+				
+		<plugin name="PluginManager" startup_order="1000" enabled="true" can_uninstall="false"/>
+	</modules>
+
+	<interfaces>
+		<interface type="Lan">
+			<if>sis1</if>
+			<ipaddr>192.168.2.3</ipaddr>
+			<subnet>24</subnet>
+			<bandwidth>100</bandwidth>
+			<bandwidthtype>Mb</bandwidthtype>
+			<mtu></mtu>
+		</interface>
+		<interface type="Wan">
+			<if>sis0</if>
+			<mtu></mtu>
+			<ipaddr>dhcp</ipaddr>
+			<mac></mac>
+			<subnet></subnet>
+			<gateway></gateway>
+			<blockpriv />
+			<blockbogons />
+			<disableftpproxy />
+			<dhcphostname></dhcphostname>
+			<bandwidth>100</bandwidth>
+			<bandwidthtype>Mb</bandwidthtype>
+		</interface>
+		<interface type="Ext">
+			<if>sis2</if>
+			<mtu></mtu>
+			<ipaddr>dhcp</ipaddr>
+			<mac></mac>
+			<subnet></subnet>
+			<gateway></gateway>
+			<blockpriv />
+			<blockbogons />
+			<disableftpproxy />
+			<dhcphostname></dhcphostname>
+			<bandwidth>100</bandwidth>
+			<bandwidthtype>Mb</bandwidthtype>
+		</interface>
+	</interfaces>
+
+	<staticroutes>
+		<route></route>
+	</staticroutes>
+
+	<dyndns enable="true">
+		<client>
+			<type>dyndns</type>
+			<username></username>
+			<password></password>
+			<server></server>
+			<port></port>
+			<host></host>
+			<mx></mx>
+			<wildcards>disable</wildcards>
+		</client>
+		<server>
+			<host></host>
+			<ttl></ttl>
+			<key name=""></key>
+			<protocol>udp</protocol>
+		</server>
+	</dyndns>
+
+	<dhcpd enable="true">
+		<chroot_path>/var/dhcpd</chroot_path>
+		<netmask>255.255.255.0</netmask>
+		<range>
+			<from>192.168.2.100</from>
+			<to>192.168.2.199</to>
+		</range>
+		<defaultleasetime>1600</defaultleasetime>
+		<maxleasetime>1600</maxleasetime>
+
+		<winsserver id="1">192.168.2.1</winsserver>
+		<winsserver id="2">192.168.2.2</winsserver>
+
+		<!-- <next-server filename=""></next-server>-->
+
+		<staticmaps>
+			<!-- <map id="1" mac="xx:xx:xx:xx:xx:xx" ipaddr="xxx.xxx.xxx.xxx">desc</map>-->
+		</staticmaps>
+	</dhcpd>
+
+	<dnsmasq enable="true" regdhcp='true'>
+		<!-- <hosts id="">
+			<host></host>
+			<domain></domain>
+			<ip></ip>
+			<description></description>
+		</hosts>
+		<override id="">
+			<domain></domain>
+			<ip></ip>
+			<description></description>
+		</override> -->
+	</dnsmasq>
+
+	<ssh enable="true">
+		<port>22</port>
+		<login>password</login>	
+		<authorizedKey></authorizedKey>
+	</ssh>
+
+	<snmpd enable="true">
+		<syslocation></syslocation>
+		<syscontact></syscontact>
+		<rocommunity>public</rocommunity>
+	</snmpd>
+
+	<nat>
+		<natreflection>enabled</natreflection>
+		<reflectiontimeout>0</reflectiontimeout>
+		<ipsecpassthru>enabled</ipsecpassthru> <!-- Why is this here? This is a change in the IPSEC kernel module... we have no nat service to enforce this on? -->
+
+		<inbound>
+			<rule id="">
+				<interface>Wan</interface>
+				<external-address>195.169.160.2</external-address>
+				<protocol>tcp</protocol>
+				<external-port>81</external-port>
+				<target>192.168.2.1</target>
+				<local-port>81</local-port>
+				<description>Test row</description>
+			</rule>
+		</inbound>
+
+		<onetoone>
+			<rule id="">
+				<interface>Lan</interface>
+				<external>195.169.160.2</external>
+				<subnet>32</subnet>
+				<internal>192.168.2.1</internal>
+				<description>nonsensical test row</description>
+			</rule>
+		</onetoone>
+
+		<advancedoutbound enable="false">
+			<rule nonat="false" id="">
+				<interface></interface>
+				<source>
+					<address></address>
+					<subnet></subnet>
+					<port></port>
+				</source>
+				<destination>
+					<address></address>
+					<subnet></subnet>
+					<port></port>
+				</destination>
+				<natport></natport>
+				<staticnatport></staticnatport>
+				<target>xxx.xxx.xxx.xxx</target>
+				<description></description>
+			</rule>
+		</advancedoutbound>
+
+		<servernat>
+			<rule id="">
+				<ipaddr></ipaddr>
+				<description></description>
+			</rule>
+		</servernat>
+	</nat>
+
+	<firewall enable="true">
+		<module name="Nat" call="enabled" category="nat" />
+		<module name="Shaper" call="disabled" category="altq" />
+		
+		<maximumStates>300</maximumStates>
+		<optimization>normal</optimization>
+		<rule id="1200"  order="0" enable="true" addedBy="user">
+			<action>pass</action>
+			<direction>in</direction>
+			<protocol>tcp</protocol>
+			<icmptype>any</icmptype>
+			<description>Default LAN -&gt; any</description>
+			<interface>Lan</interface>
+			<source>
+				<type invert="true">Lan</type>
+				<port>22</port>
+				<address>192.168.19.2</address>
+				<network>lan</network>
+				<subnet></subnet>
+			</source>
+			<destination>
+				<type invert="true">Lan</type>
+				<port>25</port>
+				<address>192.168.19.2</address>
+				<subnet></subnet>
+			</destination>
+			<fragments>enabled</fragments>
+			<log>enabled</log>
+		</rule>
+	</firewall>
+
+	<scheduler>
+		<schedule name="">
+			<standard>
+				<upspeed></upspeed>
+				<downspeed></downspeed>
+			</standard>
+
+			<optional>
+				<upspeed></upspeed>
+				<downspeed></downspeed>
+			</optional>
+
+			<days>
+				<day name="monday">
+					<block start="13:00" end="15:00" config="" />
+					<block start="17:00" end="20:00" config="" />
+				</day>
+			</days>
+		</schedule>
+	</scheduler>
+
+	<shaper enable="true">
+		<rule enable="true">
+			<descr></descr>
+
+			<interface>lan</interface>
+			<protocol>tcp</protocol>
+			<direction>in</direction>
+
+			<source>
+				<type invert="true">lan</type>
+				<port></port>
+			</source>
+			<destination invert="false">
+				<type invert="true">lan</type>
+				<port></port>
+			</destination>
+
+			<iptos></iptos>
+			<tcpflags></tcpflags>
+			<queue></queue>
+		</rule>
+	
+		<rootqueue id="">
+			<interface></interface>
+			<descr></descr>
+			<targetpipe></targetpipe>
+			<weight></weight>
+			<mask></mask>
+			
+			<!--  Sub queues, aka pipes, where data actually gets queued -->
+			<subqueue id="">
+				<name></name>
+				<descr></descr>
+				<bandwidth></bandwidth>
+				<priority></priority>
+				<queuetype></queuetype>
+			</subqueue>
+		</rootqueue>
+	</shaper>
+
+	<ipsec enable="true">
+		<!-- <preferoldsa>enable</preferoldsa> -->		
+		<tunnel enable="false" id="1"> <!-- autoconnect="true" -->
+			<description>Example tunnel</description>
+			<local-public-ip>wan|lan|ext[#]|xxx.xxx.xxx.xxx</local-public-ip>
+			<local-private-ip>wan|lan|ext[#]|xxx.xxx.xxx.xxx</local-private-ip>
+			<local-private-subnet>xxx.xxx.xxx.xxx</local-private-subnet>
+			<remote-public-ip>xxx.xxx.xxx.xxx</remote-public-ip>
+			<remote-private-ip>xxx.xxx.xxx.xxx</remote-private-ip>
+			<remote-private-subnet>xxx.xxx.xxx.xxx</remote-private-subnet>
+			<!-- <certificate>#</certificate> -->
+			<phase1>
+				<mode>main|aggressive|base</mode>
+				<!-- <myident></myident> -->
+				<encryption-algorithm>des|3des|blowfish|cast128|aes|camellia</encryption-algorithm>
+				<hash-algorithm>md5|sha1|sha256|sha384|sha512</hash-algorithm>
+				<dhgroup></dhgroup><!-- modp768, modp1024, modp1536, modp2048, modp3072, modp4096, modp6144, modp8192. Or you can define 1, 2, 5, 14, 15, 16,17, or 18 as the DH group number. -->
+				<lifetime>[number] [timeunit]</lifetime>
+				<authentication-method type="pre_shared_key|rsasig">blaatkey|[certificate #]</authentication-method>
+			</phase1>
+			<phase2>
+				<pfsgroup></pfsgroup><!-- modp768, modp1024, modp1536, modp2048, modp3072, modp4096, modp6144, modp8192. Or you can define 1, 2, 5, 14, 15, 16, 17, or 18 as the DH group number.-->
+				<lifetime>[number] [timeunit]</lifetime>
+				<encryption-algorithm>des, 3des, des_iv64, des_iv32, rc5, rc4, idea, 3idea, cast128, blowfish, null_enc, twofish, rijndael, aes, camellia</encryption-algorithm>
+				<authentication-algorithm>des, 3des, des_iv64, des_iv32, hmac_md5, hmac_sha1, hmac_sha256, hmac_sha384, hmac_sha512, non_auth</authentication-algorithm>
+			</phase2>
+		</tunnel>
+		<certificates>
+			<certificate id="1">
+				<private>/bla/bla/myrsakey.priv</private>
+				<!-- <key></key> -->
+				<public>/bla/bla/yourrsakey.pub</public>
+			</certificate>
+		</certificates>
+	</ipsec>
+
+	<proxy>
+		<port>8888</port>
+		<rule id="0">
+			<protocol>SSL</protocol>
+			<port>443</port>
+		</rule>
+		<rule id="1">
+			<protocol>SSL</protocol>
+			<port>563</port>
+		</rule>
+	</proxy>
+
+	<!-- Possibly remove -->
+	<wol>
+		<wolentry>
+			<interface>lan|opt[n]</interface>
+			<mac>xx:xx:xx:xx:xx:xx</mac>
+			<descr></descr>
+		</wolentry>
+	</wol>
+
+	<!-- See cron on making cron jobs. -->
+	<cron>
+		<item id="1">
+			<minute>0</minute>
+			<hour>*</hour>
+			<mday>*</mday>
+			<month>*</month>
+			<wday>*</wday>
+			<who>root</who>
+			<command>/usr/bin/nice -n20 newsyslog</command>
+		</item>
+		<item id="0">
+			<minute>*/5</minute>
+			<hour>*</hour>
+			<mday>*</mday>
+			<month>*</month>
+			<wday>*</wday>
+			<who>root</who>
+			<command>/usr/libexec/atrun</command>
+		</item>
+	</cron>
+</config>

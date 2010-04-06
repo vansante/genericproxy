@@ -1,0 +1,10 @@
+<reply action="ok">
+	<interface type="Lan">
+		<if>sis1</if>
+		<ipaddr>192.168.2.3</ipaddr>
+		<subnet>255.255.255.0</subnet>
+		<bandwidth>100</bandwidth>
+		<bandwidthtype>Mb</bandwidthtype>
+		<mtu></mtu>
+	</interface>
+</reply>

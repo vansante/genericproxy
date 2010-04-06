@@ -1,0 +1,17 @@
+<reply action="ok">
+	<proxy>
+        <port>8888</port>
+        <allow_from>
+			<ip>172.0.0.0</ip>
+			<subnet>8</subnet>
+		</allow_from>
+        <proxyname>GenericProxy Alpha</proxyname>
+        <maxclients>10</maxclients>
+        <timeout>600</timeout>
+       
+        <ports>
+            <port id="443" />
+            <port id="563" />
+        </ports>
+    </proxy>
+</reply>

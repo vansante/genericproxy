@@ -1,0 +1,7 @@
+<reply action="ok">
+	<ssh enable="true">
+		<port>22</port>
+		<login>password</login>	
+		<authorizedKey></authorizedKey>
+	</ssh>
+</reply>

@@ -1,0 +1,50 @@
+<reply action="ok">
+	<nat>
+		<natreflection>enabled</natreflection>
+		<reflectiontimeout>0</reflectiontimeout>
+		<ipsecpassthru>enabled</ipsecpassthru>
+		
+		<inbound>
+			<rule id="12">
+				<interface>Wan</interface>
+				<external-address>195.169.160.2</external-address>
+				<protocol>tcp</protocol>
+				<external-port>81</external-port>
+				<target>192.168.2.1</target>
+				<local-port>21</local-port>
+				<description>Test row</description>
+			</rule>
+		</inbound>
+
+		<onetoone>
+			<rule id="2">
+				<interface>Lan</interface>
+				<external>195.169.160.2</external>
+				<subnet>32</subnet>
+				<internal>192.168.2.1</internal>
+				<description>nonsensical test row</description>
+			</rule>
+		</onetoone>
+
+		<advancedoutbound enable="true">
+			<rule nonat="false" id="23">
+				<interface></interface>	
+				<source>
+					<address></address>
+					<subnet></subnet>
+					<port></port>
+				</source>
+				<destination>
+					<address></address>
+					<subnet></subnet>
+					<port></port>
+				</destination>
+				<natport></natport>
+				<staticnatport></staticnatport>
+				<target>xxx.xxx.xxx.xxx</target>
+				<description></description>
+			</rule>
+		</advancedoutbound>
+	</nat>
+</reply>
+	
