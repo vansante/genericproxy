@@ -122,16 +122,6 @@ $(function() {
     });
 });
 
-/*
- * Argument: one object with the following properties:
- *  - module: modulename (optional)
- *  - page: pagename (optional)
- *  - params: extra post parameters in object form, or querystring(does not work with file) (optional)
- *  - error_element: the element the error appears in (optional)
- *  - successFn: function that gets called with the json as parameter when the request was successful (optional)
- *  - errorFn:  function that gets called when the request fails (optional)
- *  - url: Can be overridden for testing purposes, default 'ajaxserver.php'
- */
 gp.showHomepage = function() {
     // Show default homepage: System status
     var cp = $('#cp_status_system');
@@ -142,6 +132,44 @@ gp.showHomepage = function() {
     gp.status.system.clickHandler();
 }
 
+gp.checkForUpdates = function() {
+    if (gp.system && !gp.update_alert_given) {
+        gp.doAction({
+            url: 'testxml/update.xml',
+            module: 'Update',
+            page: 'check',
+            successFn: function(json) {
+                if (json.release) {
+                    var txt = '<p>There is a new firmware with version <strong>'
+                        +json.release.version+'</strong> issued on <strong>'+json.release.date+'</strong>.'
+                        +'<br>Do you want to go to the firmware upgrade page to apply it?</p>';
+
+                    gp.confirm('New firmware', txt, function() {
+                        gp.update_alert_given = true;
+                        // Go to the firmware upgrade page
+                        $('.module').hide();
+                        $('.page').hide();
+                        $('a.active').removeClass('active');
+                        $('#cp_system_upgrade').show().parent().show();
+                        $('#system_upgrade').addClass('active');
+                        $('#menu').accordion('activate' , '#system');
+                    });
+                }
+            }
+        });
+    }
+};
+
+/*
+ * Argument: one object with the following properties:
+ *  - module: modulename (optional)
+ *  - page: pagename (optional)
+ *  - params: extra post parameters in object form, or querystring(does not work with file) (optional)
+ *  - error_element: the element the error appears in (optional)
+ *  - successFn: function that gets called with the json as parameter when the request was successful (optional)
+ *  - errorFn:  function that gets called when the request fails (optional)
+ *  - url: Can be overridden for testing purposes, default 'ajaxserver.php'
+ */
 gp.doAction = function(opts) {
     if (opts.error_element) {
         if ($.isArray(opts.error_element)) {

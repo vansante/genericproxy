@@ -14,13 +14,17 @@ addMenu('system', array(
                     )
                 )
             ),
-            'firmwup' => array(
+            'upgrade' => array(
                 'name' => 'Firmware upgrade',
-                'key' => 'firmwup',
+                'key' => 'upgrade',
                 'tabs' => array(
-                    'firmwup' => array(
-                        'name' => 'Firmware upgrade',
-                        'key' => 'firmwup',
+                    'auto' => array(
+                        'name' => 'Automatic',
+                        'key' => 'auto',
+                    ),
+                    'manual' => array(
+                        'name' => 'Manual',
+                        'key' => 'manual',
                     )
                 )
             ),

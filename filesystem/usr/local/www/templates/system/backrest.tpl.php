@@ -7,7 +7,7 @@
                     form_id: 'system_backrest_restore_form',
                     error_element: $('#system_backrest_restore_form_error'),
                     successFn: function(json) {
-                        gp.rebootNotice();
+
                     }
                 });
             });

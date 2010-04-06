@@ -1,0 +1,17 @@
+<reply action="ok">
+    <release>
+        <version>0.9</version>
+        <date>15-04-2010</date>
+        <changelog>
+        Initial release of the GenericProxy appliance for testing
+        purposes, basic functionality is present excluding the following:
+
+        - IPSEC
+        - Traffic graphs
+
+        The following functionality remains completely untested:
+        - DynDNS
+        </changelog>
+        <filename>GenericProxy-0.9.image</filename>
+    </release>
+</reply>

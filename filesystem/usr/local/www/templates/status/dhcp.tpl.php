@@ -42,7 +42,6 @@
     //Add a rule to the table
     gp.status.dhcp.addRule = function(rule) {
         var tblstring = '<tr>'+
-            '<td><img src="images/icons/'+(rule.online.toLowerCase()=='true'?'en':'dis')+'abled.png" alt="'+(rule.online.toLowerCase()=='true'?'On':'Off')+'line" title="'+(rule.online.toLowerCase()=='true'?'On':'Off')+'line"/></td>'+
             '<td>'+rule.ip+'</td>'+
             '<td>'+rule.mac+'</td>'+
             '<td>'+rule.hostname+'</td>'+
