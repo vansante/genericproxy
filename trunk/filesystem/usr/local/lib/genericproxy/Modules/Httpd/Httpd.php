@@ -163,7 +163,7 @@ class Httpd implements Plugin {
 	 */
 	public function configure() {
 		Logger::getRootLogger ()->info ( "Configuring HTTPD" );
-		Functions::mountFilesystem ( 'rw' );
+		Functions::mountFilesystem ( 'mount' );
 		
 		// init.
 		$port = 80;
@@ -290,7 +290,7 @@ EOD;
 			$this->updateFirewall ( ( string ) $this->data->port );
 		}
 		
-		Functions::mountFilesystem ( 'ro' );
+		Functions::mountFilesystem ( 'unmount' );
 	}
 	
 	/**

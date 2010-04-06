@@ -156,6 +156,9 @@ class System implements Plugin {
 		elseif($_POST['page'] == 'reboot'){
 			$this->reboot();
 		}
+		elseif($_POST['page'] == 'backup'){
+			$this->backupConfig();
+		}
 		elseif($_POST['page'] == 'reset'){
 			$this->resetToDefaults();
 		}
@@ -167,6 +170,48 @@ class System implements Plugin {
 		}
 		else{
 			throw new Exception('Invalid page request');
+		}
+	}
+	
+	/**
+	 * 	Offers the config.xml file as a download
+	 * 
+	 *	@access private
+	 */
+	private function backupConfig(){
+		$path = '/etc/genericproxy/config.xml';
+		
+		$size = filesize($path);
+		header('Content-Type: application/octet-stream');
+		header('Content-Length: '.$size);
+		header('Content-Disposition: attachment; filename=config.xml');
+		header('Content-Transfer-Encoding: binary');
+		
+		// open the file in binary read-only mode
+		// display the error messages if the file can´t be opened
+		$file = @ fopen($path, ‘rb’);
+		
+		if ($file) {
+			// stream the file and exit the script when complete
+			fpassthru($file);
+		}
+	}
+	
+	/**
+	 * Overwrites config.xml with uploaded config.xml
+	 * 
+	 * Validates the uploaded config.xml for XML syntax errors but does not
+	 * validate all configuration options for every module.
+	 * 
+	 * @access private
+	 * @throws Exception
+	 */
+	private function restoreConfig(){
+		if(!empty($_FILES['system_backrest_restorexml']['name'])){
+			
+		}
+		else{
+			throw new Exception('No configuration file was uploaded');
 		}
 	}
 	
@@ -213,14 +258,23 @@ class System implements Plugin {
 	/**
 	 * Resets the system config to defaults
 	 * 
+	 * Resets the system configuration by copying /etc/Genericproxy/default.config.xml to /cfg/GenericProxy/config.xml
+	 * and automatically reboots the system afterwards
+	 * 
 	 * @access private
+	 * @throws Exception
 	 */
 	private function resetToDefaults(){
-		Functions::mountFilesystem('w');
-		Functions::shellCommand('cp /etc/GenericProxy default.config.xml /cfg/GenericProxy/config.xml');
-		Functions::mountFilesystem('r');
-		echo '<reply action="ok" />';
-		$this->reboot();
+		if(file_exists('/etc/GenericProxy/default.config.xml')){
+			Functions::mountFilesystem('mount');
+			Functions::shellCommand('cp /etc/GenericProxy/default.config.xml /cfg/GenericProxy/config.xml');
+			Functions::mountFilesystem('unmount');
+			echo '<reply action="ok" />';
+			$this->reboot();
+		}
+		else{
+			throw new Exception('The file containing the default configuration could not be loaded');
+		}
 	}
 	
 	/**
@@ -237,6 +291,10 @@ class System implements Plugin {
 	
 	/**
 	 * Save XML configuration based on POST data from webGUI
+	 * 
+	 * Saves XML configuration for general settings front-end page
+	 * 
+	 * @throws Exception
 	 */
 	private function saveConfig(){
 		$i = 1;
@@ -305,11 +363,9 @@ class System implements Plugin {
 	}
 	
 	/**
-	 * Gets a list of dependend plugins
+	 * Gets a list of plugin dependencies
 	 */
-	public function getDependency() {
-	
-	}
+	public function getDependency() {}
 	
 	/**
 	 * Starts the plugin

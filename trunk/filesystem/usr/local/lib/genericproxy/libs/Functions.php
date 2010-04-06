@@ -37,7 +37,7 @@ class Functions {
 	/**
 	 * 	Mount filesystem
 	 *
-	 * 	Mounts the filesystem with the specified mode
+	 * 	Mounts / unmounts the /cfg partition
 	 * 
 	 * 	@static
 	 * 	@access public
@@ -45,10 +45,10 @@ class Functions {
 	 * 	@return Boolean
 	 */
 	public static function mountFilesystem($mode) {
-		if($mode == 'r'){
+		if($mode == 'unmount'){
 			Functions::shellCommand('umount /cfg',$errors,$returncode,null);	
 		}
-		elseif($mode == 'w'){
+		elseif($mode == 'mount'){
 			Functions::shellCommand('mount /cfg',$errors,$returncode,null);
 		}
 		return true;
