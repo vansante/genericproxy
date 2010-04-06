@@ -560,46 +560,50 @@ EOD;
 	 */
 	private function echoStatus(){
 		$file_handle = fopen($this->data->chroot_path.self::LEASES_PATH, "r");
-		$buffer .= '<reply action="ok"><dhcp_status>';
+		$leases = array();
 		while (!feof($file_handle)) {
 		   $line = fgets($file_handle);
-		   if($line[0] != '#'){
-		   		if(stristr($line,'lease')){
+		   if ($line[0] != '#') {
+				if(stristr($line,'lease')){
 		   			//start a new lease
-		   			$buffer .= '<lease online="true">';
-		   			$ip = str_replace('lease ','',$line);
-		   			$ip = str_replace(" {\n",'',$ip);
-		   			$buffer .= '<ip>'.$ip.'</ip>';
-		   		}
-		   		elseif(stristr($line,'starts')){
+					$lease = array();
+		   			$ip = str_replace('lease ', '', $line);
+		   			$ip = str_replace(" {\n", '', $ip);
+		   			$lease['ip'] = $ip;
+		   		} elseif (stristr($line, 'starts')) {
 		   			//start of lease found
-		   			$start = substr($line,11,19);
-		   			$buffer .= '<start>'.$start.'</start>';
-		   		}
-		   		elseif(stristr($line,'ends')){
+		   			$lease['start'] = substr($line, 11, 19);
+		   		} else if(stristr($line, 'ends')) {
 		   			//end of lease found
-		   			$end = substr($line,9,19);
-		   			$buffer .= '<end>'.$end.'</end>';
-		   		}
-		   		elseif(stristr($line,'ethernet')){
+		   			$lease['end'] = substr($line, 9, 19);
+		   		} else if (stristr($line, 'ethernet')) {
 		   			//mac address found
-		   			$mac = substr($line,20,17);
-		   			$buffer .= '<mac>'.$mac.'</mac>';
-		   		}
-		   		elseif(stristr($line,'hostname')){
+		   			$lease['mac'] = substr($line, 20, 17);
+		   		} else if (stristr($line,'hostname')) {
 		   			//hostname found
 		   			$host_start = strpos($line,'"');
 		   			$host_end = strrpos($line,'"');
-		   			$hostname = substr($line,$host_start + 1,($host_end - $host_start - 1));
-		   			$buffer .= '<hostname>'.$hostname.'</hostname>';
-		   		}
-		   		elseif(stristr($line,'}')){
+		   			$lease['hostname'] = substr($line,$host_start + 1, ($host_end - $host_start - 1));
+		   		} else if (stristr($line,'}')) {
 		   			//End of lease
-		   			$buffer .= '</lease>';
+		   			$timestamp = strtotime($lease['end']);
+					if ($timestamp > time()) {
+						$leases[$lease['mac']] = $lease;
+					}
 		   		}
 		   }
 		}
 		fclose($file_handle);
+		$buffer = '<reply action="ok"><dhcp_status>';
+		foreach ($leases as $lease) {
+			$buffer .= '<lease>';
+			$buffer .= '<ip>'.$lease['ip'].'</ip>';
+			$buffer .= '<start>'.$lease['start'].'</start>';
+			$buffer .= '<end>'.$lease['end'].'</end>';
+			$buffer .= '<mac>'.$lease['mac'].'</mac>';
+			$buffer .= '<hostname>'.$lease['hostname'].'</hostname>';
+			$buffer .= '</lease>';
+		}
 		$buffer .= '</dhcp_status></reply>';
 		echo $buffer;
 	}
