@@ -140,6 +140,7 @@ gp.checkForUpdates = function() {
             page: 'check',
             successFn: function(json) {
                 if (json.release) {
+                    gp.data.new_release = json.release;
                     var txt = '<p>There is a new firmware with version <strong>'
                         +json.release.version+'</strong> issued on <strong>'+json.release.date+'</strong>.'
                         +'<br>Do you want to go to the firmware upgrade page to apply it?</p>';
@@ -154,6 +155,8 @@ gp.checkForUpdates = function() {
                         $('#system_upgrade').addClass('active');
                         $('#menu').accordion('activate' , '#system');
                     });
+                } else {
+                    gp.data.no_release = true;
                 }
             }
         });
