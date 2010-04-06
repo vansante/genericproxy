@@ -142,6 +142,7 @@ class User {
 				$this->session ['ip'] = $_SERVER ['REMOTE_ADDR'];
 				session_register('uid');
 				$_SESSION['uid'] = (string) $xmlUser['name'];
+				$_SESSION['group'] = $xmlUser['group'];
 				$this->updateSession ();
 				
 				Logger::getRootLogger ()->info ( "User {$xmlUser['name']} is logged in." );

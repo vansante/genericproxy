@@ -156,8 +156,11 @@ class System implements Plugin {
 		elseif($_POST['page'] == 'reboot'){
 			$this->reboot();
 		}
-		elseif($_POST['page'] == 'backup'){
+		elseif($_POST['page'] == 'getconfigxml'){
 			$this->backupConfig();
+		}
+		elseif($_POST['page'] == 'saveconfigxml'){
+			$this->restoreConfig();
 		}
 		elseif($_POST['page'] == 'reset'){
 			$this->resetToDefaults();
@@ -208,7 +211,22 @@ class System implements Plugin {
 	 */
 	private function restoreConfig(){
 		if(!empty($_FILES['system_backrest_restorexml']['name'])){
-			
+			try{
+				$newconfig = new Config($_FILES['system_backrest_restorexml']['tmp_name']);
+				//	We're still here so the config loaded without any issues, copy it over
+				Functions::mountFilesystem('mount');
+				//	TODO keep a copy of the old config.xml for safety reasons?
+				if(move_uploaded_file($_FILES['system_backrest_restorexml']['tmp_name'], '/cfg/GenericProxy/config.xml')){
+					echo '<reply action="ok"><message>Your configuration has been loaded, you will need to reboot for the changes to take place. Alternatively you can now review the new configuration in the GUI.</message></reply>';
+				}
+				else{
+					throw new Exception('There was an error uploading the file');
+				}
+				Functions::mountFilesystem('unmount');
+			}
+			catch(Exception $e){
+				throw new Exception('The config file you uploaded contains XML errors');
+			}
 		}
 		else{
 			throw new Exception('No configuration file was uploaded');
@@ -221,7 +239,28 @@ class System implements Plugin {
 	 * @access private
 	 */
 	private function getSystemStatus(){
+		$buffer .= '<reply action="ok"><system>';
 		
+		//	Get the boot time
+		$data = Functions::shellCommand('uptime');
+		$data = explode(',',$data);
+		
+		$buffer .= '<uptime>'.$data[0].''.$data[1].'</uptime>';
+
+		//	Get name
+		$buffer .= '<name>'.(string)$this->data->hostname.'</name>';
+		$buffer .= '<version><current>'.PluginFramework::VERSION.'</current></version>';
+
+		//	Get processor 
+		$cpu = str_replace(' Load averages: ',$data[3]);
+		$buffer .= '<cpu>'.$cpu.'</cpu>';
+		
+		//	Get memory usage
+		//	TODO get real memory usage here
+		$buffer .= '<memory>0</memory>';
+		
+		$buffer .= '</system></reply>';
+		echo $buffer;
 	}
 	
 	/**
