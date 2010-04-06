@@ -153,7 +153,7 @@ class Proxy implements Plugin {
 	 */
 	public function configure() {
 		Logger::getRootLogger ()->info ( "Configuring Proxy server" );
-		Functions::mountFilesystem ( 'w' );
+		Functions::mountFilesystem ( 'mount' );
 		
 		//Write away the DHCPD config.
 		$fd = fopen ( self::CONFIG_PATH, "w" );
@@ -256,7 +256,7 @@ EOD;
 		
 		fwrite ( $fd, $proxyconf );
 		fclose ( $fd );
-		Functions::mountFilesystem ( 'r' );
+		Functions::mountFilesystem ( 'unmount' );
 		
 		return 0;
 	}

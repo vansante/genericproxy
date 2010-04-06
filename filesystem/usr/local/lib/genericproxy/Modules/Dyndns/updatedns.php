@@ -633,11 +633,11 @@
 				/* Write WAN IP to cache file */
 				$currentTime = time();				  
 				Logger::getRootLogger ()->info("phpDynDNS: updating cache file {$this->_cacheFile}: {$this->_wan_ip}");
-				Functions::mountFilesystem ( 'rw' );
+				Functions::mountFilesystem ( 'mount' );
 				$file = fopen($this->_cacheFile, 'w');
 				fwrite($file, $this->_wan_ip.':'.$currentTime);
 				fclose($file);
-				Functions::mountFilesystem ( 'ro' );
+				Functions::mountFilesystem ( 'unmount' );
 			}
 			$this->status = $status;
 			Logger::getRootLogger ()->info($status);
@@ -707,11 +707,11 @@
 				$initial = false;
 				Logger::getRootLogger ()->info("DynDns: Cached IP: {$cacheIP}");
 			} else {
-				Functions::mountFilesystem ( 'rw' );
+				Functions::mountFilesystem ( 'mount' );
 				$file = fopen($this->_cacheFile, 'w');
 				fwrite($file, '0.0.0.0:'.$currentTime);
 				fclose($file);
-				Functions::mountFilesystem ( 'ro' );
+				Functions::mountFilesystem ( 'unmount' );
 				$cacheIP = '0.0.0.0';
 				$cacheTime = $currentTime;
 				$initial = true;
@@ -761,11 +761,11 @@
 		 */
 		function _debug ($data) {
 			$string = date('m-d-y h:i:s').' - ('.$this->_debugID.') - ['.$this->_dnsService.'] - '.$data.'\n';
-			Functions::mountFilesystem ( 'rw' );
+			Functions::mountFilesystem ( 'mount' );
 			$file = fopen($this->_debugFile, 'a');
 			fwrite($file, $string);
 			fclose($file);
-			Functions::mountFilesystem ( 'ro' );
+			Functions::mountFilesystem ( 'unmount' );
 		}
 
 	}

@@ -320,11 +320,6 @@ class PluginFramework {
 		//Enable console output if its muted.
 		//Functions::shellCommand("/sbin/conscontrol mute off >/dev/null");
 		
-
-		//TODO: Mount filsystem here, instead of in plugins.
-		//Functions::mountFilesystem('rw');
-		
-
 		//Run early shell commands found in the config
 		foreach ( $this->configuration->getElement ( 'system' )->earlyshellcmd [0] as $command ) {
 			if ($command->getName () == 'command' && strlen ( ( string ) $command ) > 1) {
@@ -344,9 +339,6 @@ class PluginFramework {
 				Logger::getRootLogger ()->info ( "Running custom command '$command' " . ((strlen ( $result ) > 0) ? (" Result: " . $result) : "") );
 			}
 		}
-		
-		//Functions::mountFilesystem('ro');
-		
 
 		Logger::getRootLogger ()->debug ( "Peak Memory usage: " . memory_get_peak_usage ( false ) . " Bytes" );
 		Logger::getRootLogger ()->debug ( "Peak  Memory real usage: " . memory_get_peak_usage ( true ) . " Bytes" );
@@ -472,9 +464,9 @@ class PluginFramework {
 				 * 	TODO make the error led blink to signal the system is being booted with defaults during boot?
 				 */
 				//	Copy corrupt config.xml into /cfg/broken-config.xml 
-				Functions::mountFilesystem('w');
+				Functions::mountFilesystem('mount');
 				Functions::shellCommand('cp '.self::CONFIG_PATH.'/config.xml /cfg/broken-config.xml');
-				Functions::mountFilesystem('r');
+				Functions::mountFilesystem('unmount');
 				
 				//	Replace saved config with default config and reload
 				Functions::shellCommand('cp '.self::CONFIG_PATH.'/default-config.xml '.self::CONFIG_PATH.'/config.xml');

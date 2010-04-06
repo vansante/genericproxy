@@ -78,7 +78,7 @@ class Config {
 	 * @return bool Returns TRUE on success.
 	 */
 	public function saveConfig($file = null) {
-		Functions::mountFilesystem('w');
+		Functions::mountFilesystem('mount');
 		$file = is_null($file) ? $this->file : $file;
 		Logger::getRootLogger()->info("Saving config to {$file}.");
 		$return = $this->xml->asXML($file);
@@ -86,7 +86,7 @@ class Config {
 			Functions::shellCommand('mkdir /cfg/GenericProxy');
 		}
 		Functions::shellCommand('cp -r /etc/GenericProxy/* /cfg/GenericProxy/');
-		Functions::mountFilesystem('r');
+		Functions::mountFilesystem('unmount');
 		return $return;
 	}
 
