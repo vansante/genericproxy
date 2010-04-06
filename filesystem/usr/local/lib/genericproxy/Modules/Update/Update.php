@@ -132,6 +132,16 @@ class Update implements Plugin{
 	}
 	
 	/**
+	 * Automatically update Firmware
+	 * 
+	 * @access public
+	 * @throws Exception
+	 */
+	private function updateFirmware(){
+		
+	}
+	
+	/**
 	 * Checks for firmware updates
 	 * 
 	 * Checks using releases.xml on the specified update server

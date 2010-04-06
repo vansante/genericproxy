@@ -249,15 +249,24 @@ class System implements Plugin {
 
 		//	Get name
 		$buffer .= '<name>'.(string)$this->data->hostname.'</name>';
-		$buffer .= '<version><current>'.PluginFramework::VERSION.'</current></version>';
+		$buffer .= '<version>'.PluginFramework::VERSION.'</version>';
 
 		//	Get processor 
 		$cpu = str_replace(' Load averages: ',$data[3]);
-		$buffer .= '<cpu>'.$cpu.'</cpu>';
+		$cpu = explode(',',$cpu);
+		
+		$buffer .= '<cpu>';
+		$buffer .= '<avg15>'.round($cpu[2] * 100).'</avg15>';
+		$buffer .= '<avg5>'.round($cpu[1] * 100).'</avg5>';
+		$buffer .= '<avg1>'.round($cpu[0] * 100).'</avg1>';
+		$buffer .= '</cpu>';
 		
 		//	Get memory usage
+		$totalram = str_replace('hw.physmem: ','',Functions::shellCommand('sysctl hw.physmem'));
+		$totalram = (($totalram / 1024)/1024);
 		//	TODO get real memory usage here
-		$buffer .= '<memory>0</memory>';
+		$usedram = 0;
+		$buffer .= '<memory><total>'.$totalram.'</total><used>'.$usedram.'</used></memory>';
 		
 		$buffer .= '</system></reply>';
 		echo $buffer;
