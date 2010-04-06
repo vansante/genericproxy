@@ -512,7 +512,7 @@ form dl.form_sub dd, dl.form dl.form_sub dd {
     margin-top: 20px;
     display: none;
 }
-.interface_status, .parse-error-output, .diagnostics-results code {
+.release-changelog pre, .interface_status, .parse-error-output, .diagnostics-results code {
     display: block;
     overflow: scroll;
     overflow-x: scroll;
@@ -527,5 +527,9 @@ form dl.form_sub dd, dl.form dl.form_sub dd {
 }
 
 #status_system_download {
+    display: none;
+}
+
+#system_upgrade_auto_warning, #system_upgrade_auto_no_update, #system_upgrade_auto_form {
     display: none;
 }
