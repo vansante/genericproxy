@@ -1,6 +1,7 @@
 <script type="text/javascript">
     gp.status.system.clickHandler = function() {
         gp.status.system.load();
+        gp.checkForUpdates();
     };
 
     gp.status.system.load = function() {
@@ -14,15 +15,13 @@
             successFn: function(json) {
                 json = json.system;
                 $('#status_system_name').html(json.name);
-                $('#status_system_currentversion').html(json.version.current);
-                $('#status_system_latestversion').html(json.version.latest);
-                if (json.version.current < json.version.latest) {
-                    $('#status_system_download').slideDown(500);
-                }
+                $('#status_system_version').html(json.version);
                 $('#status_system_uptime').html(json.uptime);
-                $('#status_system_cpu').html(json.cpu);
-                $('#status_system_memory').html(json.memory);
-                $('#status_system_hdd').html(json.harddisk);
+                $('#status_system_cpu_1').html(json.cpu.avg1);
+                $('#status_system_cpu_5').html(json.cpu.avg5);
+                $('#status_system_cpu_15').html(json.cpu.avg15);
+                $('#status_system_memory_total').html(json.memory.total);
+                $('#status_system_memory_inuse').html(json.memory.used);
             }
         });
     };

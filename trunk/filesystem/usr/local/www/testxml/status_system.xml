@@ -1,13 +1,16 @@
 <reply action="ok">
 	<system>
 		<name>generic proxy system</name>
-		<version>
-			<current>0.8</current>
-			<latest>0.9</latest>
-		</version>
+		<version>0.8</version>
 		<uptime>8 days, 5 hours and 44 minutes</uptime>
-		<cpu>67%</cpu>
-		<memory>62%</memory>
-		<harddisk>34%</harddisk>
+		<cpu>
+			<avg1>12</avg1>
+			<avg5>34</avg5>
+			<avg15>24</avg15>
+		</cpu>
+		<memory>
+			<total>1024</total>
+			<used>0</used>
+		</memory>
 	</system>
 </reply>

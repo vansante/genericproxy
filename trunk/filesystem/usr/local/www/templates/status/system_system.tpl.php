@@ -9,18 +9,9 @@
         <span id="status_system_name"></span>
     </dd>
 
-    <dt>Current version</dt>
+    <dt>System version</dt>
     <dd>
-        <span id="status_system_currentversion"></span>
-    </dd>
-
-    <dt>Latest version</dt>
-    <dd>
-        <span id="status_system_latestversion"></span>
-    </dd>
-
-    <dd>
-        <span id="status_system_download">Download the latest version at <a href="http://www.genericproxy.org">GenericProxy.org</a></span>
+        <span id="status_system_version"></span>
     </dd>
 
     <dt>Uptime</dt>
@@ -28,19 +19,29 @@
         <span id="status_system_uptime"></span>
     </dd>
 
-    <dt>CPU usage</dt>
+    <dt>CPU load</dt>
     <dd>
-        <span id="status_system_cpu"></span>
+        <dl class="form_sub">
+            <dt>1 minute average</dt>
+            <dd><span id="status_system_cpu_1"></span> %</dd>
+
+            <dt>5 minute average</dt>
+            <dd><span id="status_system_cpu_5"></span> %</dd>
+
+            <dt>15 minute average</dt>
+            <dd><span id="status_system_cpu_15"></span> %</dd>
+        </dl>
     </dd>
 
     <dt>Memory usage</dt>
     <dd>
-        <span id="status_system_memory"></span>
-    </dd>
+        <dl class="form_sub">
+            <dt>Total</dt>
+            <dd><span id="status_system_memory_total"></span> MiB</dd>
 
-    <dt>Harddisk usage</dt>
-    <dd>
-        <span id="status_system_hdd"></span>
+            <dt>In use</dt>
+            <dd><span id="status_system_memory_inuse"></span> MiB</dd>
+        </dl>
     </dd>
 </dl>
 
