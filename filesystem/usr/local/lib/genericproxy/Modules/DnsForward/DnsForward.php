@@ -176,13 +176,14 @@ class DnsForward implements Plugin{
 			sleep( 1 );
 		}
 		
+		$args = null;
 		if ((string)$this->data['enable'] == 'true'){
 			Logger::getRootLogger()->info('Configuring DNS masking');
 	
 			if($this->data['regdhcpd'] == 'true'){
 				$system = $this->config->getElement('system');
 				if(file_exists(Dhcpd::LEASES_PATH)){
-					$args .= ' -l '.Dhcpd::LEASES_PATH.' -s '.$system->domain;
+					$args = ' -l '.Dhcpd::LEASES_PATH.' -s '.$system->domain;
 				}
 				else{
 					Logger::getRootLogger()->info('DHCP leases could not be registered into dnsmasq (missing lease file)');
@@ -195,7 +196,6 @@ class DnsForward implements Plugin{
 	
 			/* run dnsmasq */
 			$return = Functions::shellCommand("/usr/local/sbin/dnsmasq --local-ttl 1 --all-servers --dns-forward-max=5000 --cache-size=10000 {$args}");
-			Logger::getRootLogger()->debug(print_r($return));
 		}
 		else{
 			Logger::getRootLogger()->info('DnsForward disabled');

@@ -603,7 +603,7 @@ class Nat implements Plugin, GeneratesRules {
 		$staticport = '';
 		
 		if(!empty($source_port)){
-			$tmp_network .= " port ".$source_port;
+			$tmp_network = " port ".$source_port;
 		}
 		
 		if(!empty($dest_port)){
@@ -635,7 +635,7 @@ class Nat implements Plugin, GeneratesRules {
 		
 		Logger::getRootLogger()->debug('NAT interface name: '.(string)$source->if);
 		
-		$network .= ((string)$source->if).':network';
+		$network = ((string)$source->if).':network';
 		$network .= $tmp_network;
 		return $nat . " on " . $interface . " from " . $network . " to " . $destination . " " . $target . $staticport . "\n";
 	}

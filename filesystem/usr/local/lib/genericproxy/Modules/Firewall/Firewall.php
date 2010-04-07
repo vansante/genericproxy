@@ -847,7 +847,7 @@ class Firewall implements Plugin {
 					//		Destination is an IP address
 					$destination .= ( string ) $rule->destination->address;
 				}
-				elseif((string)$rule->destination->type = 'network'){
+				elseif((string)$rule->destination->type == 'network'){
 					//		Destination is a subnet / network
 					$destination .= ( string ) $rule->destination->address.'/'.$rule->destination->subnet;
 				}
