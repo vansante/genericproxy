@@ -468,10 +468,14 @@ class Firewall implements Plugin {
 	 * 	@access private
 	 */
 	private function echoRules() {
-		$buffer .= '<reply action="ok"><firewall>';
+		//	We haven't found anything yet
+		$foundSomething = false;
+		
+		$buffer = '<reply action="ok"><firewall>';
 		foreach ( $this->data->rule as $rule ) {
 			if ($this->checkRights($rule)) {
 				$buffer .= $rule->asXML ();
+				//	We found a rule, set the flag
 				$foundSomething = true;
 			}
 		}
