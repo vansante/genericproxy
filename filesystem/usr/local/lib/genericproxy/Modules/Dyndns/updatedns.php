@@ -52,7 +52,7 @@
 	 */
 
 	class updatedns {
-		var $_cacheFile = '/cf/conf/dyndns.cache';
+		var $_cacheFile = '/var/etc/dyndns.cache';
 		var $_debugFile = '/var/etc/dyndns.debug';
 		var $_UserAgent = 'User-Agent: phpDynDNS/0.7';
 		var $_errorVerbosity = 0;
@@ -633,11 +633,9 @@
 				/* Write WAN IP to cache file */
 				$currentTime = time();				  
 				Logger::getRootLogger ()->info("phpDynDNS: updating cache file {$this->_cacheFile}: {$this->_wan_ip}");
-				Functions::mountFilesystem ( 'mount' );
 				$file = fopen($this->_cacheFile, 'w');
 				fwrite($file, $this->_wan_ip.':'.$currentTime);
 				fclose($file);
-				Functions::mountFilesystem ( 'unmount' );
 			}
 			$this->status = $status;
 			Logger::getRootLogger ()->info($status);
