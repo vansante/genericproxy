@@ -76,6 +76,9 @@ class User {
 	const SESSION_FILE = '/tmp/login.session';
 	
 	public function __construct($configuration) {
+		//	Start the session
+		session_start();
+		
 		$this->configuration = &$configuration;
 		
 		//Get system session data and check if an user is already logged in.
@@ -118,9 +121,6 @@ class User {
 	 * @access public
 	 */
 	public function login() {
-		//	Start the session
-		session_start();
-		
 		//see if the user exists in the config.
 		if (empty ( $_SESSION['uid'] ) && !isset($_POST['user'])) {
 			echo '<reply action="login-error"><message type="error">Login required.</message></reply>';
