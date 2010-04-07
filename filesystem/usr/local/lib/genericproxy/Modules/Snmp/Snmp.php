@@ -43,6 +43,20 @@ class Snmp implements Plugin{
 	private $data;
 	
 	/**
+	 * Location of the SNMPD config file
+	 * 
+	 * @var string
+	 */
+	const CONFIG_FILE = '/var/etc/snmpd.conf';
+	
+	/**
+	 * Location of the snmpd service PID file
+	 * 
+	 * @var string
+	 */
+	const PID_PATH = '/var/run/snmpd.pid';
+	
+	/**
 	 * Constructor
 	 *
 	 * @access public
@@ -136,7 +150,7 @@ class Snmp implements Plugin{
 			
 			#pass_persist .1.3.6.1.4.1.21695.1.2 /usr/local/sbin/dhcpd-snmp /usr/local/etc/dhcpd-snmp.conf";
 		
-		$fp = fopen('/usr/local/share/snmp/snmpd.conf','w');
+		$fp = fopen(self::CONFIG_FILE,'w');
 		
 		if($fp !== false){
 			fwrite($fp,$config);
@@ -170,7 +184,13 @@ class Snmp implements Plugin{
 	 * 	@returns Error|Started|Stopped
 	 */
 	public function getStatus() {
-		
+		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
+		if ($pid > 0) {
+			return 'Started';
+		}
+		else{
+			return 'Stopped';
+		}
 	}
 
 	/**
@@ -197,7 +217,14 @@ class Snmp implements Plugin{
 	 * 	@access public
 	 */
 	public function start() {
-		Functions::shellCommand('snmpd');
+		Logger::getRootLogger()->info('Starting snmpd');
+		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
+		if ($pid > 0) {
+			Logger::getRootLogger()->info('Snmpd already running?');
+		}
+		else{
+			Functions::shellCommand('snmpd -c '.self::CONFIG_FILE);
+		}
 	}
 
 	/**
@@ -205,7 +232,13 @@ class Snmp implements Plugin{
 	 * 
 	 * 	@access public
 	 */
-	public function stop() {}
+	public function stop() {
+		Logger::getRootLogger ()->info ( "Stopping snmpd" );
+		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
+		if ($pid > 0) {
+			Functions::shellCommand ( "/bin/kill {$pid}" );
+		}
+	}
 
 	
 }

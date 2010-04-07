@@ -476,10 +476,12 @@ EOD;
 		if ($pid > 0) {
 			return 'Started';
 		} else {
-			if (( string ) $this->data ['enable'] == true)
+			if (( string ) $this->data ['enable'] == true){
 				return "Error"; //Is enabled, but not running
-			else
+			}
+			else{
 				return 'Stopped';
+			}
 		}
 	}
 	

@@ -69,7 +69,7 @@ class Scheduler implements Plugin,GeneratesRules {
 	 * @return Boolean
 	 */
 	public function isService() {
-		return true;
+		return false;
 	}
 	
 	/**

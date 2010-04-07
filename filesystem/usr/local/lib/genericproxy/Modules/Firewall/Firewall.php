@@ -124,10 +124,10 @@ class Firewall implements Plugin {
 	 *	@return String $status
 	 */
 	public function getStatus() {
-		if ($this->data->enable == 'true') {
-			return 'running';
+		if ($this->data['enable'] == 'true') {
+			return 'Started';
 		} else {
-			return 'stopped';
+			return 'Stopped';
 		}
 	}
 
