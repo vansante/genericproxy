@@ -81,9 +81,6 @@ class User {
 		//Get system session data and check if an user is already logged in.
 		$this->getSession ();
 		
-		//Start session client side
-		session_start ();
-		
 		//The user is already logged in
 		if (isset ( $this->session ) && $this->session ['uid'] == session_id () && $this->session ['ip'] == $_SERVER ['REMOTE_ADDR']) {
 			//populate User with user data
