@@ -601,6 +601,7 @@ class Nat implements Plugin, GeneratesRules {
 	 */
 	private function generateOutboundRule($interface,$source = "any",$source_port = null,$destination = "any",$dest_port = null,$natip = null,$staticnatport = null,$nonat = false){
 		$staticport = '';
+		$tmp_network = null;
 		
 		if(!empty($source_port)){
 			$tmp_network = " port ".$source_port;
