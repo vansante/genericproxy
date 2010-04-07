@@ -140,7 +140,7 @@ class User {
 				session_register('uid');
 				session_register('group');
 				$_SESSION['uid'] = (string) $xmlUser['name'];
-				$_SESSION['group'] = $xmlUser['group'];
+				$_SESSION['group'] = (string)$xmlUser['group'];
 				$this->updateSession ();
 				
 				Logger::getRootLogger ()->info ( "User {$xmlUser['name']} is logged in." );
