@@ -118,6 +118,9 @@ class User {
 	 * @access public
 	 */
 	public function login() {
+		//	Start the session
+		session_start();
+		
 		//see if the user exists in the config.
 		if (empty ( $_SESSION['uid'] ) && !isset($_POST['user'])) {
 			echo '<reply action="login-error"><message type="error">Login required.</message></reply>';
