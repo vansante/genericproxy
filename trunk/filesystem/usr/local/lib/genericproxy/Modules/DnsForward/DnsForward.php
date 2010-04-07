@@ -461,7 +461,12 @@ class DnsForward implements Plugin{
 			return 'Started';
 		}
 		else{
-			return 'Stopped';
+			if($this->data['enable'] == 'true'){
+				return 'Error';
+			}
+			else{
+				return 'Stopped';
+			}
 		}
 	}
 	

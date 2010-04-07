@@ -297,7 +297,7 @@
 		</rule>
 	</firewall>
 
-	<scheduler>
+	<scheduler enable="true">
 		<maxupspeed>50</maxupspeed>
 		<maxdownspeed>500</maxdownspeed>
 
@@ -829,7 +829,7 @@
 		</keys>
 	</ipsec>
 
-	<proxy>
+	<proxy enable="true">
 		<port>8888</port>
 		<allow_from>
 			<ip>172.0.0.0</ip>
@@ -844,15 +844,6 @@
 			<port id="563" />
 		</ports>
 	</proxy>
-
-	<!-- Possibly remove -->
-	<wol>
-		<wolentry>
-			<interface>lan|opt[n]</interface>
-			<mac>xx:xx:xx:xx:xx:xx</mac>
-			<descr></descr>
-		</wolentry>
-	</wol>
 
 	<!-- See cron on making cron jobs. -->
 	<cron>

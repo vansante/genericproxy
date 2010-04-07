@@ -38,7 +38,7 @@ class Diagnostics implements Plugin{
 	 * @return Boolean
 	 */
 	public function isService() {
-		return true;
+		return false;
 	}
 
 	/**
