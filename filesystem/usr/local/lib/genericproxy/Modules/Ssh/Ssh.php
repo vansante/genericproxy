@@ -96,7 +96,6 @@ class Ssh implements Plugin {
 
 		//      Get firewall XML configuration
 		$this->data = $this->config->getElement ( 'ssh' );
-		$this->logger->debug("Config XML: ".$this->data->asXML());
 	}
 	
 	/**
