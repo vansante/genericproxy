@@ -216,12 +216,6 @@
 		<authorizedKey></authorizedKey>
 	</ssh>
 
-	<snmpd enable="true">
-		<syslocation></syslocation>
-		<syscontact></syscontact>
-		<rocommunity>public</rocommunity>
-	</snmpd>
-
 	<nat>
 		<natreflection>enabled</natreflection>
 		<reflectiontimeout>0</reflectiontimeout>

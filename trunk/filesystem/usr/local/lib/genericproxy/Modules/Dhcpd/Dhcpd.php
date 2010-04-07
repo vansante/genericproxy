@@ -215,12 +215,15 @@ class Dhcpd implements Plugin {
 	public function configure() {
 		Logger::getRootLogger ()->info ( "Configuring DHCPD" );
 		
-		Functions::shellCommand('mkdir /var/db');
+		//	make /var/db directory if it does not exist
+		if(!is_dir('/var/db')){
+			Functions::shellCommand('mkdir /var/db');
+		}
 		
 		//Write away the DHCPD config.
 		$fd = fopen ( self::CONFIG_PATH, "w" );
 		if (! $fd) {
-			Logger::getRootLogger ()->error ( "Error: Could not write DHCPD conifg to " . self::CONFIG_PATH );
+			Logger::getRootLogger ()->error ( "Error: Could not write DHCPD configuration to " . self::CONFIG_PATH );
 			return 1;
 		}
 		
