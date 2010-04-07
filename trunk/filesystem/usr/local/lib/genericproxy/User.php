@@ -138,6 +138,7 @@ class User {
 				$this->session ['name'] = ( string ) $xmlUser ['name'];
 				$this->session ['ip'] = $_SERVER ['REMOTE_ADDR'];
 				session_register('uid');
+				session_register('group');
 				$_SESSION['uid'] = (string) $xmlUser['name'];
 				$_SESSION['group'] = $xmlUser['group'];
 				$this->updateSession ();
