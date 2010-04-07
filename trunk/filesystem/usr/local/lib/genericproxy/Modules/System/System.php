@@ -263,9 +263,8 @@ class System implements Plugin {
 		
 		//	Get memory usage
 		$totalram = str_replace('hw.physmem: ','',Functions::shellCommand('sysctl hw.physmem'));
-		$totalram = (($totalram / 1024)/1024);
-		//	TODO get real memory usage here
-		$usedram = 0;
+		$totalram = ($totalram / (1024 * 1024));
+		$usedram = ($totalram - Functions::getFreeMemory());
 		$buffer .= '<memory><total>'.$totalram.'</total><used>'.$usedram.'</used></memory>';
 		
 		$buffer .= '</system></reply>';
