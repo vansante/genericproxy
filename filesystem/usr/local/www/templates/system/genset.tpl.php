@@ -13,6 +13,7 @@
             module: 'System',
             page: 'getconfig',
             error_element: $('#system_genset_form_error'),
+            content_id: 'cp_system_genset_genset',
             successFn: function(json) {
                 gp.data.system = json.system;
 

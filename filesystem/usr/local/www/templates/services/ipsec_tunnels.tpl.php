@@ -462,6 +462,7 @@
                     tunnelid: id
                 },
                 error_element: $('#services_ipsec_tunnel_table_error'),
+                content_id: 'cp_services_ipsec_tunnels',
                 successFn: function(json) {
                     var enabled = gp.data.ipsec_tunnels[id].enable;
                     gp.data.ipsec_tunnels[id].enable = (enabled == 'true' ? 'false' : 'true');
@@ -482,6 +483,7 @@
                         tunnelid: id
                     },
                     error_element: $('#services_ipsec_tunnel_table_error'),
+                    content_id: 'cp_services_ipsec_tunnels',
                     successFn: function(json) {
                         delete gp.data.ipsec_tunnels[id];
                         gp.services.ipsec.tunnels.buildTable();

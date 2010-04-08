@@ -14,6 +14,7 @@
             module: 'System',
             page: 'getntpconfig',
             error_element: $('#services_ntp_form_error'),
+            content_id: 'cp_services_ntp_ntp',
             successFn: function(json) {
                 gp.data.ntp = json.ntp;
 

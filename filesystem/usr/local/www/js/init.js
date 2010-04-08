@@ -27,14 +27,14 @@ $(function() {
         //Initializeer een hook methode die in de pagina template wordt overschreven
         var url_str = $(this).attr('rel').split('->');
 
+        //Toon het paneel
+        contentpart.show();
+        contentpart.parent().show();
+
         //Module = urlStr[0], Pagina = urlStr[1]
         if (gp[url_str[0]] && gp[url_str[0]][url_str[1]] && gp[url_str[0]][url_str[1]].clickHandler) {
             gp[url_str[0]][url_str[1]].clickHandler();
         }
-
-        //Toon het paneel
-        contentpart.show();
-        contentpart.parent().show();
     });
 
     // Initialize a page when it's opened by an anchor
@@ -173,6 +173,7 @@ gp.checkForUpdates = function() {
  *  - page: pagename (optional)
  *  - params: extra post parameters in object form, or querystring(does not work with file) (optional)
  *  - error_element: the element the error appears in (optional)
+ *  - content_id: the id of the element the ajax loader should appear in (optional)
  *  - successFn: function that gets called with the json as parameter when the request was successful (optional)
  *  - errorFn:  function that gets called when the request fails (optional)
  *  - url: Can be overridden for testing purposes, default 'ajaxserver.php'
@@ -181,10 +182,19 @@ gp.doAction = function(opts) {
     if (opts.error_element) {
         if ($.isArray(opts.error_element)) {
             $.each(opts.error_element, function(i, el) {
-                el.slideUp(350);
+                el.slideUp(150);
             });
         } else {
-            opts.error_element.slideUp(350);
+            opts.error_element.slideUp(150);
+        }
+    }
+    if (opts.content_id) {
+        if ($.isArray(opts.content_id)) {
+            $.each(opts.content_id, function(i, el){
+                gp.showAjaxLoader(el);
+            });
+        } else {
+            gp.showAjaxLoader(opts.content_id);
         }
     }
     var postFields = {};
@@ -204,12 +214,24 @@ gp.doAction = function(opts) {
         type: 'POST',
         data: postFields,
         error: function(request, textStatus, error) {
+            if (opts.content_id) {
+                if ($.isArray(opts.content_id)) {
+                    $.each(opts.content_id, function(i, el){
+                        gp.hideAjaxLoader(el);
+                    });
+                } else {
+                    gp.hideAjaxLoader(opts.content_id);
+                }
+            }
             gp.handleRequestError(request, textStatus, opts.error_element, opts.errorFn);
             if (opts.errorFn) {
                 opts.errorFn();
             }
         },
         success: function(data, textStatus, request) {
+            if (opts.content_id) {
+                gp.hideAjaxLoader(opts.content_id);
+            }
             $('#'+opts.form_id+' input[type=submit]').removeAttr('disabled');
             gp.processReply(data, opts.error_element, opts.successFn, opts.errorFn);
         }
@@ -226,7 +248,7 @@ gp.doAction = function(opts) {
  */
 gp.doFormAction = function(opts) {
     $('#'+opts.form_id+' input[type=submit]').attr('disabled', 'disabled');
-    gp.showFormLoader(opts.form_id);
+    gp.showAjaxLoader(opts.form_id);
     if (opts.error_element) {
         if ($.isArray(opts.error_element)) {
             $.each(opts.error_element, function(i, el) {
@@ -243,12 +265,12 @@ gp.doFormAction = function(opts) {
         clearForm: false,
         resetForm: false,
         error: function(request, textStatus, error) {
-            gp.hideFormLoader(opts.form_id);
+            gp.hideAjaxLoader(opts.form_id);
             $('#'+opts.form_id+' input[type=submit]').removeAttr('disabled');
             gp.handleRequestError(request, textStatus, opts.error_element, opts.errorFn);
         },
         success: function(data, textStatus, request) {
-            gp.hideFormLoader(opts.form_id);
+            gp.hideAjaxLoader(opts.form_id);
             $('#'+opts.form_id+' input[type=submit]').removeAttr('disabled');
             gp.processReply(data, opts.error_element, opts.successFn, opts.errorFn);
         }
@@ -459,28 +481,28 @@ gp.rebootCountDown = function() {
     }
 }
 
-gp.showFormLoader = function(form_id) {
-    var form = $('#'+form_id);
-    var loader = $('#'+form_id+'_loader');
+gp.showAjaxLoader = function(el_id) {
+    var element = $('#'+el_id);
+    var loader = $('#'+el_id+'_loader');
     if (!loader.length) {
-        loader = $('<div class="ajax-form-loader" id="'+form_id+'_loader"><img src="images/loader.gif" alt="loader"/> Loading..</div>');
-        form.append(loader);
+        loader = $('<div class="ajax-form-loader" id="'+el_id+'_loader"><img src="images/loader.gif" alt="loader"/> Loading..</div>');
+        element.append(loader);
     }
     var top, left;
-    if (form.hasClass('dialog')) {
-        top = form.height() / 2 - (32 / 2);
-        left = form.width() / 2 - (100 / 2);
+    if (element.hasClass('dialog')) {
+        top = element.height() / 2 - (32 / 2);
+        left = element.width() / 2 - (100 / 2);
     } else {
-        top = form.position().top + (form.height() / 2 - (32 / 2));
-        left = form.position().left + (form.width() / 2 - (100 / 2));
+        top = element.position().top + (element.height() / 2 - (32 / 2));
+        left = element.position().left + (element.width() / 2 - (100 / 2));
     }
     loader.css('top', top);
     loader.css('left', left);
     loader.show();
 };
 
-gp.hideFormLoader = function(form_id) {
-    $('#'+form_id+'_loader').hide();
+gp.hideAjaxLoader = function(el_id) {
+    $('#'+el_id+'_loader').hide();
 };
 
 String.prototype.trim = function() {

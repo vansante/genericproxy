@@ -9,6 +9,7 @@
             module: 'Diagnostics',
             page: 'getbootlog',
             error_element: $('#diagnostics_log_boot_error'),
+            content_id: 'cp_diagnostics_log_boot',
             successFn: function(json) {
                 $('#diagnostics_log_boot').html('<pre>'+json.bootlog+'</pre>');
             }
@@ -19,6 +20,7 @@
             module: 'Diagnostics',
             page: 'gethttpdlog',
             error_element: $('#diagnostics_log_httpd_error'),
+            content_id: 'cp_diagnostics_log_httpd',
             successFn: function(json) {
                 $('#diagnostics_log_httpd').html('<pre>'+json.httpdlog+'</pre>');
             }
@@ -29,6 +31,7 @@
             module: 'Diagnostics',
             page: 'getbrowserlog',
             error_element: $('#diagnostics_log_browser_error'),
+            content_id: 'cp_diagnostics_log_browser',
             successFn: function(json) {
                 $('#diagnostics_log_browser').html('<pre>'+json.browserlog+'</pre>');
             }

@@ -41,15 +41,18 @@
         <script type="text/javascript">
             $(function() {
                 $('#login_form').submit(function() {
-                    $('#login_form_error').slideUp();
+                    $('#login_form_error').slideUp(150);
+                    gp.showAjaxLoader('login_form');
                     $.ajax({
                         url: 'ajaxserver.php',
                         type: 'POST',
                         data: $('#login_form').serialize(),
                         error: function(request, textStatus) {
+                            gp.hideFormLoader('login_form');
                             gp.displayError(textStatus, 'Server unreachable', $('#login_form_error'));
                         },
                         success: function(data) {
+                            gp.hideAjaxLoader('login_form');
                             var json = $.xml2json(data);
                             if (!json || !json.action || json.action != 'login-ok') {
                                 if (json.message) {

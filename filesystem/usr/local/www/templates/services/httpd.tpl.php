@@ -13,6 +13,7 @@
             module: 'Httpd',
             page: 'getconfig',
             error_element: $('#services_httpd_form_error'),
+            content_id: 'cp_services_httpd_httpd',
             successFn: function(json) {
                 gp.data.httpd = json.httpd;
                 gp.services.httpd.loadForm();

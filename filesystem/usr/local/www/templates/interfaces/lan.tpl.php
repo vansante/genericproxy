@@ -12,6 +12,7 @@
             module: 'Lan',
             page: 'getconfig',
             error_element: $('#interfaces_lan_form_error'),
+            content_id: 'cp_interfaces_lan_lan',
             successFn: function(json) {
                 gp.data.interface_lan = json['interface'];
                 gp.interfaces.lan.loadForm();

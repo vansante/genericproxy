@@ -21,6 +21,7 @@
                 $('#services_ipsec_key_table_error'),
                 $('#services_ipsec_certif_table_error')
             ],
+            content_id: ['cp_services_ipsec_settings', 'cp_services_ipsec_tunnels', 'cp_services_ipsec_keys', 'cp_services_ipsec_certificates'],
             successFn: function(json) {
                 gp.data.ipsec_settings = json.ipsec;
 

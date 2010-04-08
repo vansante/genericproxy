@@ -121,6 +121,7 @@
                         portid: id
                     },
                     error_element: $('#services_proxy_port_table_error'),
+                    content_id: 'cp_services_proxy_ports',
                     successFn: function(json) {
                         delete gp.data.proxy_ports[id];
                         gp.services.proxy.ports.buildTable();

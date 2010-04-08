@@ -156,6 +156,7 @@
                         maskid: id
                     },
                     error_element: $('#services_dnsf_mask_table_error'),
+                    content_id: 'cp_services_dnsf_masks',
                     successFn: function(json) {
                         delete gp.data.dnsf_masks[id];
                         gp.services.dnsf.masks.buildTable();

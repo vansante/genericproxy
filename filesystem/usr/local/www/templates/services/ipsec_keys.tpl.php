@@ -135,6 +135,7 @@
                         keyid: id
                     },
                     error_element: $('#services_ipsec_key_table_error'),
+                    content_id: 'cp_services_ipsec_keys',
                     successFn: function(json) {
                         delete gp.data.ipsec_keys[id];
                         gp.services.ipsec.keys.buildTable();

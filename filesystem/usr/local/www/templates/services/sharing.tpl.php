@@ -13,6 +13,7 @@
             module: 'Scheduler',
             page: 'getconfig',
             error_element: $('#services_sharing_form_error'),
+            content_id: 'cp_services_sharing_sharing',
             successFn: function(json) {
                 gp.data.sharing = json.sharing;
                 gp.services.sharing.loadForm();
@@ -226,6 +227,7 @@
                         name: name
                     },
                     error_element: $('#services_sharing_form_error'),
+                    content_id: 'cp_services_sharing_sharing',
                     successFn: function(json) {
                         if ($.isArray(gp.data.sharing.userdefined)) {
                             var id;

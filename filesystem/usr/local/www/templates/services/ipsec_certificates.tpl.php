@@ -137,6 +137,7 @@
                         keyid: id
                     },
                     error_element: $('#services_ipsec_certif_table_error'),
+                    content_id: 'cp_services_proxy_certificates',
                     successFn: function(json) {
                         delete gp.data.ipsec_certificates[id];
                         gp.services.ipsec.certificates.buildTable();
