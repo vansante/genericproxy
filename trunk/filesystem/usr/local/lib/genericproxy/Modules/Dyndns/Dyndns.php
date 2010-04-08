@@ -206,7 +206,7 @@ class Dyndns implements Plugin {
 			$this->data->client->password = $_POST ['services_dyndns_password'];
 			$this->data->client->server = $_POST ['services_dyndns_server'];
 			$this->data->client->port = $_POST ['services_dyndns_port'];
-			$this->data->client->host = $_POST ['services_dyndns_host'];
+			$this->data->client->host = $_POST ['services_dyndns_hostname'];
 			$this->data->client->mx = $_POST ['services_dyndns_mx'];
 			$this->data->client->wildcards = $_POST ['services_dyndns_wildcards'];
 		}
