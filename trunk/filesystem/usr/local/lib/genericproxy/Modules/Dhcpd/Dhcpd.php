@@ -80,7 +80,7 @@ class Dhcpd implements Plugin {
 	 * 
 	 * @var string
 	 */
-	const PID_PATH = '/var/dhcpd/var/run/dhcpd.pid';
+	const PID_PATH = '/var/run/dhcpd.pid';
 	
 	/**
 	 * Path to the leases file.
@@ -129,7 +129,7 @@ class Dhcpd implements Plugin {
 	 * @return bool false when service failed to start
 	 */
 	public function start() {
-		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
+		$pid = file_exists ( (string)$this->data->chroot_path.self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . (string)$this->data->chroot_path.self::PID_PATH ) : 0;
 		if ($pid > 0) {
 			Logger::getRootLogger ()->info ( 'DHCPD was already running' );
 			return true;
@@ -200,7 +200,7 @@ class Dhcpd implements Plugin {
 	 */
 	public function stop() {
 		Logger::getRootLogger ()->info ( "Stopping DHCPD" );
-		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
+		$pid = file_exists ( (string)$this->data->chroot_path.self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . (string)$this->data->chroot_path.self::PID_PATH ) : 0;
 		if ($pid > 0) {
 			Functions::shellCommand ( "/bin/kill {$pid}" );
 		}
@@ -617,7 +617,7 @@ EOD;
 	 * @return string Status of the service/plugin
 	 */
 	public function getStatus() {
-		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
+		$pid = file_exists ( (string)$this->data->chroot_path.self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . (string)$this->data->chroot_path.self::PID_PATH ) : 0;
 		if ($pid > 0) {
 			return 'Started';
 		} else {

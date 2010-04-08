@@ -194,7 +194,7 @@ class Dyndns implements Plugin {
 		if (isset ( $_POST ['services_dyndns_enable'] ) && ($_POST ['services_dyndns_enable'] == 'true' || $_POST ['services_dyndns_enable'] == 'enabled')) {
 			//Turn on the plugin
 			$this->data ['services_dyndns_enable'] = 'true';
-		} elseif (isset ( $_POST ['enable'] )) {
+		} else{
 			//turn off the plugin
 			$this->data ['services_dyndns_enable'] = 'false';
 		}
@@ -208,7 +208,13 @@ class Dyndns implements Plugin {
 			$this->data->client->port = $_POST ['services_dyndns_port'];
 			$this->data->client->host = $_POST ['services_dyndns_hostname'];
 			$this->data->client->mx = $_POST ['services_dyndns_mx'];
-			$this->data->client->wildcards = $_POST ['services_dyndns_wildcards'];
+			
+			if($_POST ['services_dyndns_wildcards'] == 'true'){
+				$this->data->client->wildcards = 'enable';
+			}
+			else{
+				$this->data->client->wildcards = 'disable';
+			}
 		}
 		
 		//Save config and print the data

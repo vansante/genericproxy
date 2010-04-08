@@ -223,7 +223,7 @@ class Snmp implements Plugin{
 			Logger::getRootLogger()->info('Snmpd already running?');
 		}
 		else{
-			Functions::shellCommand('/usr/local/sbin/snmpd -c '.self::CONFIG_FILE);
+			Functions::shellCommand('/usr/local/sbin/snmpd -c '.self::CONFIG_FILE.' -p /var/run/snmpd.pid');
 		}
 	}
 

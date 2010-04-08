@@ -95,6 +95,9 @@ class Diagnostics implements Plugin{
 			case 'getbrowserlog':
 				$this->getBrowserLog();
 				break;
+			case 'nmap':
+				$this->doNmap();
+				break;
 			default:
 				throw new Exception('Invalid page request');
 				break;
@@ -105,7 +108,7 @@ class Diagnostics implements Plugin{
 	 * 	return the log file specified to the browser
 	 */
 	private function getLog($logfile,$name = null){
-		if(file_exists($logfile)){
+		if(file_exists('/var/log'.$logfile)){
 			$log = file_get_contents('/var/log/'.$logfile);
 
 			$buffer = '<reply action="ok">
@@ -167,6 +170,16 @@ class Diagnostics implements Plugin{
 		else{
 			throw new Exception('The log file could not be found');
 		}
+	}
+	
+	/**
+	 * Passthrough function to execute nmap from the frontend
+	 * 
+	 * @access private
+	 * @throws Exception
+	 */
+	private function doNmap(){
+		
 	}
 	
 	/**

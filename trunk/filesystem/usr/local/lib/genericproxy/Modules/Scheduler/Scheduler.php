@@ -150,7 +150,7 @@ class Scheduler implements Plugin,GeneratesRules {
 	 * 	@param Bool		$return	whether or not to return an XML reply	
 	 */
 	private function removeUserSchedule($name,$return){
-		foreach($this->data->userdefined as $schedule){
+		foreach($this->scheduler_data->userdefined as $schedule){
 			if($schedule['name'] == $name){
 				/*	We found a configuration with the same name, remove it to replace it with
 				 *	the new one
@@ -184,7 +184,7 @@ class Scheduler implements Plugin,GeneratesRules {
 		$this->removeUserSchedule($name,false);
 		
 		//	Cleanup completed, add the new schedule
-		$newschedule = $this->data->addChild('userdefined');
+		$newschedule = $this->scheduler_data->addChild('userdefined');
 		$newschedule->addAttribute('name',$name);
 		
 		$days = explode(':',$_POST['services_sharing_config_schedule']);
@@ -281,9 +281,7 @@ class Scheduler implements Plugin,GeneratesRules {
 	 * 
 	 * @access private
 	 */
-	private function returnConfig(){
-		//		Root tag
-		
+	private function returnConfig(){		
 		$nbuffer = '<maxupspeed>'.(string)$this->scheduler_data->maxupspeed.'</maxupspeed>';
 		$nbuffer .= '<maxdownspeed>'.(string)$this->scheduler_data->maxdownspeed.'</maxdownspeed>';
 		
