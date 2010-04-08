@@ -52,9 +52,9 @@
         
         <dt><input type="submit" value="Save" id="system_genset_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="help_pool">
     <div class="help" id="help_system_genset_hostname">Name of the firewall host, without domain part. e.g. "firewall"</div>

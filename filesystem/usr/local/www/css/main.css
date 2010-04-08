@@ -533,3 +533,19 @@ form dl.form_sub dd, dl.form dl.form_sub dd {
 #system_upgrade_auto_warning, #system_upgrade_auto_no_update, #system_upgrade_auto_form {
     display: none;
 }
+
+div.ajax-form-loader {
+    position: absolute;
+    display: none;
+    background: #e9e9e9;
+    height: 32px;
+    width: 100px;
+    padding: 4px;
+    border: 5px solid #d9d9d9;
+    line-height: 32px;
+}
+
+div.ajax-form-loader img {
+    float: left;
+    margin-right: 5px
+}

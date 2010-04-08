@@ -226,13 +226,14 @@ gp.doAction = function(opts) {
  */
 gp.doFormAction = function(opts) {
     $('#'+opts.form_id+' input[type=submit]').attr('disabled', 'disabled');
+    gp.showFormLoader(opts.form_id);
     if (opts.error_element) {
         if ($.isArray(opts.error_element)) {
             $.each(opts.error_element, function(i, el) {
-                el.slideUp(350);
+                el.slideUp(150);
             });
         } else {
-            opts.error_element.slideUp(350);
+            opts.error_element.slideUp(150);
         }
     }
     $('#'+opts.form_id).ajaxSubmit({
@@ -242,10 +243,12 @@ gp.doFormAction = function(opts) {
         clearForm: false,
         resetForm: false,
         error: function(request, textStatus, error) {
+            gp.hideFormLoader(opts.form_id);
             $('#'+opts.form_id+' input[type=submit]').removeAttr('disabled');
             gp.handleRequestError(request, textStatus, opts.error_element, opts.errorFn);
         },
         success: function(data, textStatus, request) {
+            gp.hideFormLoader(opts.form_id);
             $('#'+opts.form_id+' input[type=submit]').removeAttr('disabled');
             gp.processReply(data, opts.error_element, opts.successFn, opts.errorFn);
         }
@@ -455,6 +458,30 @@ gp.rebootCountDown = function() {
         window.location.reload(true);
     }
 }
+
+gp.showFormLoader = function(form_id) {
+    var form = $('#'+form_id);
+    var loader = $('#'+form_id+'_loader');
+    if (!loader.length) {
+        loader = $('<div class="ajax-form-loader" id="'+form_id+'_loader"><img src="images/loader.gif" alt="loader"/> Loading..</div>');
+        form.append(loader);
+    }
+    var top, left;
+    if (form.hasClass('dialog')) {
+        top = form.height() / 2 - (32 / 2);
+        left = form.width() / 2 - (100 / 2);
+    } else {
+        top = form.position().top + (form.height() / 2 - (32 / 2));
+        left = form.position().left + (form.width() / 2 - (100 / 2));
+    }
+    loader.css('top', top);
+    loader.css('left', left);
+    loader.show();
+};
+
+gp.hideFormLoader = function(form_id) {
+    $('#'+form_id+'_loader').hide();
+};
 
 String.prototype.trim = function() {
     return this.replace(/(^\s+|\s+$)/,'');

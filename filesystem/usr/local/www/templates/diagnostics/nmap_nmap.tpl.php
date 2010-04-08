@@ -1,4 +1,9 @@
-<h2>Nmap</h2>
+<h2>Network mapper</h2>
+
+<div class="note">
+    <h3>Note:</h3>
+    <p>Nmap may take a while to complete.</p>
+</div>
 
 <form id="diagnostics_nmap_form" action="ajaxserver.php" method="post">
     <div class="form-error" id="diagnostics_nmap_form_error">
@@ -10,7 +15,7 @@
     <dl>
         <dt><label for="diagnostics_nmap_options">Nmap options</label></dt>
         <dd>
-            <input name="diagnostics_nmap_options" type="text" size="40" id="diagnostics_nmap_options" />
+            <input name="diagnostics_nmap_options" type="text" size="60" id="diagnostics_nmap_options" />
         </dd>
 
         <dt><input type="submit" value="Nmap" id="diagnostics_nmap_submit" class="submitbutton"/></dt>
