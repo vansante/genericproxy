@@ -117,7 +117,8 @@ class System implements Plugin {
 	 * 
 	 * @return bool false when service failed to stop
 	 */
-	public function stop() {}
+	public function stop() {
+	}
 	
 	/**
 	 * Write configuration to the system
@@ -136,8 +137,9 @@ class System implements Plugin {
 		$this->configure ();
 		$this->start ();
 		
-		//TODO: Check if the following is changed in the config, and if so then update the system: <hostname>, <domain>, <timezone>(also update php using date_default_timezone_set), <harddiskstandby>, etc. See config->system
-		
+	//TODO: Check if the following is changed in the config, and if so then update the system: <hostname>, <domain>, <timezone>(also update php using date_default_timezone_set), <harddiskstandby>, etc. See config->system
+	
+
 	}
 	
 	/**
@@ -147,32 +149,24 @@ class System implements Plugin {
 	 * @throws Exception
 	 */
 	public function getPage() {
-		if($_POST['page'] == 'getconfig'){
-			$this->echoConfig();
-		}
-		elseif($_POST['page'] == 'savegeneralsettings'){
-			$this->saveConfig();
-		}
-		elseif($_POST['page'] == 'reboot'){
-			$this->reboot();
-		}
-		elseif($_POST['page'] == 'getconfigxml'){
-			$this->backupConfig();
-		}
-		elseif($_POST['page'] == 'saveconfigxml'){
-			$this->restoreConfig();
-		}
-		elseif($_POST['page'] == 'reset'){
-			$this->resetToDefaults();
-		}
-		elseif($_POST['page'] == 'getservicesstatus'){
-			$this->getServiceStatus();
-		}
-		elseif($_POST['page'] == 'getstatus'){
-			$this->getSystemStatus();
-		}
-		else{
-			throw new Exception('Invalid page request');
+		if ($_POST ['page'] == 'getconfig') {
+			$this->echoConfig ();
+		} elseif ($_POST ['page'] == 'savegeneralsettings') {
+			$this->saveConfig ();
+		} elseif ($_POST ['page'] == 'reboot') {
+			$this->reboot ();
+		} elseif ($_POST ['page'] == 'getconfigxml') {
+			$this->backupConfig ();
+		} elseif ($_POST ['page'] == 'saveconfigxml') {
+			$this->restoreConfig ();
+		} elseif ($_POST ['page'] == 'reset') {
+			$this->resetToDefaults ();
+		} elseif ($_POST ['page'] == 'getservicesstatus') {
+			$this->getServiceStatus ();
+		} elseif ($_POST ['page'] == 'getstatus') {
+			$this->getSystemStatus ();
+		} else {
+			throw new Exception ( 'Invalid page request' );
 		}
 	}
 	
@@ -181,22 +175,20 @@ class System implements Plugin {
 	 * 
 	 *	@access private
 	 */
-	private function backupConfig(){
+	private function backupConfig() {
 		$path = '/etc/GenericProxy/config.xml';
-		
-		$size = filesize($path);
-		header('Content-Type: application/octet-stream');
-		header('Content-Length: '.$size);
-		header('Content-Disposition: attachment; filename=config.xml');
-		header('Content-Transfer-Encoding: binary');
-		
-		// open the file in binary read-only mode
-		// display the error messages if the file can´t be opened
-		$file = @ fopen($path, ‘rb’);
-		
-		if ($file) {
-			// stream the file and exit the script when complete
-			fpassthru($file);
+		$dir = "/etc/GenericProxy/";
+		$file = 'config.xml';
+		if ((isset ( $file )) && (file_exists ( $dir . $file ))) {
+			header ( "Content-type: application/force-download" );
+			header ( 'Content-Disposition: inline; filename="' . $dir . $file . '"' );
+			header ( "Content-Transfer-Encoding: Binary" );
+			header ( "Content-length: " . filesize ( $dir . $file ) );
+			header ( 'Content-Type: application/octet-stream' );
+			header ( 'Content-Disposition: attachment; filename="' . $file . '"' );
+			readfile ( "$dir$file" );
+		} else {
+			throw new Exception ( 'The config file could not be piped' );
 		}
 	}
 	
@@ -209,28 +201,25 @@ class System implements Plugin {
 	 * @access private
 	 * @throws Exception
 	 */
-	private function restoreConfig(){
-		if(!empty($_FILES['system_backrest_restorexml']['name'])){
-			try{
-				$newconfig = new Config($_FILES['system_backrest_restorexml']['tmp_name']);
+	private function restoreConfig() {
+		if (! empty ( $_FILES ['system_backrest_restorexml'] ['name'] )) {
+			try {
+				$newconfig = new Config ( $_FILES ['system_backrest_restorexml'] ['tmp_name'] );
 				//	We're still here so the config loaded without any issues, copy it over
-				Functions::mountFilesystem('mount');
+				Functions::mountFilesystem ( 'mount' );
 				//	TODO keep a copy of the old config.xml for safety reasons?
-				if(move_uploaded_file($_FILES['system_backrest_restorexml']['tmp_name'], '/cfg/GenericProxy/config.xml')){
-					Functions::shellCommand('cp /cfg/GenericProxy/config.xml /etc/GenericProxy/config.xml');
+				if (move_uploaded_file ( $_FILES ['system_backrest_restorexml'] ['tmp_name'], '/cfg/GenericProxy/config.xml' )) {
+					Functions::shellCommand ( 'cp /cfg/GenericProxy/config.xml /etc/GenericProxy/config.xml' );
 					echo '<reply action="ok"><message>Your configuration has been loaded, you will need to reboot for the changes to take place. Alternatively you can now review the new configuration in the GUI.</message></reply>';
+				} else {
+					throw new Exception ( 'There was an error uploading the file' );
 				}
-				else{
-					throw new Exception('There was an error uploading the file');
-				}
-				Functions::mountFilesystem('unmount');
+				Functions::mountFilesystem ( 'unmount' );
+			} catch ( Exception $e ) {
+				throw new Exception ( 'The config file you uploaded contains XML errors' );
 			}
-			catch(Exception $e){
-				throw new Exception('The config file you uploaded contains XML errors');
-			}
-		}
-		else{
-			throw new Exception('No configuration file was uploaded');
+		} else {
+			throw new Exception ( 'No configuration file was uploaded' );
 		}
 	}
 	
@@ -239,36 +228,36 @@ class System implements Plugin {
 	 * 
 	 * @access private
 	 */
-	private function getSystemStatus(){
+	private function getSystemStatus() {
 		$buffer = '<reply action="ok"><system>';
 		
 		//	Get the boot time
-		$data = Functions::shellCommand('uptime');
+		$data = Functions::shellCommand ( 'uptime' );
 		
-		$data = explode(',',$data);
-		$data[0] = substr($data[0],13,strlen($data[0]));
+		$data = explode ( ',', $data );
+		$data [0] = substr ( $data [0], 13, strlen ( $data [0] ) );
 		
-		$buffer .= '<uptime>'.$data[0].''.$data[1].'</uptime>';
-
+		$buffer .= '<uptime>' . $data [0] . '' . $data [1] . '</uptime>';
+		
 		//	Get name
-		$buffer .= '<name>'.(string)$this->data->hostname.'</name>';
-		$buffer .= '<version>'.PluginFramework::VERSION.'</version>';
-
+		$buffer .= '<name>' . ( string ) $this->data->hostname . '</name>';
+		$buffer .= '<version>' . PluginFramework::VERSION . '</version>';
+		
 		//	Get processor 
-		$cpu = str_replace(' Load averages: ',$data[3]);
-		$cpu = explode(',',$cpu);
+		$cpu = str_replace ( ' Load averages: ', $data [3] );
+		$cpu = explode ( ',', $cpu );
 		
 		$buffer .= '<cpu>';
-		$buffer .= '<avg15>'.round($cpu[2] * 100).'</avg15>';
-		$buffer .= '<avg5>'.round($cpu[1] * 100).'</avg5>';
-		$buffer .= '<avg1>'.round($cpu[0] * 100).'</avg1>';
+		$buffer .= '<avg15>' . round ( $cpu [2] * 100 ) . '</avg15>';
+		$buffer .= '<avg5>' . round ( $cpu [1] * 100 ) . '</avg5>';
+		$buffer .= '<avg1>' . round ( $cpu [0] * 100 ) . '</avg1>';
 		$buffer .= '</cpu>';
 		
 		//	Get memory usage
-		$totalram = str_replace('hw.physmem: ','',Functions::shellCommand('sysctl hw.physmem'));
-		$totalram = floor($totalram / (1024 * 1024));
-		$usedram = floor($totalram - Functions::getFreeMemory());
-		$buffer .= '<memory><total>'.$totalram.'</total><used>'.$usedram.'</used></memory>';
+		$totalram = str_replace ( 'hw.physmem: ', '', Functions::shellCommand ( 'sysctl hw.physmem' ) );
+		$totalram = floor ( $totalram / (1024 * 1024) );
+		$usedram = floor ( $totalram - Functions::getFreeMemory () );
+		$buffer .= '<memory><total>' . $totalram . '</total><used>' . $usedram . '</used></memory>';
 		
 		$buffer .= '</system></reply>';
 		echo $buffer;
@@ -279,15 +268,15 @@ class System implements Plugin {
 	 * 
 	 * @access private
 	 */
-	private function getServiceStatus(){
+	private function getServiceStatus() {
 		//	Load all plugins so we can get their service status
-		$this->framework->startAllPlugins(false);
+		$this->framework->startAllPlugins ( false );
 		
 		$buffer = '<reply action="ok"><services>';
-		foreach($this->framework->plugins as $plugin){
-			if($plugin->isService() == true){
-				$buffer .= '<service status="'.$plugin->getStatus().'">';
-				$buffer .= '<name>'.get_class($plugin).'</name>';
+		foreach ( $this->framework->plugins as $plugin ) {
+			if ($plugin->isService () == true) {
+				$buffer .= '<service status="' . $plugin->getStatus () . '">';
+				$buffer .= '<name>' . get_class ( $plugin ) . '</name>';
 				$buffer .= '</service>';
 			}
 		}
@@ -300,9 +289,9 @@ class System implements Plugin {
 	 * 
 	 * @access private
 	 */
-	private function reboot(){
+	private function reboot() {
 		echo '<reply action="ok" />';
-		Functions::shellCommand('shutdown -r now');
+		Functions::shellCommand ( 'shutdown -r now' );
 	}
 	
 	/**
@@ -314,28 +303,27 @@ class System implements Plugin {
 	 * @access private
 	 * @throws Exception
 	 */
-	private function resetToDefaults(){
-		if(file_exists('/etc/GenericProxy/default.config.xml')){
-			Functions::mountFilesystem('mount');
-			Functions::shellCommand('cp /etc/GenericProxy/default.config.xml /cfg/GenericProxy/config.xml');
-			Functions::mountFilesystem('unmount');
+	private function resetToDefaults() {
+		if (file_exists ( '/etc/GenericProxy/default.config.xml' )) {
+			Functions::mountFilesystem ( 'mount' );
+			Functions::shellCommand ( 'cp /etc/GenericProxy/default.config.xml /cfg/GenericProxy/config.xml' );
+			Functions::mountFilesystem ( 'unmount' );
 			echo '<reply action="ok" />';
-			$this->reboot();
-		}
-		else{
-			throw new Exception('The file containing the default configuration could not be loaded');
+			$this->reboot ();
+		} else {
+			throw new Exception ( 'The file containing the default configuration could not be loaded' );
 		}
 	}
 	
 	/**
 	 * echo XML configuration
 	 */
-	private function echoConfig(){
+	private function echoConfig() {
 		echo '<reply action="ok"><system>';
-		echo $this->data->hostname->asXML();
-		echo $this->data->domain->asXML();
-		echo $this->data->dnsservers->asXML();
-		echo $this->data->dnsoverride->asXML();
+		echo $this->data->hostname->asXML ();
+		echo $this->data->domain->asXML ();
+		echo $this->data->dnsservers->asXML ();
+		echo $this->data->dnsoverride->asXML ();
 		echo '</system></reply>';
 	}
 	
@@ -346,89 +334,85 @@ class System implements Plugin {
 	 * 
 	 * @throws Exception
 	 */
-	private function saveConfig(){
+	private function saveConfig() {
 		$i = 1;
-		while(!empty($_POST['system_genset_dns'.$i])){
-			if(Functions::is_ipAddr($_POST['system_genset_dns'.$i])){
-				$this->data->dnsservers->dnsserver[$i - 1]['ip'] = $_POST['system_genset_dns'.$i];
+		while ( ! empty ( $_POST ['system_genset_dns' . $i] ) ) {
+			if (Functions::is_ipAddr ( $_POST ['system_genset_dns' . $i] )) {
+				$this->data->dnsservers->dnsserver [$i - 1] ['ip'] = $_POST ['system_genset_dns' . $i];
+			} else {
+				ErrorHandler::addError ( 'formerror', 'system_genset_dns' . $i );
 			}
-			else{
-				ErrorHandler::addError('formerror','system_genset_dns'.$i);
-			}
-			$i++;
+			$i ++;
 		}
 		
-		$this->data->domain = $_POST['system_genset_domain'];
-		if(Functions::is_hostname($_POST['system_genset_hostname'])){
-			$this->data->hostname = $_POST['system_genset_hostname'];
-		}
-		else{
-			ErrorHandler::addError('formerror','system_genset_hostname');
+		$this->data->domain = $_POST ['system_genset_domain'];
+		if (Functions::is_hostname ( $_POST ['system_genset_hostname'] )) {
+			$this->data->hostname = $_POST ['system_genset_hostname'];
+		} else {
+			ErrorHandler::addError ( 'formerror', 'system_genset_hostname' );
 		}
 		
-		if($_POST['system_genset_dnsoverride'] == 'true'){
-			$this->data->dnsoverride = 'allow';	
-		}
-		else{
+		if ($_POST ['system_genset_dnsoverride'] == 'true') {
+			$this->data->dnsoverride = 'allow';
+		} else {
 			$this->data->dnsoverride = 'deny';
 		}
 		
 		//			Edit username
-		if(!empty($_POST['system_genset_username'])){
-			if(!empty($_POST['system_genset_password1']) && ($_POST['system_genset_password1'] == $_POST['system_genset_password2'])){
+		if (! empty ( $_POST ['system_genset_username'] )) {
+			if (! empty ( $_POST ['system_genset_password1'] ) && ($_POST ['system_genset_password1'] == $_POST ['system_genset_password2'])) {
 				//		Check if this is an existing user
-				foreach($this->data->users->user as $user){
-					if(strtolower($user['name']) == strtolower($_POST['system_genset_username']) ){
+				foreach ( $this->data->users->user as $user ) {
+					if (strtolower ( $user ['name'] ) == strtolower ( $_POST ['system_genset_username'] )) {
 						//		Check if we have the rights to edit this user (ROOT can overwrite passwords for recovery purposes)
-						if(strtolower($_POST['system_genset_username']) == ($this->framework->user->name) || $this->framework->user->group == 'ROOT'){
-							$user['password'] = crypt($_POST['system_genset_password1']);
+						if (strtolower ( $_POST ['system_genset_username'] ) == ($this->framework->user->name) || $this->framework->user->group == 'ROOT') {
+							$user ['password'] = crypt ( $_POST ['system_genset_password1'] );
 							break;
-						}
-						else{
-							ErrorHandler::addError('formerror','system_genset_username');
-							throw new Exception('You do not have the rights to alter the password for the user '.$_POST['system_genset_username']);
+						} else {
+							ErrorHandler::addError ( 'formerror', 'system_genset_username' );
+							throw new Exception ( 'You do not have the rights to alter the password for the user ' . $_POST ['system_genset_username'] );
 						}
 					}
-				}			
-			}
-			else{
-				ErrorHandler::addError('formerror','system_genset_password1');
-				ErrorHandler::addError('formerror','system_genset_password2');
+				}
+			} else {
+				ErrorHandler::addError ( 'formerror', 'system_genset_password1' );
+				ErrorHandler::addError ( 'formerror', 'system_genset_password2' );
 			}
 		}
 		
-		if(ErrorHandler::errorCount() == 0){
-			if($this->config->saveConfig()){
+		if (ErrorHandler::errorCount () == 0) {
+			if ($this->config->saveConfig ()) {
 				echo '<reply action="ok">';
-				echo $this->data->asXML();
+				echo $this->data->asXML ();
 				echo '</reply>';
+			} else {
+				throw new Exception ( 'Configuration file could not be saved' );
 			}
-			else{
-				throw new Exception('Configuration file could not be saved');
-			}
-		}
-		else{
-			throw new Exception('There is invalid form input');	
+		} else {
+			throw new Exception ( 'There is invalid form input' );
 		}
 	}
 	
 	/**
 	 * Gets a list of plugin dependencies
 	 */
-	public function getDependency() {}
+	public function getDependency() {
+	}
 	
 	/**
 	 * Starts the plugin
 	 * 
 	 * @return string Status of the service/plugin
 	 */
-	public function getStatus() {}
+	public function getStatus() {
+	}
 	
 	/**
 	 * Shutsdown the Plugin.
 	 * Called at program shutdown. 
 	 */
-	public function shutdown() {}
+	public function shutdown() {
+	}
 	
 	/**
 	 * Configure ntp client to update on regular intervals

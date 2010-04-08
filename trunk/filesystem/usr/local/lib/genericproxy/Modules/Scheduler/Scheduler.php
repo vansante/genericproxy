@@ -124,7 +124,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				break;
 			case 'addconfig':
 				$this->saveUserConfig();
-			case 'deletecofig':
+			case 'deleteconfig':
 				$this->removeUserSchedule(htmlentities($_POST['name']));
 			default:
 				throw new Exception('Invalid page request');
@@ -205,7 +205,7 @@ class Scheduler implements Plugin,GeneratesRules {
 		}
 		
 		echo '<reply action="ok"><sharing>';
-		echo $this->newschedule->asXML();
+		echo $newschedule->asXML();
 		echo '</sharing></reply>';
 	}
 	

@@ -108,7 +108,7 @@ class Diagnostics implements Plugin{
 	 * 	return the log file specified to the browser
 	 */
 	private function getLog($logfile,$name = null){
-		if(file_exists('/var/log'.$logfile)){
+		if(file_exists('/var/log/'.$logfile)){
 			$log = file_get_contents('/var/log/'.$logfile);
 
 			$buffer = '<reply action="ok">
