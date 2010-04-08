@@ -182,7 +182,7 @@ class System implements Plugin {
 	 *	@access private
 	 */
 	private function backupConfig(){
-		$path = '/etc/genericproxy/config.xml';
+		$path = '/etc/GenericProxy/config.xml';
 		
 		$size = filesize($path);
 		header('Content-Type: application/octet-stream');
