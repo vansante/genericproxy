@@ -32,6 +32,11 @@
     $(function(){
         //Handler for submitting the form
         $('#services_ipsec_settings_form').submit(function() {
+            var checked = $('#services_ipsec_settings_enabled').attr('checked');
+            if ((gp.data.ipsec_settings.enable.toLowerCase() == 'true' && checked)
+                || (gp.data.ipsec_settings.enable.toLowerCase() == 'false' && !checked)) {
+                return false;
+            }
             gp.doFormAction({
                 url: 'testxml/ipsec.xml',
                 form_id: 'services_ipsec_settings_form',

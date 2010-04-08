@@ -29,9 +29,9 @@
 
         <dt><input type="submit" value="Save" id="interfaces_assign_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="help_pool">
     <div class="help" id="help_interfaces_assign_lan">Select the device to assign to the LAN interface here.</div>

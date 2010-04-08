@@ -35,9 +35,8 @@
 
         <dt><input type="submit" value="Save" id="services_httpd_submit" class="submitbutton"/></dt>
     </dl>
+    <p style="clear: both;"></p>
 </form>
-
-<p style="clear: both;"></p>
 
 <div class="help_pool">
     <div class="help" id="help_services_httpd_protocol">Select the protocol you want to use</div>

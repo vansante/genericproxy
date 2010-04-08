@@ -65,7 +65,7 @@
         <dd>
             <?
             $this->ip_id = 'firewall_rules_src';
-            include $this->template('forms/ip.tpl.php');
+            include $this->template('firewall/forms/ip.tpl.php');
             ?>
         </dd>
 
@@ -81,7 +81,7 @@
         <dd>
             <?
             $this->ip_id = 'firewall_rules_dest';
-            include $this->template('forms/ip.tpl.php');
+            include $this->template('firewall/forms/ip.tpl.php');
             ?>
         </dd>
 
