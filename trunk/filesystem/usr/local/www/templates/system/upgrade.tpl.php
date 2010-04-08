@@ -9,6 +9,7 @@
                 url: 'testxml/update.xml',
                 module: 'Update',
                 page: 'check',
+                content_id: 'cp_system_upgrade_auto',
                 successFn: function(json) {
                     if (json.release) {
                         gp.data.new_release = json.release;

@@ -13,6 +13,7 @@
             module: 'Dyndns',
             page: 'getconfig',
             error_element: $('#services_dyndns_form_error'),
+            content_id: 'cp_services_dyndns_dyndns',
             successFn: function(json) {
                 gp.data.dyndns = json.dyndns;
                 gp.services.dyndns.loadForm();

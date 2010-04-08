@@ -13,6 +13,7 @@
             module: 'Dhcpd',
             page: 'getstatus',
             error_element: $('#status_dhcp_table_error'),
+            content_id: 'cp_status_dhcp_dhcp',
             successFn: function(json) {
                 if (json.dhcp_status.lease) {
                     var lease = json.dhcp_status.lease;

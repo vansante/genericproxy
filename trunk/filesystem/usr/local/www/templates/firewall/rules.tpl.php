@@ -21,6 +21,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                 $('#firewall_rules_lan_table_error'),
                 $('#firewall_rules_ext_table_error')
             ],
+            content_id: ['cp_firewall_rules_wan', 'cp_firewall_rules_lan', 'cp_firewall_rules_ext'],
             successFn: function(json) {
                 json = json.firewall;
                 if (json.rule) {
@@ -127,6 +128,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                 ruleid2: id2
             },
             error_element: $('#firewall_rules_'+gp.data.firewall_rules[id1]['interface'].toLowerCase()+'_table_error'),
+            content_id: 'cp_firewall_rules_'+gp.data.firewall_rules[id1]['interface'].toLowerCase(),
             successFn: function(json) {
                 gp.data.firewall_rules[id1].order = id2;
                 gp.data.firewall_rules[id2].order = id1;
@@ -177,6 +179,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                     ruleid: id
                 },
                 error_element: $('#firewall_rules_'+gp.data.firewall_rules[id]['interface'].toLowerCase()+'_table_error'),
+                content_id: 'cp_firewall_rules_'+gp.data.firewall_rules[id1]['interface'].toLowerCase(),
                 successFn: function(json) {
                     var enabled = gp.data.firewall_rules[id].enable;
                     gp.data.firewall_rules[id].enable = (enabled == 'true' ? 'false' : 'true');
@@ -197,6 +200,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                         ruleid: id
                     },
                     error_element: $('#firewall_rules_'+gp.data.firewall_rules[id]['interface'].toLowerCase()+'_table_error'),
+                    content_id: 'cp_firewall_rules_'+gp.data.firewall_rules[id1]['interface'].toLowerCase(),
                     successFn: function(json) {
                         delete gp.data.firewall_rules[id];
                         gp.firewall.rules.buildTable();

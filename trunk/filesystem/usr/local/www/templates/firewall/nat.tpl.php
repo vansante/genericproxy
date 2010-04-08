@@ -20,6 +20,7 @@
                 $('#firewall_nat_outbound_enable_form_error'),
                 $('#firewall_nat_11nat_table_error')
             ],
+            content_id: ['cp_firewall_nat_inbound', 'cp_firewall_nat_outbound', 'cp_firewall_nat_11nat'],
             successFn: function(json) {
                 json = json.nat;
 

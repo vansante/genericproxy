@@ -14,8 +14,10 @@
             module: 'Proxy',
             page: 'getconfig',
             error_element: [
+                $('#services_proxy_settings_form_error'),
                 $('#services_proxy_port_table_error')
             ],
+            content_id: ['cp_services_proxy_settings', 'cp_services_proxy_ports'],
             successFn: function(json) {
                 json = json.proxy;
 

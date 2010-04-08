@@ -158,6 +158,7 @@
                         ruleid: id
                     },
                     error_element: $('#services_dhcpd_table_error'),
+                    content_id: 'cp_services_dhcpd_rules',
                     successFn: function(json) {
                         delete gp.data.dhcpd_rules[id];
                         gp.services.dhcpd.rules.buildTable();

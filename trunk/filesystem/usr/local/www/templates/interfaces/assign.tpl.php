@@ -12,6 +12,7 @@
             module: 'AssignInterfaces',
             page: 'getinterfaces',
             error_element: $('#interfaces_assign_form_error'),
+            content_id: 'cp_interfaces_assign_assign',
             successFn: function(json) {
                 gp.data.interface_list = json['interface'];
                 gp.interfaces.assign.loadForm();

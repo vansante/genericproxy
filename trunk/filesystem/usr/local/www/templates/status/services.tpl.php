@@ -13,6 +13,7 @@
             module: 'System',
             page: 'getservicesstatus',
             error_element: $('#status_services_table_error'),
+            content_id: 'cp_status_services_services',
             successFn: function(json) {
                 if (json.services.service) {
                     var service = json.services.service;

@@ -12,6 +12,7 @@
             module: '<?=$this->ipconfig_module?>',
             page: 'getconfig',
             error_element: $('#<?=$this->ipconfig_id?>_form_error'),
+            content_id: 'cp_<?=$this->ipconfig_id?>',
             successFn: function(json) {
                 gp.data.interface_<?=$this->ipconfig_iface?> = json['interface'];
                 gp.interfaces.<?=$this->ipconfig_iface?>.loadForm();

@@ -148,6 +148,7 @@
                         overrideid: id
                     },
                     error_element: $('#services_dnsf_override_table_error'),
+                    content_id: 'cp_services_dnsf_overrides',
                     successFn: function(json) {
                         delete gp.data.dnsf_overrides[id];
                         gp.services.dnsf.overrides.buildTable();

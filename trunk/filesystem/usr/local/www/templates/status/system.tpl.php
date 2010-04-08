@@ -11,6 +11,7 @@
             module: 'System',
             page: 'getstatus',
             error_element: $('#status_system_error'),
+            content_id: 'cp_status_system_system',
             successFn: function(json) {
                 json = json.system;
                 $('#status_system_name').html(json.name);

@@ -169,6 +169,7 @@
                         ruleid: id
                     },
                     error_element: $('#firewall_nat_11nat_table_error'),
+                    content_id: 'cp_firewall_nat_11nat',
                     successFn: function(json) {
                         delete gp.data.nat_11nat_rules[id];
                         gp.firewall.nat['11nat'].buildTable();

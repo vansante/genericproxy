@@ -19,6 +19,7 @@
                 $('#services_dnsf_mask_table_error'),
                 $('#services_dnsf_override_table_error')
             ],
+            content_id: ['cp_services_dnsf_settings', 'cp_services_dnsf_masks', 'cp_services_dnsf_overrides'],
             successFn: function(json) {
                 gp.data.dnsf_settings = json.dnsmasq;
                 gp.services.dnsf.settings.loadForm();

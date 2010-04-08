@@ -211,6 +211,7 @@
                         ruleid: id
                     },
                     error_element: $('#firewall_nat_inbound_table_error'),
+                    content_id: 'cp_firewall_nat_inbound',
                     successFn: function(json) {
                         delete gp.data.nat_inbound_rules[id];
                         gp.firewall.nat.inbound.buildTable();

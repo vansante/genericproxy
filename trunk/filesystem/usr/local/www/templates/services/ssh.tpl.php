@@ -13,6 +13,7 @@
             module: 'Ssh',
             page: 'getconfig',
             error_element: $('#services_ssh_form_error'),
+            content_id: 'cp_services_ssh_ssh',
             successFn: function(json) {
                 gp.data.ssh = json.ssh;
 

@@ -17,6 +17,7 @@
                 $('#services_dhcpd_form_error'),
                 $('#services_dhcpd_table_error')
             ],
+            content_id: ['cp_services_dhcpd_settings', 'cp_services_dhcpd_rules'],
             successFn: function(json) {
                 gp.data.dhcpd_settings = json.dhcpd;
                 gp.services.dhcpd.settings.loadForm();

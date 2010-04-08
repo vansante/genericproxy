@@ -308,6 +308,7 @@
                         ruleid: id
                     },
                     error_element: $('#firewall_nat_outbound_table_error'),
+                    content_id: 'cp_firewall_nat_outbound',
                     successFn: function(json) {
                         delete gp.data.nat_outbound_rules[id];
                         gp.firewall.nat.outbound.buildTable();
