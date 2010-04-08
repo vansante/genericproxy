@@ -189,13 +189,7 @@ gp.doAction = function(opts) {
         }
     }
     if (opts.content_id) {
-        if ($.isArray(opts.content_id)) {
-            $.each(opts.content_id, function(i, el){
-                gp.showAjaxLoader(el);
-            });
-        } else {
-            gp.showAjaxLoader(opts.content_id);
-        }
+        gp.showAjaxLoader(opts.content_id);
     }
     var postFields = {};
     if (opts.module) {
@@ -215,13 +209,7 @@ gp.doAction = function(opts) {
         data: postFields,
         error: function(request, textStatus, error) {
             if (opts.content_id) {
-                if ($.isArray(opts.content_id)) {
-                    $.each(opts.content_id, function(i, el){
-                        gp.hideAjaxLoader(el);
-                    });
-                } else {
-                    gp.hideAjaxLoader(opts.content_id);
-                }
+                gp.hideAjaxLoader(opts.content_id);
             }
             gp.handleRequestError(request, textStatus, opts.error_element, opts.errorFn);
             if (opts.errorFn) {
@@ -482,6 +470,13 @@ gp.rebootCountDown = function() {
 }
 
 gp.showAjaxLoader = function(el_id) {
+    if ($.isArray(el_id)) {
+        $.each(el_id, function(i, el){
+            gp.showAjaxLoader(el);
+        });
+        return;
+    }
+
     var element = $('#'+el_id);
     var loader = $('#'+el_id+'_loader');
     if (!loader.length) {
@@ -502,6 +497,13 @@ gp.showAjaxLoader = function(el_id) {
 };
 
 gp.hideAjaxLoader = function(el_id) {
+    if ($.isArray(el_id)) {
+        $.each(el_id, function(i, el){
+            gp.hideAjaxLoader(el);
+        });
+        return;
+    }
+
     $('#'+el_id+'_loader').hide();
 };
 
