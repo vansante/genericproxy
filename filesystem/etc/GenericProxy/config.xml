@@ -147,7 +147,7 @@
 			<blockpriv />
 			<blockbogons />
 			<disableftpproxy />
-			<dhcphostname></dhcphostname>
+			<dhcphostname>GPAlpha</dhcphostname>
 			<bandwidth>100</bandwidth>
 			<bandwidthtype>Mb</bandwidthtype>
 		</interface>
