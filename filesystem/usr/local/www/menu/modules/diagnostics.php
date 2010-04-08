@@ -4,6 +4,24 @@ addMenu('diagnostics', array(
         'name' => 'Diagnostics',
         'key' => 'diagnostics',
         'pages' => array(
+            'log' => array(
+                'name' => 'Logs',
+                'key' => 'log',
+                'tabs' => array(
+                    'boot' => array(
+                        'name' => 'Boot',
+                        'key' => 'boot'
+                    ),
+                    'httpd' => array(
+                        'name' => 'HTTPD',
+                        'key' => 'httpd'
+                    ),
+                    'browser' => array(
+                        'name' => 'Browser',
+                        'key' => 'browser'
+                    )
+                )
+            ),
             'ping' => array(
                 'name' => 'Ping',
                 'key' => 'ping',
@@ -21,6 +39,16 @@ addMenu('diagnostics', array(
                     'tracert' => array(
                         'name' => 'Traceroute',
                         'key' => 'tracert'
+                    )
+                )
+            ),
+            'nmap' => array(
+                'name' => 'Nmap',
+                'key' => 'nmap',
+                'tabs' => array(
+                    'nmap' => array(
+                        'name' => 'Nmap',
+                        'key' => 'nmap'
                     )
                 )
             )

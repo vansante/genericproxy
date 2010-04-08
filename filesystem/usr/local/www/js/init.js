@@ -120,6 +120,8 @@ $(function() {
             }
         });
     });
+
+    gp.checkForUpdates();
 });
 
 gp.showHomepage = function() {
@@ -155,6 +157,7 @@ gp.checkForUpdates = function() {
                         $('#cp_system_upgrade').show().parent().show();
                         $('#system_upgrade').addClass('active');
                         $('#menu').accordion('activate' , '#system');
+                        gp.system.upgrade.clickHandler();
                     });
                 } else {
                     gp.data.no_release = true;
