@@ -165,14 +165,14 @@ class Proxy implements Plugin {
 		$interface = $this->framework->getPlugin ( "Ext" );
 		if (empty ( $interface )) {
 			Logger::getRootLogger ()->error ( 'Could not get EXT plugin.' );
-			return false;
+			return 1;
 		}
 		
 		$interfaceIP = $interface->getIpAddress (1);
 		if(empty($interfaceIP)){
 			//	Interface IP could not be resolved so we have no listen directives
 			Logger::getRootLogger()->error('Could not get the IP of the Ext interface');
-			return false;
+			return 1;
 		}
 		
 		$proxyconf = "PidFile \"" . self::PID_PATH . "\"\n";
