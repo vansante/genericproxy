@@ -217,6 +217,7 @@ class System implements Plugin {
 				Functions::mountFilesystem('mount');
 				//	TODO keep a copy of the old config.xml for safety reasons?
 				if(move_uploaded_file($_FILES['system_backrest_restorexml']['tmp_name'], '/cfg/GenericProxy/config.xml')){
+					Functions::shellCommand('cp /cfg/GenericProxy/config.xml /etc/GenericProxy/config.xml');
 					echo '<reply action="ok"><message>Your configuration has been loaded, you will need to reboot for the changes to take place. Alternatively you can now review the new configuration in the GUI.</message></reply>';
 				}
 				else{
@@ -239,11 +240,13 @@ class System implements Plugin {
 	 * @access private
 	 */
 	private function getSystemStatus(){
-		$buffer .= '<reply action="ok"><system>';
+		$buffer = '<reply action="ok"><system>';
 		
 		//	Get the boot time
 		$data = Functions::shellCommand('uptime');
+		
 		$data = explode(',',$data);
+		$data[0] = substr($data[0],13,strlen($data[0]));
 		
 		$buffer .= '<uptime>'.$data[0].''.$data[1].'</uptime>';
 
