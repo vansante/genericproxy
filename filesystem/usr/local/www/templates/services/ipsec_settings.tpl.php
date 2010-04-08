@@ -17,9 +17,9 @@
         
         <dt><input type="submit" value="Save" id="services_ipsec_settings_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <script type="text/javascript">
     gp.services.ipsec.settings.loadForm = function() {

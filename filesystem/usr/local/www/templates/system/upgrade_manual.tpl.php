@@ -22,9 +22,9 @@
 
         <dt><input type="submit" value="Upgrade firmware" id="system_upgrade_manual_submit" class="submitbutton"/></dt>
     </dl>
+    
+    <p style="clear: both;"></p>
 </form>
-
-<p style="clear: both;"></p>
 
 <script type="text/javascript">
     $(function() {

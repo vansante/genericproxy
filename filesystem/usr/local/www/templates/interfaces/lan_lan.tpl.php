@@ -37,9 +37,9 @@
         
         <dt><input type="submit" value="Save" id="interfaces_lan_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="help_pool">
     <div class="help" id="help_interfaces_lan_ipaddr">Enter an IP address in the following format: xxx.xxx.xxx.xxx</div>

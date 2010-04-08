@@ -13,6 +13,6 @@
     <dl>
         <dt><input type="submit" value="Reboot" id="system_reboot_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>

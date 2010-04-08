@@ -41,9 +41,9 @@
 
         <dt><input type="submit" value="Save" id="services_proxy_settings_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="help_pool">
     <div class="help" id="help_services_proxy_settings_port">The port the proxy will listen on</div>

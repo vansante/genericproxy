@@ -140,6 +140,8 @@
     <p style="clear: both;"></p>
 
     <input type="submit" value="Save" id="services_sharing_submit" class="submitbutton"/>
+
+    <p style="clear: both;"></p>
 </form>
 
 <form id="services_sharing_config_form" action="ajaxserver.php" method="post" class="dialog" title="Add new config">
@@ -159,11 +161,11 @@
 
         <dt><input type="submit" value="Add config" id="services_sharing_config_submit" class="submitbutton"/></dt>
     </dl>
+    
+    <p style="clear: both;"></p>
 </form>
 
 
 <div class="help_pool">
-    <div class="help" id="help_services_sharing">
-        Specify your maximum connection speed here.<br />
-        You can specify the sharing speed below in a percentage of the maximum connection speed.</div>
+    <div class="help" id="help_services_sharing">Specify your maximum connection speed here.<br />You can specify the sharing speed below in a percentage of the maximum connection speed.</div>
 </div>

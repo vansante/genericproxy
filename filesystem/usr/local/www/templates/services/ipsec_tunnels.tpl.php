@@ -271,9 +271,8 @@
         <dt><input type="submit" value="Add tunnel" id="services_ipsec_tunnel_submit" class="submitbutton"/></dt>
     </dl>
 
+    <p style="clear: both;"></p>
 </form>
-
-<p style="clear: both;"></p>
 
 <script type="text/javascript">
     gp.services.ipsec.tunnels.buildTable = function() {
