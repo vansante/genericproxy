@@ -86,9 +86,86 @@ class Diagnostics implements Plugin{
 			case 'traceroute':
 				$this->doTraceRoute();
 				break;
+			case 'getbootlog':
+				$this->getBootLog();
+				break;
+			case 'gethttpdlog':
+				$this->getLog('lighttpd.error.log','httpdlog');
+				break;
+			case 'getbrowserlog':
+				$this->getBrowserLog();
+				break;
 			default:
 				throw new Exception('Invalid page request');
 				break;
+		}
+	}
+	
+	/**
+	 * 	return the log file specified to the browser
+	 */
+	private function getLog($logfile,$name = null){
+		if(file_exists($logfile)){
+			$log = file_get_contents('/var/log/'.$logfile);
+
+			$buffer = '<reply action="ok">
+					<'.$name.'>
+					<![CDATA['.$log.']]>
+					</'.$name.'>
+			</reply>';
+			
+			echo $buffer;
+		}
+		else{
+			throw new Exception('The specified log file does not exist');
+		}
+	}
+	
+	/**
+	 * return the browser log to the AJAX frontend for viewing
+	 * 
+	 * the browser log contains the logs for the framework during browser mode
+	 * 
+	 * @throws Exception
+	 */
+	private function getBrowserLog(){
+		if(file_exists('/var/log/www.browser.log')){
+			$log = file_get_contents('/var/log/www.browser.log');
+
+			$buffer = '<reply action="ok">
+					<browserlog>
+					<![CDATA['.$log.']]>
+					</browserlog>
+			</reply>';
+			
+			echo $buffer;
+		}
+		else{
+			throw new Exception('The log file could not be found');
+		}
+	}
+	
+	/**
+	 *	return the Boot log to the AJAX frontend for viewing
+	 *
+	 *	the boot log 
+	 *
+	 *	@throws Exception
+	 */
+	private function getBootLog(){
+		if(file_exists('/var/log/www.boot.log')){
+			$log = file_get_contents('/var/log/www.boot.log');
+
+			$buffer = '<reply action="ok">
+					<bootlog>
+					<![CDATA['.$log.']]>
+					</bootlog>
+			</reply>';
+			
+			echo $buffer;
+		}
+		else{
+			throw new Exception('The log file could not be found');
 		}
 	}
 	

@@ -122,6 +122,10 @@ class Scheduler implements Plugin,GeneratesRules {
 			case 'save':
 				$this->saveConfig();
 				break;
+			case 'addconfig':
+				$this->saveUserConfig();
+			case 'deletecofig':
+				$this->removeUserSchedule(htmlentities($_POST['name']));
 			default:
 				throw new Exception('Invalid page request');
 				break;
@@ -138,6 +142,72 @@ class Scheduler implements Plugin,GeneratesRules {
 	public function start() {}
 	public function stop() {}
 	public function configure() {}
+	
+	/**
+	 * 	remove a user defined schedule preset
+	 * 
+	 * 	@param String	$name	name of the schedule to remove
+	 * 	@param Bool		$return	whether or not to return an XML reply	
+	 */
+	private function removeUserSchedule($name,$return){
+		foreach($this->data->userdefined as $schedule){
+			if($schedule['name'] == $name){
+				/*	We found a configuration with the same name, remove it to replace it with
+				 *	the new one
+				 */
+				$this->config->deleteElement($schedule);
+				
+				if($return){
+					echo '<reply action="ok" />';
+					return 1;
+				}
+				else{
+					return 1;
+				}
+			}
+		}
+		
+		if($return){
+			throw new Exception('The specified schedule could not be found');
+		}
+	}
+	
+	/**
+	 * 	Saves user-added schedule presets
+	 * 
+	 * 	@access private
+	 * 	@throws	Exception
+	 */
+	private function saveUserConfig(){
+		$name = htmlentities($_POST['services_sharing_config_name']);
+		
+		$this->removeUserSchedule($name,false);
+		
+		//	Cleanup completed, add the new schedule
+		$newschedule = $this->data->addChild('userdefined');
+		$newschedule->addAttribute('name',$name);
+		
+		$days = explode(':',$_POST['services_sharing_config_schedule']);
+		
+		$i = 0;
+		foreach($days as $day){
+			$dayschedule = $newschedule->addChild('day');
+			$dayschedule->addAttribute('id',$i);
+
+			$hours = explode(',',$day);
+			
+			$h = 0;
+			foreach($hours as $hour){
+				$dayschedule->addChild('<h'.$h.'>',$hour);
+				$h++;
+			}
+			$i++;
+		}
+		
+		echo '<reply action="ok"><sharing>';
+		echo $this->newschedule->asXML();
+		echo '</sharing></reply>';
+	}
 	
 	/**
 	 * Saves schedule information to config XML
