@@ -512,7 +512,7 @@ form dl.form_sub dd, dl.form dl.form_sub dd {
     margin-top: 20px;
     display: none;
 }
-.release-changelog pre, .interface_status, .parse-error-output, .diagnostics-results code {
+.release-changelog pre, .interface_status, .parse-error-output, .log-file, .diagnostics-results code {
     display: block;
     overflow: scroll;
     overflow-x: scroll;
