@@ -50,9 +50,9 @@
 
         <dt><input type="submit" value="Save" id="<?=$this->ipconfig_id?>_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="help_pool">
     <div class="help" id="help_<?=$this->ipconfig_id?>_mac">This field can be used to modify (spoof) the MAC address of the WAN interface (may be required with some cable connections) Enter a MAC address in the following format: xx:xx:xx:xx:xx:xx or leave blank</div>

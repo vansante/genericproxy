@@ -18,9 +18,9 @@
 
         <dt><input type="submit" value="Save" id="firewall_nat_outbound_enable_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="help_pool">
     <div class="help" id="help_firewall_nat_outbound_adv_enable">Enable this to specify your own advanced outbound rules.</div>

@@ -20,9 +20,9 @@
 
         <dt><input type="submit" value="Nmap" id="diagnostics_nmap_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="diagnostics-results" id="diagnostics_nmap_results_div">
     <h3>Nmap results</h3>

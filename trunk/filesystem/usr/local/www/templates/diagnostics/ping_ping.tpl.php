@@ -29,9 +29,9 @@
 
         <dt><input type="submit" value="Ping" id="diagnostics_ping_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="diagnostics-results" id="diagnostics_ping_results_div">
     <h3>Ping results</h3>

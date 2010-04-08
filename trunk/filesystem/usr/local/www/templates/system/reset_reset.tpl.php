@@ -15,6 +15,6 @@
     <dl>
         <dt><input type="submit" value="Reset" id="system_reset_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>

@@ -34,9 +34,9 @@
 
         <dt><input type="submit" value="Trace route" id="diagnostics_tracert_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="diagnostics-results" id="diagnostics_tracert_results_div">
     <h3>Traceroute results</h3>

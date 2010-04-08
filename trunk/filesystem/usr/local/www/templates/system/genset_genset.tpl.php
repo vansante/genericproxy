@@ -52,7 +52,7 @@
         
         <dt><input type="submit" value="Save" id="system_genset_submit" class="submitbutton"/></dt>
     </dl>
-
+    
     <p style="clear: both;"></p>
 </form>
 

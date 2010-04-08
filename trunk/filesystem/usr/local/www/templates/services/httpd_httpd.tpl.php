@@ -35,6 +35,7 @@
 
         <dt><input type="submit" value="Save" id="services_httpd_submit" class="submitbutton"/></dt>
     </dl>
+    
     <p style="clear: both;"></p>
 </form>
 

@@ -20,9 +20,9 @@
             <input type="submit" value="Download configuration" id="system_backrest_backup_submit" class="submitbutton"/>
         </dd>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <h3>Restore configuration</h3>
 
@@ -41,11 +41,11 @@
         
         <dt><input type="submit" value="Restore configuration" id="system_backrest_restore_submit" class="submitbutton"/></dt>
     </dl>
+
+    <p style="clear: both;"></p>
 </form>
 
 <div class="help_pool">
     <div class="help" id="help_system_backrest_backup_submit">Click this button to save the system configuration in XML format.</div>
     <div class="help" id="help_system_backrest_restorexml">Open a configuration XML file and click the button below to restore the configuration.</div>
 </div>
-
-<p style="clear: both;"></p>

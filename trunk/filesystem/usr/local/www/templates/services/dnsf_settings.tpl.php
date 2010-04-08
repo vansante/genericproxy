@@ -22,9 +22,9 @@
 
         <dt><input type="submit" value="Save" id="services_dnsf_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="help_pool">
     <div class="help" id="help_services_dnsf_enabled">If this option is set, then machines that specify their hostname when requesting a DHCP lease will be registered in the DNS forwarder, so that their name can be resolved. You should also set the domain in System: General setup to the proper value.</div>

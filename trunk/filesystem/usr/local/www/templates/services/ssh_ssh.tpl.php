@@ -15,9 +15,9 @@
 
         <dt><input type="submit" value="Save" id="services_ssh_submit" class="submitbutton"/></dt>
     </dl>
-</form>
 
-<p style="clear: both;"></p>
+    <p style="clear: both;"></p>
+</form>
 
 <div class="help_pool">
     <div class="help" id="help_services_ssh_enabled">If enabled, the device can be accessed over the LAN interface through SSH.</div>

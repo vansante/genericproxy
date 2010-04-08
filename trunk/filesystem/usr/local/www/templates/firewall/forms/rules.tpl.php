@@ -104,6 +104,8 @@
 
         <dt><input type="submit" value="Add rule" id="firewall_rules_submit" class="submitbutton"/></dt>
     </dl>
+
+    <p style="clear: both;"></p>
 </form>
 
 <div class="help_pool">
@@ -123,5 +125,3 @@
     <div class="help" id="help_firewall_rules_log">Hint: the firewall has limited local log space. Don't turn on logging for everything. If you want to do a lot of logging, consider using a remote syslog server.</div>
     <div class="help" id="help_firewall_rules_descr">You may enter a description here for your reference</div>    
 </div>
-
-<p style="clear: both;"></p>
