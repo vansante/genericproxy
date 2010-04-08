@@ -1,7 +1,6 @@
 <script type="text/javascript">
     gp.status.system.clickHandler = function() {
         gp.status.system.load();
-        gp.checkForUpdates();
     };
 
     gp.status.system.load = function() {

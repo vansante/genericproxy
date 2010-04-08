@@ -1,4 +1,5 @@
 <reply action="ok">
+<!--
     <release>
         <version>0.9</version>
         <date>15-04-2010</date>
@@ -13,5 +14,5 @@
         - DynDNS
         </changelog>
         <filename>GenericProxy-0.9.image</filename>
-    </release>
+    </release>-->
 </reply>

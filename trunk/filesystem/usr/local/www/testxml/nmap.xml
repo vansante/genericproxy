@@ -1,0 +1,25 @@
+﻿<reply action="ok">
+	<ping>
+		<result><![CDATA[
+Starting Nmap 4.62 ( http://nmap.org ) at 2010-04-08 11:01 CEST
+Interesting ports on localhost (127.0.0.1):
+Not shown: 1706 closed ports
+PORT     STATE SERVICE
+21/tcp   open  ftp
+22/tcp   open  ssh
+53/tcp   open  domain
+80/tcp   open  http
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+953/tcp  open  rndc
+3306/tcp open  mysql
+8888/tcp open  sun-answerbook
+
+Nmap done: 1 IP address (1 host up) scanned in 1.746 seconds
+]]></result>
+	</ping>
+</reply>
+<!--
+
+<reply action="error"><message type="error">Errormessage</message></reply>
+-->
