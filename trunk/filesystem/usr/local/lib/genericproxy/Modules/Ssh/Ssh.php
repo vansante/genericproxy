@@ -44,7 +44,7 @@ class Ssh implements Plugin {
 	 * 	Contains reference to the Logger object
 	 * 
 	 * 	@var Logger
-	 * 	@access = private;
+	 * 	@access private
 	 */
 	private $logger;
 	

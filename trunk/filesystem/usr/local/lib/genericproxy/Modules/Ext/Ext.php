@@ -270,7 +270,7 @@ class Ext extends Interfaces {
 			$this->data[$interface -1]->ipaddr = 'dhcp';
 			$this->data[$interface -1]->dhcphostname = $_POST['interfaces_ext_dhcp_hostname'];
 		}
-		elseif($_POST['interfaces_ext_type'] != 'static'){
+		elseif($_POST['interfaces_ext_type'] == 'static'){
 			$this->data[$interface -1]->ipaddr = $_POST['interfaces_ext_static_ipaddr'];
 			$this->data[$interface -1]->gateway = $_POST['interfaces_ext_static_gateway'];
 		}
@@ -285,10 +285,10 @@ class Ext extends Interfaces {
 	 * 
 	 * @access private
 	 */
-	private function getConfig() {
+	private function getConfig($iface = null) {
 		echo '<reply action="ok">';
 		foreach($this->data as $interface){
-			if($interface['type'] == 'Ext'.$_POST['interface']){
+			if($interface['type'] == 'Ext'.$iface){
 				echo $interface->asXML();	
 			}
 		}

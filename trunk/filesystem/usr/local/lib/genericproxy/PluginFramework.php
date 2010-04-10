@@ -469,6 +469,10 @@ class PluginFramework {
 				Functions::mountFilesystem('unmount');
 				
 				//	Replace saved config with default config and reload
+				if(is_dir('/dev/led')){
+					Functions::shellCommand('/bin/echo 1 > /dev/led/error');
+				}
+				
 				Functions::shellCommand('cp '.self::CONFIG_PATH.'/default-config.xml '.self::CONFIG_PATH.'/config.xml');
 				$this->configuration = new Config( self::CONFIG_PATH.'/config.xml');
 			}

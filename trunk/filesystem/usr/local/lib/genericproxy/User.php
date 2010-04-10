@@ -128,7 +128,9 @@ class User {
 			return;
 		}
 		
-		$xmlUser = $this->getUser ( $_POST ['user'] );
+		if(isset($_POST['user'])){
+			$xmlUser = $this->getUser ( $_POST ['user'] );
+		}
 		
 		//Validate the user
 		if ( isset ( $xmlUser ) && (empty($xmlUser ['password']) || (isset($_POST ['password']) && $xmlUser ['password'] == crypt($_POST ['password'],$xmlUser['password'])))) {

@@ -46,7 +46,7 @@ class DnsForward implements Plugin{
 	 * 	Contains reference to the Logger object
 	 * 
 	 * 	@var Logger
-	 * 	@access = private;
+	 * 	@access private
 	 */
 	private $logger;
 	
@@ -336,7 +336,7 @@ class DnsForward implements Plugin{
 	 * 	Save the edited DNS forwarding
 	 * 
 	 * @access public
-	 * TODO		Finish this
+	 * @todo	finish
 	 */
 	public function saveSettings(){
 

@@ -27,8 +27,8 @@
  */
 
 /**
- * Httpd plugin
- * This plugin manages the lighttpd webserver. 
+ * Cron plugin
+ * This plugin manages the cron service 
  *
  * @author Sebastiaan Gibbon
  * @version 0.0
