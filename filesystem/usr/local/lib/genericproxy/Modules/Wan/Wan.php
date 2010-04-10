@@ -236,7 +236,7 @@ class Wan extends Interfaces {
 			$this->data->ipaddr = 'dhcp';
 			$this->data->dhcphostname = $_POST['interfaces_wan_dhcp_hostname'];
 		}
-		elseif($_POST['interfaces_wan_type'] != 'static'){
+		elseif($_POST['interfaces_wan_type'] == 'static'){
 			$this->data->ipaddr = $_POST['interfaces_wan_static_ipaddr'];
 			$this->data->gateway = $_POST['interfaces_wan_static_gateway'];
 		}

@@ -41,6 +41,13 @@ class MaraDNS implements Plugin{
 	private $plugin;
 	
 	/**
+	 * Path where the MaraDNS configuration file will be saved to
+	 * 
+	 * @var String
+	 */
+	const CONFIG_PATH = '/etc/mararc';
+	
+	/**
 	 *
 	 * @param PluginFramework $framework Framework object, containing all information and plugins.
 	 * @param Config $config Object with System Configuration
@@ -53,7 +60,7 @@ class MaraDNS implements Plugin{
 		$this->plugin = $options;
 		
 		//get config
-		$this->data = $this->config->getElement ( 'dns' );
+		$this->data = $this->config->getElement ( 'maradns' );
 	}
 	
 	/**
@@ -71,6 +78,16 @@ class MaraDNS implements Plugin{
 	 * 
 	 */
 	public function configure() {
+		//	Check if the chroot dir exists, things turn ugly if it doesn't
+		if(!is_dir('/var/maradns')){
+			mkdir('/var/maradns');
+		}
+		
+		//	Check if the db.wleiden.net file exists, if not we need to fetch it
+		if(!file_exists('/var/maradns/db.wleiden.nl')){
+			$this->fetchZone();
+		}
+		
 		/*
 		 *	MaraDNS config file
 		 *	This config file is a 1:1 copy of all the settings (sans comments) from the 
@@ -79,7 +96,7 @@ class MaraDNS implements Plugin{
 		 * 	TODO make these settings changeable in the configuration xml
 		 */
 		$config = $cert = <<<EOD
-# Example mararc file (unabridged version)
+# Wleiden mararc file (abridged version)
 # The various zones we support
 
 # We must initialize the csv2 hash, or MaraDNS will be unable to
@@ -89,7 +106,7 @@ csv2 = {}
 # This is just to show the format of the file
 csv2["wleiden.net."] = "db.wleiden.net"
 ipv4_bind_addresses = "<internalif>, 127.0.0.1"
-chroot_dir = "/usr/local/etc/maradns"
+chroot_dir = "/var/maradns"
 maradns_uid = 53
 maradns_gid = 53
 
@@ -125,10 +142,22 @@ upstream_servers = {}
 
 upstream_servers["."] = "8.8.8.8, 8.8.4.4"
 
+ipv4_alias["hiddenonline"] = "65.107.225.0/24"
 ipv4_alias["azmalink"] = "12.164.194.0/24"
 spammers = "azmalink,hiddenonline"
 
 EOD;
+		$fd = fopen(self::CONFIG_PATH,'w');
+		if($fd !== false){
+			fwrite ( $fd, $config );
+			fclose ( $fd );
+			return true;
+		}
+		else{
+			Logger::getRootLogger()->error('Could not open '.self::CONFIG_PATH.' for writing');
+			return false;
+		}
+		
 	}
 	
 	/**
@@ -137,7 +166,19 @@ EOD;
 	 * @return bool false when service failed to start
 	 */
 	public function start() {
-		
+		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
+		if($dns_pid == "") {
+			$status = Functions::shellCommand('maradns -f '.self::CONFIG_PATH);
+			if($status != 0){
+				Logger::getRootLogger()->error('MaraDNS failed to start');
+				return false;
+			}
+			return true;
+		}
+		else{
+			$this->logger->info('MaraDNS was already running');
+			return false;
+		}
 	}
 	
 	/**
@@ -145,7 +186,49 @@ EOD;
 	 * 
 	 * @return bool false when service failed to stop
 	 */
-	public function stop() {}
+	public function stop() {
+		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
+		if($dns_pid <> "") {
+			$this->logger->info('Stopping MaraDNS');
+			Functions::shellCommand("kill $dns_pid");
+			return true;
+		}
+		else{
+			$this->logger->info('MaraDNS was terminated without it running');
+			return false;
+		}
+	}
+	
+	/**
+	 * Fetches the wleiden zone through the shell script they made
+	 * 
+	 * @return Boolean	true on success, false on error
+	 */
+	private function fetchZone($return = false){
+		//	Load the zone file through wleiden's script 
+		$status = Functions::shellCommand('sh /usr/local/lib/genericproxy/Modules/MaraDNS/fetchzone.sh');
+		if(stristr($status,'[ERROR]')){
+			if($return){
+				throw new Exception('The zone file could not be retrieved');
+			}
+			else{
+				Logger::getRootLogger()->error('The zone file could not be retrieved');
+			}
+			return false;
+		}
+		
+		//	Restart MaraDNS if it's running
+		if($this->getStatus == 'Running'){
+			$this->stop();
+			$this->start();
+		}
+		
+		if($return){
+			echo '<reply action="ok" />';
+		}
+		return true;
+	}
+	
 	
 	/**
 	 * Run during system shutdown
@@ -163,14 +246,42 @@ EOD;
 	}
 
 	/**
+	 * Return the status of maraDNS
 	 * 
+	 * @return String Started|Error|Stopped
 	 */
-	public function getStatus() {}
+	public function getStatus() {
+		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
+		if($dns_pid <> "") {
+			return 'Started';
+		}
+		else{
+			if($this->data['enabled'] == 'true'){
+				return 'Error';
+			}
+			else{
+				return 'Stopped';
+			}
+		}
+	}
 
 	/**
 	 * 
 	 */
-	public function getPage() {}
+	public function getPage() {
+		switch($_POST['page']){
+			case 'getconfig':
+				break;
+			case 'saveconfig':
+				break;
+			case 'fetchzone':
+				$this->fetchZone(true);
+				break;
+			default:
+				throw new Exception('Invalid page request');
+				break;
+		}
+	}
 
 	/**
 	 * 

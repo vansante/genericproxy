@@ -287,7 +287,6 @@
 				<type invert="true">Lan</type>
 				<port>22:25</port>
 				<address>192.168.19.2</address>
-				<network>lan</network>
 			</source>
 			<destination>
 				<type invert="true">Lan</type>
@@ -868,4 +867,8 @@
 			<command>/usr/libexec/atrun</command>
 		</item>
 	</cron>	
+
+	<maradns>
+	
+	</maradns>
 </config>
