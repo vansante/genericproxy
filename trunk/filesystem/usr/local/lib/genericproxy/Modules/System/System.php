@@ -430,7 +430,7 @@ class System implements Plugin {
 		
 		//Only update time when time-update-interval is bigger then 0.
 		if (( int ) $this->data->ntp->{'time-update-interval'} < 1) {
-			if (isset ( $this->plugin->cronid )) {
+			if (isset ( $this->data->ntp['cronid'] )) {
 				//Remove cron settings
 				$job = $cron->getJob ( ( string ) $this->data->ntp['cronid'] );
 				$this->config->deleteElement ( $job );

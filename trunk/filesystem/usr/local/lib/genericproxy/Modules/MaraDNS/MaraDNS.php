@@ -213,7 +213,8 @@ EOD;
 	 */
 	private function fetchZone($return = false){
 		//	Load the zone file through wleiden's script 
-		$status = Functions::shellCommand('sh /usr/local/lib/genericproxy/Modules/MaraDNS/fetchzone.sh');
+		Logger::getRootLogger('We need to fetch a zone here, checking if wleiden caused the infinite loop');
+		#$status = Functions::shellCommand('sh /usr/local/lib/genericproxy/Modules/MaraDNS/fetchzone.sh');
 		if(stristr($status,'[ERROR]')){
 			if($return){
 				throw new Exception('The zone file could not be retrieved');
