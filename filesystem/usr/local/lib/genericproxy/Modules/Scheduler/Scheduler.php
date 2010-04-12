@@ -126,7 +126,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				$this->saveUserConfig();
 				break;
 			case 'deleteconfig':
-				$this->removeUserSchedule(htmlentities($_POST['name']));
+				$this->removeUserSchedule(htmlentities($_POST['name']),true);
 				break;
 			default:
 				throw new Exception('Invalid page request');
@@ -154,12 +154,11 @@ class Scheduler implements Plugin,GeneratesRules {
 	private function removeUserSchedule($name,$return){
 		foreach($this->scheduler_data->userdefined as $schedule){
 			if($schedule['name'] == $name){
-				/*	We found a configuration with the same name, remove it to replace it with
-				 *	the new one
-				 */
+				//	We found a configuration with the same name, remove it
 				$this->config->deleteElement($schedule);
 				
 				if($return){
+					$this->config->saveConfig();
 					echo '<reply action="ok" />';
 					return 1;
 				}
@@ -209,6 +208,8 @@ class Scheduler implements Plugin,GeneratesRules {
 		echo '<reply action="ok"><sharing>';
 		echo $newschedule->asXML();
 		echo '</sharing></reply>';
+		
+		$this->config->saveConfig();
 	}
 	
 	/**
@@ -272,6 +273,7 @@ class Scheduler implements Plugin,GeneratesRules {
 			$i++;
 		}
 		
+		$this->config->saveConfig();
 		echo $return->asXML();
 	}
 	

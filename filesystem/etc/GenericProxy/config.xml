@@ -4,6 +4,7 @@
 		<optimization>normal</optimization>
 
 		<update>
+			<check_signature>false</check_signature>
 			<server>www.genericproxy.org/releases</server>
 		</update>
 
