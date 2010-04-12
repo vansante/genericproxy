@@ -461,9 +461,9 @@ class PluginFramework {
 				 * 	Default configuration could not be loaded, return to factory
 				 * 	defaults so the system can be inspected and recovered by the user
 				 * 	
-				 * 	TODO make the error led blink to signal the system is being booted with defaults during boot?
 				 */
-				//	Copy corrupt config.xml into /cfg/broken-config.xml 
+				//	Copy corrupt config.xml into /cfg/broken-config.xml
+				Logger::getRootLogger()->error('Invalid config.xml found, you can review this configuration in /cfg/broken-config.xml'); 
 				Functions::mountFilesystem('mount');
 				Functions::shellCommand('cp '.self::CONFIG_PATH.'/config.xml /cfg/broken-config.xml');
 				Functions::mountFilesystem('unmount');
