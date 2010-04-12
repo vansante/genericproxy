@@ -429,12 +429,12 @@ class System implements Plugin {
 		}
 		
 		//Only update time when time-update-interval is bigger then 0.
-		if (( int ) $this->data->{'time-update-interval'} < 1) {
+		if (( int ) $this->data->ntp->{'time-update-interval'} < 1) {
 			if (isset ( $this->plugin->cronid )) {
 				//Remove cron settings
-				$job = $cron->getJob ( ( string ) $this->plugin->cronid );
+				$job = $cron->getJob ( ( string ) $this->data->ntp['cronid'] );
 				$this->config->deleteElement ( $job );
-				$this->config->deleteElement ( $this->plugin->cronid );
+				$this->config->deleteElement ( $this->data->ntp['cronid'] );
 			}
 		} else {
 			//TODO: Set correct time interval using $this->data->{'time-update-interval'} to cron time
@@ -442,22 +442,22 @@ class System implements Plugin {
 			$hour = "*";
 			$mday = "*";
 			$month = "*";
-			$command = "ntpdate {$this->data->timeservers[0]}";
+			$command = "ntpdate {$this->data->ntp->timeservers[0]}";
 			
-			if (empty ( $this->plugin->cronid )) {
+			if (empty ( $this->data->ntp['cronid'])) {
 				//create job
 				$job = $cron->addJob ( $minute, $hour, $mday, $month, '*', 'root', $command );
-				$this->plugin->cronid = ( string ) $job ['id'];
+				$this->data->ntp['cronid'] = ( string ) $job ['id'];
+				$this->config->saveConfig();
 			} else {
 				//Update job if changed.
-				$job = $cron->getJob ( ( string ) $this->plugin->cronid );
+				$job = $cron->getJob ( ( string ) $this->data->ntp['cronid']);
 				//if ($hour != ( string ) $job->hour || $mday != ( string ) $job->mday || $month != ( string ) $job->month || $command != ( string ) $job->command) {
 				$job->minute = $minute;
 				$job->hour = $hour;
 				$job->mday = $mday;
 				$job->month = $month;
 				$job->command = $command;
-				//$cron->configure (); //Starting Ntp plugin before Cron plugin, so not needed.
 			//}
 			}
 		}
