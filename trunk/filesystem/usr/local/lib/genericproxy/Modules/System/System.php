@@ -242,7 +242,7 @@ class System implements Plugin {
 		$data = Functions::shellCommand ( 'uptime' );
 		
 		$data = explode ( ',', $data );
-		$data [0] = substr ( $data [0], 13, strlen ( $data [0] ) );
+		$data [0] = substr ( $data [0], 12, strlen ( $data [0] ) );
 		
 		$buffer .= '<uptime>' . $data [0] . '' . $data [1] . '</uptime>';
 		
