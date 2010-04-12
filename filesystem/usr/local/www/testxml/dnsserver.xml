@@ -1,0 +1,6 @@
+<reply action="ok">
+	<maradns>
+		<zone>wleiden.net</zone>
+		<server>server.wleiden.net</server>
+	</maradns>
+</reply>

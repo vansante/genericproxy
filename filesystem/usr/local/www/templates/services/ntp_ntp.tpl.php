@@ -7,7 +7,7 @@
     </div>
 
     <input type="hidden" name="module" value="System"/>
-    <input type="hidden" name="page" value="saventp" id="services_ntp_form_page"/>
+    <input type="hidden" name="page" value="saventpconfig" id="services_ntp_form_page"/>
 
     <dl>
         <dt><label for="services_ntp_timezone">Time zone</label></dt>

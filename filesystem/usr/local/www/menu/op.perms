@@ -1,5 +1,6 @@
 status
 ext
 firewall
+dnsserver
 ipsec
 diagnostics
