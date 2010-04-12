@@ -182,7 +182,7 @@ EOD;
 			return true;
 		}
 		else{
-			$this->logger->info('MaraDNS was already running');
+			Logger::getRootLogger()->info('MaraDNS was already running');
 			return false;
 		}
 		
