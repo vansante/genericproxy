@@ -166,6 +166,12 @@ EOD;
 	 * @return bool false when service failed to start
 	 */
 	public function start() {
+		$dnsmasq = $this->config->getElement('dnsmasq');
+		if($dnsmasq['enable'] == 'true'){
+			Logger::getRootLogger()->error('dnsmasq module is also enabled, prevented loading of maradns');
+			return false;
+		}
+		
 		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
 		if($dns_pid == "") {
 			$status = Functions::shellCommand('maradns -f '.self::CONFIG_PATH);
@@ -179,6 +185,7 @@ EOD;
 			$this->logger->info('MaraDNS was already running');
 			return false;
 		}
+		
 	}
 	
 	/**

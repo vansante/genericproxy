@@ -31,14 +31,15 @@
 			<default-username>admin</default-username>
 			<default-password>blaat</default-password>
 		-->
-
-		<timezone>ETC/GMT+1</timezone>
-		<time-update-interval>300</time-update-interval>
-		<!--
-			Values: -1 does not update time. 0 only updates at boot. > 0 updates using
-			the interval and at boot
-		-->
-		<timeservers>0.pfsense.pool.ntp.org</timeservers>
+		<ntp cronid="">
+			<timeservers>0.pfsense.pool.ntp.org</timeservers>
+			<timezone>ETC/GMT+1</timezone>
+			<!--
+				Values: -1 does not update time. 0 only updates at boot. > 0 updates using
+				the interval and at boot
+			-->
+			<time-update-interval>300</time-update-interval>
+		</ntp>
 
 		<consolemenu>enabled</consolemenu>
 		<firmwarecheck>disabled</firmwarecheck>
@@ -92,7 +93,9 @@
 			can_uninstall="true" />
 		<plugin name="DnsForward" startup_order="41" enabled="true"
 			can_uninstall="true" />
-
+		<plugin name="MaraDNS" startup_order="42" enabled="true" 
+			can_uninstall="true"/>
+		
 		<plugin name="Firewall" startup_order="50" enabled="true"
 			can_uninstall="true" />
 
@@ -195,7 +198,7 @@
 		</staticmaps>
 	</dhcpd>
 
-	<dnsmasq enable="true" regdhcp='true'>
+	<dnsmasq enable="false" regdhcp='true'>
 		<hosts>
 			<host id="1244" name="localtest.blat">
 				<domain>blat.com</domain>
