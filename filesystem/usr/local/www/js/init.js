@@ -144,6 +144,7 @@ gp.checkForUpdates = function() {
             successFn: function(json) {
                 if (json.release) {
                     gp.data.new_release = json.release;
+                    
                     var txt = '<p>There is a new firmware with version <strong>'
                         +json.release.version+'</strong> issued on <strong>'+json.release.date+'</strong>.'
                         +'<br>Do you want to go to the firmware upgrade page to apply it?</p>';
@@ -157,11 +158,11 @@ gp.checkForUpdates = function() {
                         $('#cp_system_upgrade').show().parent().show();
                         $('#system_upgrade').addClass('active');
                         $('#menu').accordion('activate' , '#system');
-                        gp.system.upgrade.clickHandler();
                     });
                 } else {
                     gp.data.no_release = true;
                 }
+                gp.system.upgrade.auto.loadForm();
             }
         });
     }
