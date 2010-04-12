@@ -124,8 +124,10 @@ class Scheduler implements Plugin,GeneratesRules {
 				break;
 			case 'addconfig':
 				$this->saveUserConfig();
+				break;
 			case 'deleteconfig':
 				$this->removeUserSchedule(htmlentities($_POST['name']));
+				break;
 			default:
 				throw new Exception('Invalid page request');
 				break;
@@ -198,7 +200,7 @@ class Scheduler implements Plugin,GeneratesRules {
 			
 			$h = 0;
 			foreach($hours as $hour){
-				$dayschedule->addChild('<h'.$h.'>',$hour);
+				$dayschedule->addChild('h'.$h,$hour);
 				$h++;
 			}
 			$i++;

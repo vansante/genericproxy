@@ -872,6 +872,7 @@
 	</cron>	
 
 	<maradns>
-	
+		<server>195.169.86.131</server>
+		<zone>wleiden.nl</zone>
 	</maradns>
 </config>

@@ -21,11 +21,6 @@ echo "Executing rc startup commands"
 echo "Starting rc.initdiskless"
 ./etc/rc.initdiskless
 
-#generating /tmp ram disk
-#mdconfig -a -t swap -s 256M -u 10
-#newfs -U /dev/md10
-#mount /dev/md10 /tmp
-
 mount /cfg
 echo "copying /cfg to /etc"
 cp -r /cfg/* /etc

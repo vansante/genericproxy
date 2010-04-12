@@ -138,6 +138,9 @@ class Update implements Plugin{
 	 * @throws Exception
 	 */
 	private function updateFirmware(){
+		Functions::shellCommand('mdconfig -a -t swap -s 120M -u 10');
+		Functions::shellCommand('newfs -U /dev/md10');
+		Functions::shellCommand('/dev/md10 /tmp/firmware');
 		
 	}
 	
