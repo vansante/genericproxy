@@ -213,7 +213,7 @@ EOD;
 	 */
 	private function fetchZone($return = false){
 		//	Load the zone file through wleiden's script 
-		Logger::getRootLogger('We need to fetch a zone here, checking if wleiden caused the infinite loop');
+		Logger::getRootLogger()->info('We need to fetch a zone here, checking if wleiden caused the infinite loop');
 		#$status = Functions::shellCommand('sh /usr/local/lib/genericproxy/Modules/MaraDNS/fetchzone.sh');
 		if(stristr($status,'[ERROR]')){
 			if($return){
@@ -274,13 +274,49 @@ EOD;
 	}
 
 	/**
+	 * Echo the configuration for the AJAX frontend
+	 */
+	private function echoConfig(){
+		echo '<reply action="ok">';
+		echo $this->data->asXML();
+		echo '</reply>';
+	}
+	
+	/**
+	 * Update configuration with data from the AJAX frontend
+	 */
+	private function saveConfig(){
+		if(Functions::is_ipAddr($_POST['services_dnsserv_server'])){
+			ErrorHandler::addError('form-error','services_dnsserv_server');
+		}
+		if(empty($_POST['services_dnsserv_zone'])){
+			ErrorHandler::addError('form-error','services_dnsserv_zone');
+		}
+		
+		if(ErrorHandler::errorCount() == 0){
+			$this->data->zone = $_POST['services_dnsserv_zone'];
+			$this->data->server = $_POST['services_dnsserv_server'];
+			$this->saveConfig();
+
+			echo '<reply action="ok">';
+			echo $this->data->asXML();
+			echo '</reply>';
+		}
+		else{
+			throw new Exception('There is invalid form input');
+		}
+	}
+	
+	/**
 	 * 
 	 */
 	public function getPage() {
 		switch($_POST['page']){
 			case 'getconfig':
+				$this->echoConfig();
 				break;
 			case 'saveconfig':
+				$this->saveConfig();
 				break;
 			case 'fetchzone':
 				$this->fetchZone(true);

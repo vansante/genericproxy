@@ -165,7 +165,14 @@ class System implements Plugin {
 			$this->getServiceStatus ();
 		} elseif ($_POST ['page'] == 'getstatus') {
 			$this->getSystemStatus ();
-		} else {
+		}
+		elseif($_POST['page'] == 'getntpconfig'){
+			$this->getntpconfig();
+		}
+		elseif($_POST['page'] == 'saventpconfig'){
+			$this->saventpconfig();
+		}
+		else {
 			throw new Exception ( 'Invalid page request' );
 		}
 	}
@@ -471,6 +478,57 @@ class System implements Plugin {
 		if (( int ) $this->data->{'time-update-interval'} >= 0) {
 			Logger::getRootLogger ()->info ( "Updating time." );
 			Functions::shellCommand ( "ntpdate {$this->data->timeservers[0]}" );
+		}
+	}
+
+	/**
+	 * Echoes NTP configuration and all time zones
+	 */
+	private function getntpconfig(){
+		echo '<reply action="ok"><ntp>';
+		
+		echo '<timezones>';
+		
+		$new = preg_replace('/\s+/', '_', Functions::shellCommand('ls /usr/share/zoneinfo'));
+		$arr = explode('_',$new);
+		
+		foreach($arr as $zone){
+			if(stristr('GMT',$zone)){
+				echo '<zone id="'.$zone.'" />';
+			}
+		}
+		echo '</timezones>';
+		
+		echo '<server>'.(string)$this->data->ntp->timeservers.'</server>';
+		echo '<current>'.(string)$this->data->ntp->timezone.'</current>';
+		echo '<update_interval>'.(string)$this->data->ntp->{'time-update-interval'}.'</update_interval>';
+		echo '</ntp></reply>';
+	}
+	
+	/**
+	 * Save NTP configuration based on POST values from the frontend
+	 * 
+	 * @throws Exception
+	 */
+	private function saventpconfig(){
+		if(!empty($_POST['services_ntp_server'])){
+			ErrorHandler::addError('form-error','services_ntp_server');
+		}
+		if(!file_exists('/usr/share/zoneinfo/ETC/'.$_POST['services_ntp_timezone'])){
+			ErrorHandler::addError('form-error','services_ntp_timezone');
+		}
+		if(is_numeric($_POST['services_ntp_interval'])){
+			ErrorHandler::addError('form-error','services_ntp_interval');
+		}
+		
+		if(ErrorHandler::errorCount() == 0){
+			$this->data->ntp->{'time-update-interval'} = $_POST['services_ntp_interval'];
+			$this->data->ntp->timeservers = $_POST['services_ntp_server'];
+			$this->data->ntp->timezone = $_POST['services_ntp_timezone'];
+			$this->config->saveConfig();
+		}
+		else{
+			throw new Exception('There is invalid form input');
 		}
 	}
 }
