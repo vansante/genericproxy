@@ -137,10 +137,41 @@ class Update implements Plugin{
 	 * @access public
 	 * @throws Exception
 	 */
-	private function updateFirmware(){
+	public function updateFirmware(){
+		$data = $this->checkForUpdates('data');
+		
+		//		Set up a temporary ramdisk to download the new firmware into
 		Functions::shellCommand('mdconfig -a -t swap -s 120M -u 10');
 		Functions::shellCommand('newfs -U /dev/md10');
 		Functions::shellCommand('/dev/md10 /tmp/firmware');
+		
+		if(is_dir('/tmp/firmware')){
+
+			//		Download the new firmware into the ramdisk
+			chdir('/tmp/firmware');
+			Functions::shellCommand('wget '.$this->data->server.'/'.$data->filename);
+			if(file_exists('/tmp/firmware/'.$data->filename)){
+				//	TODO: Verify signature
+				if($this->data->check_signature == 'false' || true){
+					$hash = hash_file('sha256','/tmp/firmware/'.$data->filename);
+					if($hash == $data->hash){
+						//	Execute the firmware upgrade
+					}
+					else{
+						throw new Exception('The downloaded file is corrupt');
+					}
+				}
+				else{
+					throw new Exception('The downloaded file has an invalid signature');
+				}
+			}
+			else{
+				throw new Exception('Error downloading firmware file '.$data->filename);
+			}
+		}
+		else{
+			throw new Exception('Could not download the firmware');
+		}
 		
 	}
 	
@@ -155,12 +186,12 @@ class Update implements Plugin{
 	 * @access public
 	 * @throws Exception
 	 */
-	public function checkForUpdates($returnXML = false){
+	public function checkForUpdates($return = null){
 		$xml = file_get_contents(((string)$this->data->server).'/releases.xml');
 		if($xml !== false){
 			$check = simplexml_load_string($xml);
 			if($this->checkVersion($check->version)){
-				if($returnXML){
+				if($return == 'XML'){
 					//	Add the current version to the reply XML, since the AJAX frontend is not aware of it
 					$check->addChild('currentversion',PluginFramework::VERSION);
 					echo '<reply action="ok">';
@@ -171,8 +202,11 @@ class Update implements Plugin{
 			}
 			else{
 				//	No update was found
-				if($returnXML){
+				if($return == 'XML'){
 					echo '<reply action="ok" />';
+				}
+				elseif($return == 'data'){
+					return $check;
 				}
 				return false;
 			}
