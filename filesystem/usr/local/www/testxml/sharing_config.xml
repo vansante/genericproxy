@@ -1,0 +1,30 @@
+<reply action="ok">
+	<sharing>
+		<userdefined name="test">
+			<day id="1">
+				<h0>0</h0>
+				<h1>1</h1>
+				<h2>2</h2>
+				<h3>2</h3>
+				<h4>2</h4>
+				<h5>2</h5>
+				<h6>2</h6>
+				<h7>1</h7>
+				<h8>1</h8>
+				<h9>1</h9>
+			</day>
+			<day id="5">
+				<h0>0</h0>
+				<h1>1</h1>
+				<h2>2</h2>
+				<h3>2</h3>
+				<h4>2</h4>
+				<h5>2</h5>
+				<h6>2</h6>
+				<h7>1</h7>
+				<h8>1</h8>
+				<h9>1</h9>
+			</day>
+		</userdefined>
+	</sharing>
+</reply>
