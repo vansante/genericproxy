@@ -289,9 +289,6 @@ class Scheduler implements Plugin,GeneratesRules {
 		$nbuffer = '<maxupspeed>'.(string)$this->scheduler_data->maxupspeed.'</maxupspeed>';
 		$nbuffer .= '<maxdownspeed>'.(string)$this->scheduler_data->maxdownspeed.'</maxdownspeed>';
 		
-		Logger::getRootLogger()->debug('Schedule test:'.print_r($this->scheduler_data->schedule->standard,true).':');
-		Logger::getRootLogger()->debug('Schedule test:'.print_r($this->scheduler_data->schedule->optional,true).':');
-		
 		$nbuffer .= '<standard>';
 		$nbuffer .= '<upspeed>'.(string)$this->scheduler_data->schedule->standard->upspeed.'</upspeed>';
 		$nbuffer .= '<downspeed>'.(string)$this->scheduler_data->schedule->standard->downspeed.'</downspeed>';

@@ -489,7 +489,7 @@ class System implements Plugin {
 		
 		echo '<timezones>';
 		
-		$new = preg_replace('/\s+/', '_', Functions::shellCommand('ls /usr/share/zoneinfo'));
+		$new = preg_replace('/\s+/', '_', Functions::shellCommand('ls /usr/share/zoneinfo/Etc'));
 		$arr = explode('_',$new);
 		
 		foreach($arr as $zone){
@@ -512,13 +512,13 @@ class System implements Plugin {
 	 */
 	private function saventpconfig(){
 		if(!empty($_POST['services_ntp_server'])){
-			ErrorHandler::addError('form-error','services_ntp_server');
+			ErrorHandler::addError('formerror','services_ntp_server');
 		}
 		if(!file_exists('/usr/share/zoneinfo/ETC/'.$_POST['services_ntp_timezone'])){
-			ErrorHandler::addError('form-error','services_ntp_timezone');
+			ErrorHandler::addError('formerror','services_ntp_timezone');
 		}
 		if(is_numeric($_POST['services_ntp_interval'])){
-			ErrorHandler::addError('form-error','services_ntp_interval');
+			ErrorHandler::addError('formerror','services_ntp_interval');
 		}
 		
 		if(ErrorHandler::errorCount() == 0){
