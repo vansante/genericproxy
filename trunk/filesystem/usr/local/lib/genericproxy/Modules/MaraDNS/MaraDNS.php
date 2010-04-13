@@ -1,5 +1,5 @@
 <?php
-class MaraDNS implements Plugin{
+class MaraDNS implements Plugin {
 	
 	/**
 	 * Contains a reference to the configuration object
@@ -84,30 +84,30 @@ class MaraDNS implements Plugin{
 	 */
 	public function configure() {
 		//	Check if the chroot dir exists, things turn ugly if it doesn't
-		if(!is_dir('/var/maradns')){
-			mkdir('/var/maradns');
+		if (! is_dir ( '/var/maradns' )) {
+			mkdir ( '/var/maradns' );
 		}
 		
 		//	Check if the db.wleiden.net file exists, if not we need to fetch it
-		if(!file_exists('/var/maradns/db.wleiden.nl')){
-			$this->fetchZone();
+		if (! file_exists ( '/var/maradns/db.wleiden.nl' )) {
+			$this->fetchZone ();
 		}
 		
-		$listen['localhost'] = '127.0.0.1';
+		$listen ['localhost'] = '127.0.0.1';
 		
-		$lan = $this->framework->getPlugin('Lan');
-		if($lan != null){
-			$lanaddress = $lan->getIpAddress();
-			if(Functions::is_ipAddr($lanaddress)){
-				$listen['lan'] = $lanaddress;
+		$lan = $this->framework->getPlugin ( 'Lan' );
+		if ($lan != null) {
+			$lanaddress = $lan->getIpAddress ();
+			if (Functions::is_ipAddr ( $lanaddress )) {
+				$listen ['lan'] = $lanaddress;
 			}
 		}
 		
-		$ext = $this->framework->getPlugin('Ext');
-		if($ext != null){
-			$extaddress = $ext->getIpAddress();
-			if(Functions::is_ipAddr($extaddress)){
-				$listen['ext'] = $extaddress;
+		$ext = $this->framework->getPlugin ( 'Ext' );
+		if ($ext != null) {
+			$extaddress = $ext->getIpAddress ();
+			if (Functions::is_ipAddr ( $extaddress )) {
+				$listen ['ext'] = $extaddress;
 			}
 		}
 		
@@ -129,8 +129,8 @@ csv2 = {}
 # This is just to show the format of the file
 csv2["wleiden.net."] = "db.wleiden.net"
 ipv4_bind_addresses = "';
-$config .= implode(',',$listen);
-$config .= '"
+		$config .= implode ( ',', $listen );
+		$config .= '"
 chroot_dir = "/var/maradns"
 maradns_uid = 53
 maradns_gid = 53
@@ -172,17 +172,16 @@ ipv4_alias["azmalink"] = "12.164.194.0/24"
 spammers = "azmalink,hiddenonline"
 ';
 		
-		$fd = fopen(self::CONFIG_PATH,'w');
-		if($fd !== false){
+		$fd = fopen ( self::CONFIG_PATH, 'w' );
+		if ($fd !== false) {
 			fwrite ( $fd, $config );
 			fclose ( $fd );
 			return true;
-		}
-		else{
-			Logger::getRootLogger()->error('Could not open '.self::CONFIG_PATH.' for writing');
+		} else {
+			Logger::getRootLogger ()->error ( 'Could not open ' . self::CONFIG_PATH . ' for writing' );
 			return false;
 		}
-		
+	
 	}
 	
 	/**
@@ -191,29 +190,27 @@ spammers = "azmalink,hiddenonline"
 	 * @return bool false when service failed to start
 	 */
 	public function start() {
-		$dnsmasq = $this->config->getElement('dnsmasq');
-		if($dnsmasq['enable'] == 'true'){
-			Logger::getRootLogger()->error('dnsmasq module is also enabled, prevented loading of maradns');
+		$dnsmasq = $this->config->getElement ( 'dnsmasq' );
+		if ($dnsmasq ['enable'] == 'true') {
+			Logger::getRootLogger ()->error ( 'dnsmasq module is also enabled, prevented loading of maradns' );
 			return false;
 		}
 		
-		if($this->data['enable'] == 'true'){
-			$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
-			if(empty($dns_pid)) {
-				$status = Functions::shellCommand('maradns -f '.self::CONFIG_PATH);
-				if($status != 0){
-					Logger::getRootLogger()->error('MaraDNS failed to start');
+		if ($this->data ['enable'] == 'true') {
+			$dns_pid = Functions::shellCommand ( "ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'" );
+			if (empty ( $dns_pid )) {
+				$status = Functions::shellCommand ( 'maradns -f ' . self::CONFIG_PATH );
+				if ($status != 0) {
+					Logger::getRootLogger ()->error ( 'MaraDNS failed to start' );
 					return false;
 				}
 				return true;
-			}
-			else{
-				Logger::getRootLogger()->info('MaraDNS was already running');
+			} else {
+				Logger::getRootLogger ()->info ( 'MaraDNS was already running' );
 				return false;
 			}
-		}
-		else{
-			Logger::getRootLogger()->info('MaraDNS disabled');
+		} else {
+			Logger::getRootLogger ()->info ( 'MaraDNS disabled' );
 		}
 	}
 	
@@ -223,14 +220,13 @@ spammers = "azmalink,hiddenonline"
 	 * @return bool false when service failed to stop
 	 */
 	public function stop() {
-		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
-		if(empty($dns_pid)) {
-			$this->logger->info('Stopping MaraDNS');
-			Functions::shellCommand("kill $dns_pid");
+		$dns_pid = Functions::shellCommand ( "ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'" );
+		if (empty ( $dns_pid )) {
+			$this->logger->info ( 'Stopping MaraDNS' );
+			Functions::shellCommand ( "kill $dns_pid" );
 			return true;
-		}
-		else{
-			$this->logger->info('MaraDNS was terminated without it running');
+		} else {
+			$this->logger->info ( 'MaraDNS was terminated without it running' );
 			return false;
 		}
 	}
@@ -240,92 +236,96 @@ spammers = "azmalink,hiddenonline"
 	 * 
 	 * @return Boolean	true on success, false on error
 	 */
-	private function fetchZone($return = false){
-		$status = $this->getStatus();
-		if($status == 'Running'){
-			$this->stop();
+	private function fetchZone($return = false) {
+		$status = $this->getStatus ();
+		if ($status == 'Running') {
+			$this->stop ();
 		}
 		//	Load the zone file
-		$status = Functions::shellCommand('fetchzone '.$this->data->zone.' '.$this->data->server.' > '.self::ZONEFILE_PATH.'db.'.$this->data->zone);
-
+		$status = Functions::shellCommand ( 'fetchzone ' . $this->data->zone . ' ' . $this->data->server . ' > ' . self::ZONEFILE_PATH . 'db.' . $this->data->zone );
+		
 		//	Restart MaraDNS if it was running when we started running
-		if($status == 'Running'){
-			$this->start();
+		if ($status == 'Running') {
+			$this->start ();
 		}
 		
-		if($return){
+		if ($return) {
 			echo '<reply action="ok" />';
 		}
 		return true;
 	}
 	
-	
 	/**
 	 * Run during system shutdown
 	 */
 	public function shutdown() {
-		
+	
 	}
-
+	
 	/**
 	 * Run during system boot
 	 */
 	public function runAtBoot() {
-		$this->configure();
-		$this->start();
+		$this->configure ();
+		$this->start ();
 	}
-
+	
 	/**
 	 * Return the status of maraDNS
 	 * 
 	 * @return String Started|Error|Stopped
 	 */
 	public function getStatus() {
-		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
-		if(!empty($dns_pid)) {
+		$dns_pid = Functions::shellCommand ( "ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'" );
+		if (! empty ( $dns_pid )) {
 			return 'Started';
-		}
-		else{
-			if($this->data['enabled'] == 'true'){
+		} else {
+			if ($this->data ['enabled'] == 'true') {
 				return 'Error';
-			}
-			else{
+			} else {
 				return 'Stopped';
 			}
 		}
 	}
-
+	
 	/**
 	 * Echo the configuration for the AJAX frontend
 	 */
-	private function echoConfig(){
+	private function echoConfig() {
 		echo '<reply action="ok">';
-		echo $this->data->asXML();
+		echo $this->data->asXML ();
 		echo '</reply>';
 	}
 	
 	/**
 	 * Update configuration with data from the AJAX frontend
 	 */
-	private function saveConfig(){
-		if(Functions::is_ipAddr($_POST['services_dnsserv_server'])){
-			ErrorHandler::addError('form-error','services_dnsserv_server');
+	private function saveConfig() {
+		if (Functions::is_ipAddr ( $_POST ['services_dnsserv_server'] )) {
+			ErrorHandler::addError ( 'form-error', 'services_dnsserv_server' );
 		}
-		if(empty($_POST['services_dnsserv_zone'])){
-			ErrorHandler::addError('form-error','services_dnsserv_zone');
+		if (empty ( $_POST ['services_dnsserv_zone'] )) {
+			ErrorHandler::addError ( 'form-error', 'services_dnsserv_zone' );
 		}
 		
-		if(ErrorHandler::errorCount() == 0){
-			$this->data->zone = $_POST['services_dnsserv_zone'];
-			$this->data->server = $_POST['services_dnsserv_server'];
-			$this->saveConfig();
-
+		if (ErrorHandler::errorCount () == 0) {
+			$this->data->zone = $_POST ['services_dnsserv_zone'];
+			$this->data->server = $_POST ['services_dnsserv_server'];
+			if (isset ( $_POST ['services_dnsserv_enabled'] )) {
+				if ($_POST ['services_dnsserv_enabled'] == 'true') {
+					$this->data ['enable'] == 'true';
+				} else {
+					$this->data ['enable'] == 'false';
+				}
+			}
+			
+			$this->saveConfig ();
+			
 			echo '<reply action="ok">';
-			echo $this->data->asXML();
+			echo $this->data->asXML ();
 			echo '</reply>';
-		}
-		else{
-			throw new Exception('There is invalid form input');
+		} else {
+			throw new Exception ( 'There is invalid form input' );
 		}
 	}
 	
@@ -333,24 +333,25 @@ spammers = "azmalink,hiddenonline"
 	 * 
 	 */
 	public function getPage() {
-		switch($_POST['page']){
-			case 'getconfig':
-				$this->echoConfig();
+		switch ($_POST ['page']) {
+			case 'getconfig' :
+				$this->echoConfig ();
 				break;
-			case 'saveconfig':
-				$this->saveConfig();
+			case 'saveconfig' :
+				$this->saveConfig ();
 				break;
-			case 'fetchzone':
-				$this->fetchZone(true);
+			case 'fetchzone' :
+				$this->fetchZone ( true );
 				break;
-			default:
-				throw new Exception('Invalid page request');
+			default :
+				throw new Exception ( 'Invalid page request' );
 				break;
 		}
 	}
-
+	
 	/**
 	 * 
 	 */
-	public function getDependency() {}
+	public function getDependency() {
+	}
 }
