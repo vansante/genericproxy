@@ -48,6 +48,11 @@ class MaraDNS implements Plugin{
 	const CONFIG_PATH = '/etc/mararc';
 	
 	/**
+	 * Path where MaraDNS will put the zone files
+	 */
+	const ZONEFILE_PATH = '/var/etc/maradns/';
+	
+	/**
 	 *
 	 * @param PluginFramework $framework Framework object, containing all information and plugins.
 	 * @param Config $config Object with System Configuration
@@ -212,22 +217,17 @@ EOD;
 	 * @return Boolean	true on success, false on error
 	 */
 	private function fetchZone($return = false){
+		$status = $this->getStatus();
+		if($status == 'Running'){
+			$this->stop();
+		}
 		//	Load the zone file through wleiden's script 
 		Logger::getRootLogger()->info('We need to fetch a zone here, checking if wleiden caused the infinite loop');
-		#$status = Functions::shellCommand('sh /usr/local/lib/genericproxy/Modules/MaraDNS/fetchzone.sh');
-		if(stristr($status,'[ERROR]')){
-			if($return){
-				throw new Exception('The zone file could not be retrieved');
-			}
-			else{
-				Logger::getRootLogger()->error('The zone file could not be retrieved');
-			}
-			return false;
-		}
 		
-		//	Restart MaraDNS if it's running
-		if($this->getStatus == 'Running'){
-			$this->stop();
+		$status = Functions::shellCommand('fetchzone '.$this->data->zone.' '.$this->data->server.' > '.self::ZONEFILE_PATH.'db.'.$this->data->zone);
+
+		//	Restart MaraDNS if it was running when we started running
+		if($status == 'Running'){
 			$this->start();
 		}
 		
