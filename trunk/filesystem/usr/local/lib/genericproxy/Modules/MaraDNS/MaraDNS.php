@@ -93,6 +93,16 @@ class MaraDNS implements Plugin{
 			$this->fetchZone();
 		}
 		
+		$lan = $this->framework->getPlugin('Lan');
+		if($lan != null){
+			$lanaddress = $lan->getIpAddress();
+		}
+		
+		$ext = $this->framework->getPlugin('Ext');
+		if($ext != null){
+			$extaddress = $ext->getIpAddress();
+		}
+		
 		/*
 		 *	MaraDNS config file
 		 *	This config file is a 1:1 copy of all the settings (sans comments) from the 
@@ -100,7 +110,7 @@ class MaraDNS implements Plugin{
 		 *
 		 * 	TODO make these settings changeable in the configuration xml
 		 */
-		$config = $cert = <<<EOD
+		$config = '
 # Wleiden mararc file (abridged version)
 # The various zones we support
 
@@ -110,7 +120,7 @@ csv2 = {}
 
 # This is just to show the format of the file
 csv2["wleiden.net."] = "db.wleiden.net"
-ipv4_bind_addresses = "<internalif>, 127.0.0.1"
+ipv4_bind_addresses = "'.$lanaddress.','.$extaddress.', 127.0.0.1"
 chroot_dir = "/var/maradns"
 maradns_uid = 53
 maradns_gid = 53
@@ -150,8 +160,8 @@ upstream_servers["."] = "8.8.8.8, 8.8.4.4"
 ipv4_alias["hiddenonline"] = "65.107.225.0/24"
 ipv4_alias["azmalink"] = "12.164.194.0/24"
 spammers = "azmalink,hiddenonline"
-
-EOD;
+';
+		
 		$fd = fopen(self::CONFIG_PATH,'w');
 		if($fd !== false){
 			fwrite ( $fd, $config );
@@ -178,7 +188,7 @@ EOD;
 		}
 		
 		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
-		if($dns_pid == "") {
+		if(empty($dns_pid)) {
 			$status = Functions::shellCommand('maradns -f '.self::CONFIG_PATH);
 			if($status != 0){
 				Logger::getRootLogger()->error('MaraDNS failed to start');
@@ -200,7 +210,7 @@ EOD;
 	 */
 	public function stop() {
 		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
-		if($dns_pid <> "") {
+		if(empty($dns_pid)) {
 			$this->logger->info('Stopping MaraDNS');
 			Functions::shellCommand("kill $dns_pid");
 			return true;
@@ -260,7 +270,7 @@ EOD;
 	 */
 	public function getStatus() {
 		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
-		if($dns_pid <> "") {
+		if(!empty($dns_pid)) {
 			return 'Started';
 		}
 		else{

@@ -171,7 +171,7 @@ class Ext extends Interfaces {
 	 * @access public
 	 * @return null|IpAddress
 	 */
-	public function getIpAddress($interface = null) {
+	public function getIpAddress($interface = 1) {
 		if ($interface >= 1) {
 			$tmp = Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $this->data [$interface - 1]->if . " | /usr/bin/grep -w \"inet\" | /usr/bin/cut -d\" \" -f 2| /usr/bin/head -1" );
 			$ip = str_replace ( "\n", "", $tmp );
