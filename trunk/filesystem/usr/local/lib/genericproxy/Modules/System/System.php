@@ -524,6 +524,7 @@ class System implements Plugin {
 			$this->data->ntp->timeservers = $_POST['services_ntp_server'];
 			$this->data->ntp->timezone = $_POST['services_ntp_timezone'];
 			$this->config->saveConfig();
+			$this->getntpconfig();
 		}
 		else{
 			throw new Exception('There is invalid form input');

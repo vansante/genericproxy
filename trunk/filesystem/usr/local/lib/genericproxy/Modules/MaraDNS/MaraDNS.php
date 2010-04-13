@@ -106,7 +106,9 @@ class MaraDNS implements Plugin{
 		$ext = $this->framework->getPlugin('Ext');
 		if($ext != null){
 			$extaddress = $ext->getIpAddress();
-			$listen['ext'] = $extaddress;
+			if(Functions::is_ipAddr($extaddress)){
+				$listen['ext'] = $extaddress;
+			}
 		}
 		
 		/*
@@ -195,20 +197,24 @@ spammers = "azmalink,hiddenonline"
 			return false;
 		}
 		
-		$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
-		if(empty($dns_pid)) {
-			$status = Functions::shellCommand('maradns -f '.self::CONFIG_PATH);
-			if($status != 0){
-				Logger::getRootLogger()->error('MaraDNS failed to start');
+		if($this->data['enable'] == 'true'){
+			$dns_pid = Functions::shellCommand("ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'");
+			if(empty($dns_pid)) {
+				$status = Functions::shellCommand('maradns -f '.self::CONFIG_PATH);
+				if($status != 0){
+					Logger::getRootLogger()->error('MaraDNS failed to start');
+					return false;
+				}
+				return true;
+			}
+			else{
+				Logger::getRootLogger()->info('MaraDNS was already running');
 				return false;
 			}
-			return true;
 		}
 		else{
-			Logger::getRootLogger()->info('MaraDNS was already running');
-			return false;
+			Logger::getRootLogger()->info('MaraDNS disabled');
 		}
-		
 	}
 	
 	/**
