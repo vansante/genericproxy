@@ -93,14 +93,21 @@ class MaraDNS implements Plugin{
 			$this->fetchZone();
 		}
 		
+		$listen = null;
+		$listen[] = '127.0.0.1';
+		
 		$lan = $this->framework->getPlugin('Lan');
 		if($lan != null){
 			$lanaddress = $lan->getIpAddress();
+			if(Functions::is_ipAddr($lanaddress)){
+				$listen[] = $lanaddress;
+			}
 		}
 		
 		$ext = $this->framework->getPlugin('Ext');
 		if($ext != null){
 			$extaddress = $ext->getIpAddress();
+			$listen[] = $extaddress;
 		}
 		
 		/*
@@ -120,7 +127,9 @@ csv2 = {}
 
 # This is just to show the format of the file
 csv2["wleiden.net."] = "db.wleiden.net"
-ipv4_bind_addresses = "'.$lanaddress.','.$extaddress.', 127.0.0.1"
+ipv4_bind_addresses = "';
+$config .= implode(',',$listen);
+$config .= '"
 chroot_dir = "/var/maradns"
 maradns_uid = 53
 maradns_gid = 53
