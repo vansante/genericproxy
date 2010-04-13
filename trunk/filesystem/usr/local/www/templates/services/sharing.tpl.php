@@ -6,6 +6,8 @@
     //XML Module: Sharing
     gp.services.sharing.load = function() {
         gp.data.sharing = {};
+        gp.data.sharing_pre_def = {};
+        gp.data.sharing_usr_def = {};
 
         //Handle XML loading
         gp.doAction({
@@ -16,6 +18,29 @@
             content_id: 'cp_services_sharing_sharing',
             successFn: function(json) {
                 gp.data.sharing = json.sharing;
+                
+                if (json.sharing.predefined) {
+                    var predef = json.sharing.predefined;
+                    if ($.isArray(predef)) {
+                        $.each(predef, function(i, rule) {
+                            gp.data.sharing_pre_def[rule.name] = rule;
+                        });
+                    } else {
+                        gp.data.sharing_pre_def[predef.name] = predef;
+                    }
+                }
+
+                if (json.sharing.userdefined) {
+                    var usrdef = json.sharing.userdefined;
+                    if ($.isArray(usrdef)) {
+                        $.each(usrdef, function(i, rule) {
+                            gp.data.sharing_usr_def[rule.name] = rule;
+                        });
+                    } else {
+                        gp.data.sharing_usr_def[usrdef.name] = usrdef;
+                    }
+                }
+
                 gp.services.sharing.loadForm();
             }
         });
@@ -44,28 +69,18 @@
     };
 
     gp.services.sharing.loadDefinedSchedules = function() {
-        var data = gp.data.sharing;
-        
         var options = '<option value=""> -- Select configuration -- </option>';
 
         options += '<optgroup label="Saved configurations">';
-        if ($.isArray(data.userdefined)) {
-            $.each(data.userdefined, function(i, usrdef){
-                options += '<option value="usrdef_'+usrdef.name+'">'+usrdef.name+'</option>';
-            });
-        } else if (data.userdefined) {
-            options += '<option value="usrdef_'+data.userdefined.name+'">'+data.userdefined.name+'</option>';
-        }
+        $.each(gp.data.sharing_usr_def, function(i, usrdef){
+            options += '<option value="usrdef_'+usrdef.name+'">'+usrdef.name+'</option>';
+        });
         options += '</optgroup>';
 
         options += '<optgroup label="Predefined configurations">';
-        if ($.isArray(data.predefined)) {
-            $.each(data.predefined, function(i, predef){
-                options += '<option value="predef_'+predef.name+'">'+predef.name+'</option>';
-            });
-        } else if (data.predefined) {
-            options += '<option value="predef_'+data.predefined.name+'">'+data.predefined.name+'</option>';
-        }
+        $.each(gp.data.sharing_pre_def, function(i, predef){
+            options += '<option value="predef_'+predef.name+'">'+predef.name+'</option>';
+        });
         options += '</optgroup>';
 
         $('#services_sharing_schedule_configs').html(options);
@@ -164,25 +179,17 @@
             var type = this.value.substr(0, 6);
             
             if (type == 'predef') {
-                if ($.isArray(data.predefined)) {
-                    $.each(data.predefined, function(i, predef){
-                        if (predef.name == val) {
-                            gp.services.sharing.loadSchedule(predef);
-                        }
-                    });
-                } else {
-                    gp.services.sharing.loadSchedule(data.predefined);
-                }
+                $.each(data.predefined, function(i, predef){
+                    if (predef.name == val) {
+                        gp.services.sharing.loadSchedule(predef);
+                    }
+                });
             } else if (type == 'usrdef') {
-                if ($.isArray(data.userdefined)) {
-                    $.each(data.userdefined, function(i, usrdef){
-                        if (usrdef.name == val) {
-                            gp.services.sharing.loadSchedule(usrdef);
-                        }
-                    });
-                } else {
-                    gp.services.sharing.loadSchedule(data.userdefined);
-                }
+                $.each(data.userdefined, function(i, usrdef){
+                    if (usrdef.name == val) {
+                        gp.services.sharing.loadSchedule(usrdef);
+                    }
+                });
             }
         });
 
@@ -218,7 +225,7 @@
                 gp.alert("Exception", "Cannot delete a predefined configuration.");
                 return false;
             }
-            gp.confirm("Are you sure?", "Are you sure you want to delete this mask?", function() {
+            gp.confirm("Are you sure?", "Are you sure you want to delete this configuration?", function() {
                 gp.doAction({
                     url: 'testxml/reply.xml',
                     module: 'Scheduler',
@@ -229,17 +236,7 @@
                     error_element: $('#services_sharing_form_error'),
                     content_id: 'cp_services_sharing_sharing',
                     successFn: function(json) {
-                        if ($.isArray(gp.data.sharing.userdefined)) {
-                            var id;
-                            $.each(gp.data.sharing.userdefined, function(i, usrdef){
-                                if (usrdef.name == name) {
-                                    id = i;
-                                }
-                            });
-                            gp.data.sharing.userdefined.splice(id, 1);
-                        } else {
-                            gp.data.sharing.userdefined = null;
-                        }
+                        delete gp.data.sharing_usr_def[name];
                         gp.services.sharing.loadForm();
                     }
                 });
@@ -248,21 +245,14 @@
 
         $('#services_sharing_config_form').submit(function() {
             gp.doFormAction({
-                url: 'testxml/reply.xml',
+                url: 'testxml/sharing_config.xml',
                 form_id: 'services_sharing_config_form',
                 error_element: $('#services_sharing_config_form_error'),
                 successFn: function(json) {
-                    if ($.isArray(gp.data.sharing.userdefined)) {
-                        gp.data.sharing.userdefined.push(json.sharing.userdefined);
-                    } else if (gp.data.sharing.userdefined) {
-                        gp.data.sharing.userdefined = [
-                            json.sharing.userdefined,
-                            gp.data.sharing.userdefined
-                        ];
-                    } else {
-                        gp.data.sharing.userdefined = [json.sharing.userdefined];
-                    }
+                    gp.data.sharing_usr_def[json.sharing.userdefined.name] = json.sharing.userdefined;
                     gp.services.sharing.loadForm();
+                    $('#services_sharing_schedule_configs').val('usrdef_'+json.sharing.userdefined.name).trigger('change');
+                    $('#services_sharing_config_form').dialog('close');
                 }
             });
             return false;
