@@ -93,21 +93,20 @@ class MaraDNS implements Plugin{
 			$this->fetchZone();
 		}
 		
-		$listen = null;
-		$listen[] = '127.0.0.1';
+		$listen['localhost'] = '127.0.0.1';
 		
 		$lan = $this->framework->getPlugin('Lan');
 		if($lan != null){
 			$lanaddress = $lan->getIpAddress();
 			if(Functions::is_ipAddr($lanaddress)){
-				$listen[] = $lanaddress;
+				$listen['lan'] = $lanaddress;
 			}
 		}
 		
 		$ext = $this->framework->getPlugin('Ext');
 		if($ext != null){
 			$extaddress = $ext->getIpAddress();
-			$listen[] = $extaddress;
+			$listen['ext'] = $extaddress;
 		}
 		
 		/*
