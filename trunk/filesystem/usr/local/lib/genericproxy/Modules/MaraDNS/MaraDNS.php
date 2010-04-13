@@ -240,9 +240,7 @@ spammers = "azmalink,hiddenonline"
 		if($status == 'Running'){
 			$this->stop();
 		}
-		//	Load the zone file through wleiden's script 
-		Logger::getRootLogger()->info('We need to fetch a zone here, checking if wleiden caused the infinite loop');
-		
+		//	Load the zone file
 		$status = Functions::shellCommand('fetchzone '.$this->data->zone.' '.$this->data->server.' > '.self::ZONEFILE_PATH.'db.'.$this->data->zone);
 
 		//	Restart MaraDNS if it was running when we started running
