@@ -8,14 +8,24 @@
     <input type="hidden" name="page" value="save" id="services_dnsserv_form_page"/>
 
     <dl>
-        <dt><label for="services_dnsserv_server">Zone server</label></dt>
+        <dt><label for="services_dnsserv_enabled">Enable DNS server</label></dt>
         <dd>
-            <input name="services_dnsserv_server" type="text" size="20" id="services_dnsserv_server" />
+            <input name="services_dnsserv_enabled" type="checkbox" id="services_dnsserv_enabled" value="true" />
         </dd>
 
-        <dt><label for="services_dnsserv_zone">Zone</label></dt>
+        <dt>DNS server settings</dt>
         <dd>
-            <input name="services_dnsserv_zone" type="text" size="20" id="services_dnsserv_zone" />
+            <dl class="form_sub" id="services_dnsserv_settings">
+                <dt><label for="services_dnsserv_server">Zone server</label></dt>
+                <dd>
+                    <input name="services_dnsserv_server" type="text" size="20" id="services_dnsserv_server" />
+                </dd>
+
+                <dt><label for="services_dnsserv_zone">Zone</label></dt>
+                <dd>
+                    <input name="services_dnsserv_zone" type="text" size="20" id="services_dnsserv_zone" />
+                </dd>
+            </dl>
         </dd>
 
         <dt>
