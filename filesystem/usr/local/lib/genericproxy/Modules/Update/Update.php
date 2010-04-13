@@ -194,7 +194,7 @@ class Update implements Plugin{
 	 * @throws Exception
 	 */
 	public function checkForUpdates($return = null){
-		$xml = file_get_contents(((string)$this->data->server).'/releases.xml');
+		$xml = file_get_contents('http://'.((string)$this->data->server).'/releases.xml');
 		if($xml !== false){
 			$check = simplexml_load_string($xml);
 			if($this->checkVersion($check->version)){
