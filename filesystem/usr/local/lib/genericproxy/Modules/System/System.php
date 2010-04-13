@@ -493,9 +493,7 @@ class System implements Plugin {
 		$arr = explode('_',$new);
 		
 		foreach($arr as $zone){
-			if(stristr('GMT',$zone)){
-				echo '<zone id="'.$zone.'" />';
-			}
+			echo '<zone id="'.$zone.'" />';
 		}
 		echo '</timezones>';
 		
@@ -511,13 +509,13 @@ class System implements Plugin {
 	 * @throws Exception
 	 */
 	private function saventpconfig(){
-		if(!empty($_POST['services_ntp_server'])){
+		if(empty($_POST['services_ntp_server'])){
 			ErrorHandler::addError('formerror','services_ntp_server');
 		}
-		if(!file_exists('/usr/share/zoneinfo/ETC/'.$_POST['services_ntp_timezone'])){
+		if(!file_exists('/usr/share/zoneinfo/Etc/'.$_POST['services_ntp_timezone'])){
 			ErrorHandler::addError('formerror','services_ntp_timezone');
 		}
-		if(is_numeric($_POST['services_ntp_interval'])){
+		if(!is_numeric($_POST['services_ntp_interval'])){
 			ErrorHandler::addError('formerror','services_ntp_interval');
 		}
 		
