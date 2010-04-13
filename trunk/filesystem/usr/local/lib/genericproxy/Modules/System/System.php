@@ -294,9 +294,9 @@ class System implements Plugin {
 	/**
 	 * Reboot the system
 	 * 
-	 * @access private
+	 * @access public
 	 */
-	private function reboot() {
+	public function reboot() {
 		echo '<reply action="ok" />';
 		Functions::shellCommand ( 'shutdown -r now' );
 	}

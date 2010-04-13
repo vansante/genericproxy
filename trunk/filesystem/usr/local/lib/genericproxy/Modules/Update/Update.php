@@ -156,6 +156,13 @@ class Update implements Plugin{
 					$hash = hash_file('sha256','/tmp/firmware/'.$data->filename);
 					if($hash == $data->hash){
 						//	Execute the firmware upgrade
+						//	Start notification led to signal upgrade is in progress
+						if(is_dir('/dev/led')){
+							Functions::shellCommand('/bin/echo 1 > /dev/led/error');
+						}
+						
+						Functions::shellCommand('zcat /tmp/firmware '.$data->filename.' | sh /root/updatep2');
+						$this->framework->getPlugin('System')->reboot();
 					}
 					else{
 						throw new Exception('The downloaded file is corrupt');
