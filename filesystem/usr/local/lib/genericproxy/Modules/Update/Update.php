@@ -202,7 +202,8 @@ class Update implements Plugin{
 					//	Add the current version to the reply XML, since the AJAX frontend is not aware of it
 					$check->addChild('currentversion',PluginFramework::VERSION);
 					echo '<reply action="ok">';
-					echo $check->asXML();
+					$string =  $check->asXML();
+					echo str_replace('<?xml version="1.0"?>','',$string);
 					echo '</reply>';
 				}
 				return true;
