@@ -123,7 +123,7 @@ class Update implements Plugin{
 			case 'save':
 				$this->saveConfig();
 				break;
-			case 'update':
+			case 'updatefirmware':
 				$this->updateFirmware();
 				break;
 			default:
@@ -138,12 +138,14 @@ class Update implements Plugin{
 	 * @throws Exception
 	 */
 	public function updateFirmware(){
+		echo '<reply action="ok" />';
 		$data = $this->checkForUpdates('data');
 		
 		//		Set up a temporary ramdisk to download the new firmware into
 		Functions::shellCommand('mdconfig -a -t swap -s 120M -u 10');
 		Functions::shellCommand('newfs -U /dev/md10');
-		Functions::shellCommand('/dev/md10 /tmp/firmware');
+		Functions::shellCommand('mkdir /tmp/firmware');
+		Functions::shellCommand('mount /dev/md10 /tmp/firmware');
 		
 		if(is_dir('/tmp/firmware')){
 
@@ -161,7 +163,7 @@ class Update implements Plugin{
 							Functions::shellCommand('/bin/echo 1 > /dev/led/error');
 						}
 						
-						Functions::shellCommand('zcat /tmp/firmware '.$data->filename.' | sh /root/updatep2');
+						Functions::shellCommand('zcat /tmp/firmware/'.$data->filename.' | sh /root/updatep2');
 						$this->framework->getPlugin('System')->reboot();
 					}
 					else{
