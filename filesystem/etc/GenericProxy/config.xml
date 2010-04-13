@@ -5,7 +5,7 @@
 
 		<update>
 			<check_signature>false</check_signature>
-			<server>www.genericproxy.org/releases</server>
+			<server>195.169.84.60/releases</server>
 		</update>
 
 		<hostname>GenericProxy</hostname>
