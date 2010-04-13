@@ -10,7 +10,7 @@
         //Handle XML loading
         gp.doAction({
             url: 'testxml/dnsserver.xml',
-            module: 'MaraDns',
+            module: 'MaraDNS',
             page: 'getconfig',
             error_element: $('#services_dnsserv_form_error'),
             content_id: 'cp_services_dnsserv_dnsserv',
@@ -47,7 +47,7 @@
         $('#services_dnsserver_fetchzone').click(function(){
             gp.doAction({
                 url: 'testxml/reply.xml',
-                module: 'MaraDns',
+                module: 'MaraDNS',
                 page: 'fetchzone',
                 error_element: $('#services_dnsserv_form_error'),
                 content_id: 'cp_services_dnsserv_dnsserv',

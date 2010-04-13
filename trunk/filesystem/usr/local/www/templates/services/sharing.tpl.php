@@ -174,18 +174,18 @@
             if (!this.value) {
                 return;
             }
-            var data = gp.data.sharing;
+
             var val = this.value.substr(7);
             var type = this.value.substr(0, 6);
             
             if (type == 'predef') {
-                $.each(data.predefined, function(i, predef){
+                $.each(gp.data.sharing_pre_def, function(i, predef){
                     if (predef.name == val) {
                         gp.services.sharing.loadSchedule(predef);
                     }
                 });
             } else if (type == 'usrdef') {
-                $.each(data.userdefined, function(i, usrdef){
+                $.each(gp.data.sharing_usr_def, function(i, usrdef){
                     if (usrdef.name == val) {
                         gp.services.sharing.loadSchedule(usrdef);
                     }
