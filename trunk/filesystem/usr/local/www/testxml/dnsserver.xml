@@ -1,5 +1,5 @@
 <reply action="ok">
-	<maradns>
+	<maradns enable="true">
 		<zone>wleiden.net</zone>
 		<server>server.wleiden.net</server>
 	</maradns>

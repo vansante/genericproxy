@@ -38,7 +38,7 @@
             $('#services_dyndns_username').val(data.client.username);
             $('#services_dyndns_password').val(data.client.password);
         } else {
-            $('#services_dyndns_subform_update input, #services_dyndns_subform_update select').attr('disabled', 'disabled');
+            $('#services_dyndns_subform_client input, #services_dyndns_subform_client select').attr('disabled', 'disabled');
         }
     };
 

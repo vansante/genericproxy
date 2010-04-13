@@ -26,8 +26,15 @@
 
         gp.resetForm('services_dnsserv_form');
 
-        $('#services_dnsserv_server').val(data.server);
-        $('#services_dnsserv_zone').val(data.zone);
+        if (data.enable.toLowerCase() == 'true') {
+            $('#services_dnsserv_settings input, #services_dnsserv_settings select').removeAttr('disabled');
+
+            $('#services_dnsserv_enabled').attr('checked', 'checked');
+            $('#services_dnsserv_server').val(data.server);
+            $('#services_dnsserv_zone').val(data.zone);
+        } else {
+            $('#services_dnsserv_settings input, #services_dnsserv_settings select').attr('disabled', 'disabled');
+        }
     };
 
     $(function(){
@@ -56,6 +63,18 @@
                 }
             });
             return false;
+        });
+
+        if (!$('#services_dnsserv_enabled').attr('checked')) {
+            $('#services_dnsserv_settings input, #services_dnsserv_settings select').attr('disabled', 'disabled');
+        }
+
+        $('#services_dnsserv_enabled').click(function() {
+            if ($(this).attr('checked')) {
+                $('#services_dnsserv_settings input, #services_dnsserv_settings select').removeAttr('disabled');
+            } else {
+                $('#services_dnsserv_settings input, #services_dnsserv_settings select').attr('disabled', 'disabled');
+            }
         });
     });
 </script>
