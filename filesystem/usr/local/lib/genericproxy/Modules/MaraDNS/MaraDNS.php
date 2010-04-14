@@ -269,8 +269,10 @@ spammers = "azmalink,hiddenonline"
 	 * Run during system boot
 	 */
 	public function runAtBoot() {
-		$this->configure ();
-		$this->start ();
+		if ($this->data ['enable'] == 'true') {
+			$this->configure ();
+			$this->start ();
+		}
 	}
 	
 	/**
