@@ -138,11 +138,10 @@ class Update implements Plugin{
 	 * @throws Exception
 	 */
 	public function updateFirmware(){
-		echo '<reply action="ok" />';
 		$data = $this->checkForUpdates('data');
-		Logger::getRootLogger()->debug(print_r($data,true));
-		
+		Logger::getRootLogger()->debug((string)$data->filename);
 		if($data !== false){
+			Logger::getRootLogger()->debug((string)$data->filename);
 			//		Set up a temporary ramdisk to download the new firmware into
 			Logger::getRootLogger()->debug('Setting up ramdisk for firmware download');
 			Functions::shellCommand('mdconfig -a -t swap -s 120M -u 10');
