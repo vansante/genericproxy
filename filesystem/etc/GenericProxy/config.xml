@@ -123,13 +123,13 @@
 
 	<interfaces>
 		<interface type="Lan">
-			<if>sis1</if>
+			<if>sis0</if>
 			<ipaddr>10.0.1.1</ipaddr>
 			<subnet>255.255.255.0</subnet>
 			<mtu></mtu>
 		</interface>
 		<interface type="Wan">
-			<if>sis0</if>
+			<if>sis1</if>
 			<mtu></mtu>
 			<ipaddr>dhcp</ipaddr>
 			<mac></mac>
