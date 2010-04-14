@@ -5,6 +5,7 @@
 
 		<update>
 			<check_signature>false</check_signature>
+			<check_hash>true</check_hash>
 			<server>195.169.84.60/releases</server>
 		</update>
 

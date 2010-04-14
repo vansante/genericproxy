@@ -140,7 +140,9 @@ class Update implements Plugin{
 	public function updateFirmware(){
 		echo '<reply action="ok" />';
 		$data = $this->checkForUpdates('data');
-		if($data == true){
+		Logger::getRootLogger()->debug(print_r($data,true));
+		
+		if($data !== false){
 			//		Set up a temporary ramdisk to download the new firmware into
 			Logger::getRootLogger()->debug('Setting up ramdisk for firmware download');
 			Functions::shellCommand('mdconfig -a -t swap -s 120M -u 10');
@@ -153,13 +155,13 @@ class Update implements Plugin{
 				Logger::getRootLogger()->debug('downloading the firmware ... ');
 				//		Download the new firmware into the ramdisk
 				chdir('/tmp/firmware');
-				Functions::shellCommand('wget http://'.$this->data->server.'/'.$data->filename);
+				Functions::shellCommand('wget http://'.$this->data->server.$data->filename);
 				if(file_exists('/tmp/firmware/'.$data->filename)){
 					//	TODO: Verify signature
 					if($this->data->check_signature == 'false' || true){
 						Logger::getRootLogger()->debug('verifying download hash');
 						$hash = hash_file('sha256','/tmp/firmware/'.$data->filename);
-						if($hash == $data->hash){
+						if($this->data->check_hash == 'false' || $hash == $data->hash){
 							//	Execute the firmware upgrade
 							//	Start notification led to signal upgrade is in progress
 							if(is_dir('/dev/led')){
