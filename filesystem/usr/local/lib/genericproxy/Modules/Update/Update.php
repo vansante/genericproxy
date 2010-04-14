@@ -220,16 +220,19 @@ class Update implements Plugin{
 					$string =  $check->asXML();
 					echo str_replace('<?xml version="1.0"?>','',$string);
 					echo '</reply>';
+					return true;
 				}
-				return true;
+				elseif($return == 'data'){
+					return $check;
+				}
+				else{
+					return true;
+				}
 			}
 			else{
 				//	No update was found
 				if($return == 'XML'){
 					echo '<reply action="ok" />';
-				}
-				elseif($return == 'data'){
-					return $check;
 				}
 				return false;
 			}
