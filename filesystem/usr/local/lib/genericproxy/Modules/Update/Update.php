@@ -155,7 +155,7 @@ class Update implements Plugin{
 				Logger::getRootLogger()->debug('downloading the firmware ... ');
 				//		Download the new firmware into the ramdisk
 				chdir('/tmp/firmware');
-				Functions::shellCommand('wget http://'.$this->data->server.$data->filename);
+				Functions::shellCommand('wget http://'.$this->data->server.'/'.$data->filename);
 				if(file_exists('/tmp/firmware/'.$data->filename)){
 					//	TODO: Verify signature
 					if($this->data->check_signature == 'false' || true){
