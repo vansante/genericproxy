@@ -87,9 +87,12 @@ class MaraDNS implements Plugin {
 		if (! is_dir ( '/var/maradns' )) {
 			mkdir ( '/var/maradns' );
 		}
+		if(!is_dir(self::ZONEFILE_PATH)){
+			mkdir(self::ZONEFILE_PATH);
+		}
 		
 		//	Check if the db.wleiden.net file exists, if not we need to fetch it
-		if (! file_exists ( '/var/maradns/db.wleiden.nl' )) {
+		if (! file_exists ( self::ZONEFILE_PATH . 'db.' . $this->data->zone )) {
 			$this->fetchZone ();
 		}
 		
