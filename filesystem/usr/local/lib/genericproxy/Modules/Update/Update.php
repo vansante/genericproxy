@@ -155,7 +155,7 @@ class Update implements Plugin{
 				Logger::getRootLogger()->debug('Changing directory');
 				chdir('/tmp/firmware');
 				Logger::getRootLogger()->debug('downloading the firmware ... ');
-				Functions::shellCommand('wget http://'.$this->data->server.'/'.$data->filename);
+				system('wget http://'.$this->data->server.'/'.$data->filename,$output);
 				if(file_exists('/tmp/firmware/'.$data->filename)){
 					//	TODO: Verify signature
 					if($this->data->check_signature == 'false' || true){
