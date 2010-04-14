@@ -152,9 +152,10 @@ class Update implements Plugin{
 			
 			Logger::getRootLogger()->debug('ramdisk setup complete ');
 			if(is_dir('/tmp/firmware')){
-				Logger::getRootLogger()->debug('downloading the firmware ... ');
 				//		Download the new firmware into the ramdisk
+				Logger::getRootLogger()->debug('Changing directory');
 				chdir('/tmp/firmware');
+				Logger::getRootLogger()->debug('downloading the firmware ... ');
 				Functions::shellCommand('wget http://'.$this->data->server.'/'.$data->filename);
 				if(file_exists('/tmp/firmware/'.$data->filename)){
 					//	TODO: Verify signature
@@ -213,7 +214,10 @@ class Update implements Plugin{
 		if($xml !== false){
 			$check = simplexml_load_string($xml);
 			if($this->checkVersion($check->version)){
-				if($return == 'XML'){
+				if($this->runtype == PluginFramework::RUNTYPE_CLI){
+					print_r($check);	
+				}
+				elseif($return == 'XML'){
 					//	Add the current version to the reply XML, since the AJAX frontend is not aware of it
 					$check->addChild('currentversion',PluginFramework::VERSION);
 					echo '<reply action="ok">';
