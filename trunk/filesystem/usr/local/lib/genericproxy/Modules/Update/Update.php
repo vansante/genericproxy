@@ -213,10 +213,7 @@ class Update implements Plugin{
 		if($xml !== false){
 			$check = simplexml_load_string($xml);
 			if($this->checkVersion($check->version)){
-				if($this->runtype == PluginFramework::RUNTYPE_CLI){
-					print_r($check);	
-				}
-				elseif($return == 'XML'){
+				if($return == 'XML'){
 					//	Add the current version to the reply XML, since the AJAX frontend is not aware of it
 					$check->addChild('currentversion',PluginFramework::VERSION);
 					echo '<reply action="ok">';
@@ -227,6 +224,9 @@ class Update implements Plugin{
 				}
 				elseif($return == 'data'){
 					return $check;
+				}
+				elseif($this->runtype == PluginFramework::RUNTYPE_CLI){
+					print_r($check);
 				}
 				else{
 					return true;
