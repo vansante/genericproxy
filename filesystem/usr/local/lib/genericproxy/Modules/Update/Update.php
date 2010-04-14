@@ -140,48 +140,59 @@ class Update implements Plugin{
 	public function updateFirmware(){
 		echo '<reply action="ok" />';
 		$data = $this->checkForUpdates('data');
-		
-		//		Set up a temporary ramdisk to download the new firmware into
-		Functions::shellCommand('mdconfig -a -t swap -s 120M -u 10');
-		Functions::shellCommand('newfs -U /dev/md10');
-		Functions::shellCommand('mkdir /tmp/firmware');
-		Functions::shellCommand('mount /dev/md10 /tmp/firmware');
-		
-		if(is_dir('/tmp/firmware')){
-
-			//		Download the new firmware into the ramdisk
-			chdir('/tmp/firmware');
-			Functions::shellCommand('wget http://'.$this->data->server.'/'.$data->filename);
-			if(file_exists('/tmp/firmware/'.$data->filename)){
-				//	TODO: Verify signature
-				if($this->data->check_signature == 'false' || true){
-					$hash = hash_file('sha256','/tmp/firmware/'.$data->filename);
-					if($hash == $data->hash){
-						//	Execute the firmware upgrade
-						//	Start notification led to signal upgrade is in progress
-						if(is_dir('/dev/led')){
-							Functions::shellCommand('/bin/echo 1 > /dev/led/error');
+		if($data == true){
+			//		Set up a temporary ramdisk to download the new firmware into
+			Logger::getRootLogger()->debug('Setting up ramdisk for firmware download');
+			Functions::shellCommand('mdconfig -a -t swap -s 120M -u 10');
+			Functions::shellCommand('newfs -U /dev/md10');
+			Functions::shellCommand('mkdir /tmp/firmware');
+			Functions::shellCommand('mount /dev/md10 /tmp/firmware');
+			
+			Logger::getRootLogger()->debug('ramdisk setup complete ');
+			if(is_dir('/tmp/firmware')){
+				Logger::getRootLogger()->debug('downloading the firmware ... ');
+				//		Download the new firmware into the ramdisk
+				chdir('/tmp/firmware');
+				Functions::shellCommand('wget http://'.$this->data->server.'/'.$data->filename);
+				if(file_exists('/tmp/firmware/'.$data->filename)){
+					//	TODO: Verify signature
+					if($this->data->check_signature == 'false' || true){
+						Logger::getRootLogger()->debug('verifying download hash');
+						$hash = hash_file('sha256','/tmp/firmware/'.$data->filename);
+						if($hash == $data->hash){
+							//	Execute the firmware upgrade
+							//	Start notification led to signal upgrade is in progress
+							if(is_dir('/dev/led')){
+								Functions::shellCommand('/bin/echo 1 > /dev/led/error');
+							}
+							
+							Functions::shellCommand('zcat /tmp/firmware/'.$data->filename.' | sh /root/updatep2');
+							$this->framework->getPlugin('System')->reboot();
 						}
-						
-						Functions::shellCommand('zcat /tmp/firmware/'.$data->filename.' | sh /root/updatep2');
-						$this->framework->getPlugin('System')->reboot();
+						else{
+							Logger::getRootLogger()->error('The hash of the downloaded file does not match');
+							throw new Exception('The downloaded file is corrupt');
+						}
 					}
 					else{
-						throw new Exception('The downloaded file is corrupt');
+						Logger::getRootLogger()->error('The downloaded file has an invalid signature');
+						throw new Exception('The downloaded file has an invalid signature');
 					}
 				}
 				else{
-					throw new Exception('The downloaded file has an invalid signature');
+					Logger::getRootLogger()->error('Error downloading http://'.$this->data->server.'/'.$data->filename);
+					throw new Exception('Error downloading firmware file '.$data->filename);
 				}
 			}
 			else{
-				throw new Exception('Error downloading firmware file '.$data->filename);
+				Logger::getRootLogger()->error('Could not create the ramdisk for the firmware');
+				throw new Exception('Could not download the firmware');
 			}
 		}
 		else{
-			throw new Exception('Could not download the firmware');
-		}
-		
+			Logger::getRootLogger()->error('There is no firmware update available');
+			throw new Exception('There is no firmware update available');
+		}	
 	}
 	
 	/**
