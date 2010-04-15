@@ -1,5 +1,7 @@
 <h2 class="help_anchor"><a class="open_all_help" rel="cp_diagnostics_tracert_tracert"></a>Trace route to host</h2>
 
+<p class="intro"> This screen gives you a GUI to traceroute from the device. Fill in the IP address or hostname of the machine whose route you want to trace, choose the maximum number of hops in the drop down, and click the traceroute button.</p>
+
 <div class="note">
     <h3>Note:</h3>
     <p>Traceroute may take a while to complete.</p>
