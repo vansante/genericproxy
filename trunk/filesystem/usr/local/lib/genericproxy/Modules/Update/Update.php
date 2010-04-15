@@ -140,7 +140,7 @@ class Update implements Plugin{
 	 * @return int $slice 1|2
 	 */
 	private function getBootSlice(){
-		$nano_drive = file_get_contents('/etc/nanobsd.conf');
+		$nano_drive = str_replace("\n",'',str_replace('NANO_DRIVE=','',file_get_contents('/etc/nanobsd.conf')));
 		$check = Functions::shellCommand('mount | grep '.$nano_drive.'s2');
 		
 		if($check == ''){
