@@ -132,6 +132,29 @@ class Update implements Plugin{
 	}
 	
 	/**
+	 * Determine the current active slice
+	 * 
+	 * Returns the slice the update should be written on
+	 * to update.
+	 * 
+	 * @return int $slice 1|2
+	 */
+	private function getBootSlice(){
+		$nano_drive = file_get_contents('/etc/nanobsd.conf');
+		$check = Functions::shellCommand('mount | grep '.$nano_drive.'s2');
+		
+		if($check == ''){
+			//	We're not on slice 2, so update it
+			$slice = 2;
+		}
+		else{
+			$slice = 1;
+		}
+		
+		return $slice;
+	}
+	
+	/**
 	 * Automatically update Firmware
 	 * 
 	 * @access public
@@ -143,56 +166,65 @@ class Update implements Plugin{
 		if($data !== false){
 			Logger::getRootLogger()->debug((string)$data->filename);
 			//		Set up a temporary ramdisk to download the new firmware into
-			Logger::getRootLogger()->debug('Setting up ramdisk for firmware download');
+			Logger::getRootLogger()->info('Setting up ramdisk for firmware download');
 			Functions::shellCommand('mdconfig -a -t swap -s 120M -u 10');
 			Functions::shellCommand('newfs -U /dev/md10');
 			Functions::shellCommand('mkdir /tmp/firmware');
 			Functions::shellCommand('mount /dev/md10 /tmp/firmware');
 			
-			Logger::getRootLogger()->debug('ramdisk setup complete ');
+			if(file_exists('/tmp/firmware/'.$data->filename)){
+				Logger::getRootLogger()->info('removing existing firmware file');
+				unlink('/tmp/firmware/'.$data->filename);
+			}
+			
 			if(is_dir('/tmp/firmware')){
-				//		Download the new firmware into the ramdisk
-				Logger::getRootLogger()->debug('Changing directory');
+				/*		Download the new firmware into the ramdisk
+				 * 		system is used instead of Functions::shellCommand so the output is
+				 * 		piped to stdout, which helped with debugging and provides useful
+				 * 		information while upgrading from the shell
+				 */
 				chdir('/tmp/firmware');
 				Logger::getRootLogger()->debug('downloading the firmware ... ');
 				system('wget http://'.$this->data->server.'/'.$data->filename,$output);
 				if(file_exists('/tmp/firmware/'.$data->filename)){
 					//	TODO: Verify signature
 					if($this->data->check_signature == 'false' || true){
-						Logger::getRootLogger()->debug('verifying download hash');
-						$hash = hash_file('sha256','/tmp/firmware/'.$data->filename);
+						if($this->data->check_hash == 'true'){
+							Logger::getRootLogger()->info('Calculating download hash (can take a while)');
+							$hash = hash_file('sha256','/tmp/firmware/'.$data->filename);
+						}
 						if($this->data->check_hash == 'false' || $hash == $data->hash){
-							//	Execute the firmware upgrade
 							//	Start notification led to signal upgrade is in progress
 							if(is_dir('/dev/led')){
 								Functions::shellCommand('/bin/echo 1 > /dev/led/error');
 							}
-							
-							Functions::shellCommand('zcat /tmp/firmware/'.$data->filename.' | sh /root/updatep2');
-							$this->framework->getPlugin('System')->reboot();
+							$slice = $this->getBootSlice();
+							if($slice == 1 || $slice == 2){
+								Logger::getRootLogger()->info('Flashing upgrade, do not power-down the device (can take a while)');
+								Functions::shellCommand('zcat /tmp/firmware/'.$data->filename.' | sh /root/updatep'.$slice);
+								$this->framework->getPlugin('System')->reboot();
+							}
+							else{
+								throw new Exception('Could not determine the current boot slice!');
+							}
 						}
 						else{
-							Logger::getRootLogger()->error('The hash of the downloaded file does not match');
 							throw new Exception('The downloaded file is corrupt');
 						}
 					}
 					else{
-						Logger::getRootLogger()->error('The downloaded file has an invalid signature');
 						throw new Exception('The downloaded file has an invalid signature');
 					}
 				}
 				else{
-					Logger::getRootLogger()->error('Error downloading http://'.$this->data->server.'/'.$data->filename);
 					throw new Exception('Error downloading firmware file '.$data->filename);
 				}
 			}
 			else{
-				Logger::getRootLogger()->error('Could not create the ramdisk for the firmware');
 				throw new Exception('Could not download the firmware');
 			}
 		}
 		else{
-			Logger::getRootLogger()->error('There is no firmware update available');
 			throw new Exception('There is no firmware update available');
 		}	
 	}
