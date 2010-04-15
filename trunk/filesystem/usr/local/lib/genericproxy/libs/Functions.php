@@ -125,7 +125,7 @@ class Functions {
 	 * @return String	$subnet
 	 * @access public
 	 */
-	public static function calculateNetwork($ipaddr, $subnetmask,$subnet_type = 'dotted') {
+	public static function calculateNetwork($ipaddr, $subnetmask) {
 		$mask = $subnetmask==0?0:0xffffffff << (32 - $subnetmask);
 		$network = long2ip(ip2long($ipaddr) & $mask);
 
