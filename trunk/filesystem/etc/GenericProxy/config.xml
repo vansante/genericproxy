@@ -119,6 +119,8 @@
 			can_uninstall="false" />
 		<plugin name="PluginManager" startup_order="1000" enabled="true"
 			can_uninstall="false" />
+		<plugin name="Debug" startup_order="1001" enabled="true"
+			can_uninstall="true" />
 	</modules>
 
 	<interfaces>
