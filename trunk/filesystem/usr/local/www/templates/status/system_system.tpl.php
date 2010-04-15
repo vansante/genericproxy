@@ -1,5 +1,7 @@
 <h2>System status</h2>
 
+<p class="intro">An overview of the system settings.</p>
+
 <div class="form-error" id="status_system_error">
 </div>
 

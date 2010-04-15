@@ -1,5 +1,7 @@
 <h2>Reset to factory defaults</h2>
 
+<p class="intro">The reset screen allows you to reset the device to its factory defaults.</p>
+
 <div class="warning">
     <h3>Warning:</h3>
     <p>If you reset the device, the firewall will be reset to factory defaults and will reboot immediately. The entire system configuration will be overwritten. The LAN IP address will be reset to 192.168.1.1, the system will be configured as a DHCP server, and the password will be set to 'password'.</p>

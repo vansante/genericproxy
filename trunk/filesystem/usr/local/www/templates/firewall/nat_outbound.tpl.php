@@ -1,5 +1,7 @@
 <h2>Outbound NAT rules</h2>
 
+<p class="intro">GenericProxy automatically adds NAT rules to all interfaces to NAT your internal hosts to your WAN IP address for outbound traffic. The only exception is for any hosts for which you have configured 1:1 NAT entries.</p>
+
 <div class="note">
     <h3>Note:</h3>
     <p>If advanced outbound NAT is enabled, no outbound NAT rules will be automatically generated anymore. Instead, only the mappings you specify below will be used. With advanced outbound NAT disabled, a mapping is automatically created for each interface's subnet (except WAN) and any mappings specified below will be ignored.</p>

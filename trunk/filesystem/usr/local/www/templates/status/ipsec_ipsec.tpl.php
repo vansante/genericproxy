@@ -1,5 +1,7 @@
 <h2>IPSec status</h2>
 
+<p class="intro">Current status of all the IPsec tunnels.</p>
+
 <table id="status_ipsec_table">
     <thead>
         <tr>

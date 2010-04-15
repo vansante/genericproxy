@@ -1,5 +1,7 @@
 <h2 class="help_anchor"><a class="open_all_help" rel="cp_services_proxy_settings"></a>Proxy settings</h2>
 
+<p class="intro">This screen allows you to enable and configure the Proxy server.</p>
+
 <form id="services_proxy_settings_form" action="ajaxserver.php" method="post">
     <div class="form-error" id="services_proxy_settings_form_error">
     </div>

@@ -1,5 +1,7 @@
 <h2>SSH</h2>
 
+<p class="intro">This screen allows you to enable the SSH server.</p>
+
 <form id="services_ssh_form" action="ajaxserver.php" method="post">
     <div class="form-error" id="services_ssh_form_error">
     </div>

@@ -1,5 +1,7 @@
 <h2>Inbound NAT rules</h2>
 
+<p class="intro">Inbound NAT allows you to open up TCP and/or UDP ports or port ranges to hosts on networks protected by Generic Proxy. You may need to open ports to allow certain NAT-unfriendly applications and protocols to function properly. Also if you run any services or applications that require inbound connections to a machine on your internal network, you will need inbound NAT.</p>
+
 <div class="note">
     <h3>Note:</h3>
     <p>It is not possible to access NATed services using the WAN IP address from within LAN (or an optional network).</p>

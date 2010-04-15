@@ -1,5 +1,7 @@
 <h2 class="help_anchor"><a class="open_all_help" rel="cp_system_backrest_backrest"></a>Backup / restore</h2>
 
+<p class="intro">This page allows you to restore a backup configuration XML file or make a backup of the current XML configuration file.</p>
+
 <div class="note">
     <h3>Note:</h3>
     <p>The device will reboot after restoring the configuration.</p>
