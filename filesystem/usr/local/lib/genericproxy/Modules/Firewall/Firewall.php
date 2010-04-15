@@ -797,7 +797,7 @@ class Firewall implements Plugin {
 					$lanconfig = $this->config->getElement('interfaces');
 					foreach($lanconfig as $interface){
 						if((string)$interface->type == 'lan'){
-							$subnet = Functions::mask2prefix((string)$interface->subnet);
+							$subnet = Functions::prefix2mask((string)$interface->subnet);
 							$ip = (string)$interface->ipaddr;
 							
 							//	Calculate network

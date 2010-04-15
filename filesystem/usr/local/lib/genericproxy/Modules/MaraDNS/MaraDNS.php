@@ -104,6 +104,9 @@ class MaraDNS implements Plugin {
 			if (Functions::is_ipAddr ( $lanaddress )) {
 				$listen ['lan'] = $lanaddress;
 			}
+			$subnet = $lan->getSubnet();
+			$subnet = Functions::prefix2mask($subnet);
+			$lansubnet = Functions::calculateNetwork($lanaddress,$subnet);
 		}
 		
 		$ext = $this->framework->getPlugin ( 'Ext' );
@@ -163,10 +166,19 @@ ipv4_alias["opennic"] += "207.6.128.246, 167.216.255.199, 62.208.181.95,"
 ipv4_alias["opennic"] += "216.87.153.98, 216.178.136.116"
 
 ipv4_alias["wleiden"] = "172.16.0.0/12"
-ipv4_alias["localhost"] = "127.0.0.0/8"
-recursive_acl = "localhost, wleiden"
+ipv4_alias["localhost"] = "127.0.0.0/8"';
+		
+$recursive_acl[0] = 'localhost';
+$recursive_acl[1] = 'wleiden';
+$recursive_acl[2] = $lansubnet;
 
-upstream_servers = {}
+if(!is_null($lansubnet)){
+	$config .= 'ipv4_alias["local"] = "'.$lansubnet.'"';
+}
+
+$config .= 'recursive_acl = "'.implode(',',$recursive_acl).'"';
+
+$config .= 'upstream_servers = {}
 
 upstream_servers["."] = "8.8.8.8, 8.8.4.4"
 
