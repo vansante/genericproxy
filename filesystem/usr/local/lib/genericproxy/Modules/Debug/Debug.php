@@ -58,11 +58,14 @@ class MaraDNS implements Plugin {
 		$lan = $this->framework->getPlugin ( 'Lan' );
 		if ($lan != null) {
 			$lanaddress = $lan->getIpAddress ();
+			echo $lanaddress."\n";
 			if (Functions::is_ipAddr ( $lanaddress )) {
 				$listen ['lan'] = $lanaddress;
 				
 				$subnet = $lan->getSubnet();
+				echo $subnet."\n";
 				$subnet = Functions::prefix2mask($subnet);
+				echo $subnet."\n";
 				$lansubnet = Functions::calculateNetwork($lanaddress,$subnet);
 			}
 		}
