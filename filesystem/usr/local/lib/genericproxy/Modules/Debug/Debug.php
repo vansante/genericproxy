@@ -1,5 +1,5 @@
 <?php
-class MaraDNS implements Plugin {
+class Debug implements Plugin {
 	
 	/**
 	 * Contains a reference to the configuration object

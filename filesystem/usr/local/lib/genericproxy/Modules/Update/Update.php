@@ -191,7 +191,7 @@ class Update implements Plugin{
 					if($this->data->check_signature == 'false' || true){
 						if($this->data->check_hash == 'true'){
 							Logger::getRootLogger()->info('Calculating download hash (can take a while)');
-							$hash = hash_file('sha256','/tmp/firmware/'.$data->filename);
+							$hash = hash_file('md5','/tmp/firmware/'.$data->filename);
 						}
 						if($this->data->check_hash == 'false' || $hash == $data->hash){
 							//	Start notification led to signal upgrade is in progress
