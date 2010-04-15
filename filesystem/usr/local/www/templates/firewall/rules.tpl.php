@@ -179,7 +179,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                     ruleid: id
                 },
                 error_element: $('#firewall_rules_'+gp.data.firewall_rules[id]['interface'].toLowerCase()+'_table_error'),
-                content_id: 'cp_firewall_rules_'+gp.data.firewall_rules[id1]['interface'].toLowerCase(),
+                content_id: 'cp_firewall_rules_'+gp.data.firewall_rules[id]['interface'].toLowerCase(),
                 successFn: function(json) {
                     var enabled = gp.data.firewall_rules[id].enable;
                     gp.data.firewall_rules[id].enable = (enabled == 'true' ? 'false' : 'true');
@@ -200,7 +200,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                         ruleid: id
                     },
                     error_element: $('#firewall_rules_'+gp.data.firewall_rules[id]['interface'].toLowerCase()+'_table_error'),
-                    content_id: 'cp_firewall_rules_'+gp.data.firewall_rules[id1]['interface'].toLowerCase(),
+                    content_id: 'cp_firewall_rules_'+gp.data.firewall_rules[id]['interface'].toLowerCase(),
                     successFn: function(json) {
                         delete gp.data.firewall_rules[id];
                         gp.firewall.rules.buildTable();
