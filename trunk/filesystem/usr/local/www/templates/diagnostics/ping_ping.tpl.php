@@ -16,6 +16,7 @@
         <dt><label for="diagnostics_ping_interface">Interface</label></dt>
         <dd>
             <select name="diagnostics_ping_interface" id="diagnostics_ping_interface">
+                <option value="">Any</option>
                 <option value="wan">WAN</option>
                 <option value="lan">LAN</option>
                 <option value="ext">EXT</option>
@@ -24,7 +25,7 @@
 
         <dt><label for="diagnostics_ping_count">Ping count</label></dt>
         <dd>
-            <input name="diagnostics_ping_count" size="1" type="text" id="diagnostics_ping_count" value="10"/>
+            <input name="diagnostics_ping_count" size="1" type="text" id="diagnostics_ping_count" value="1"/>
         </dd>
 
         <dt><input type="submit" value="Ping" id="diagnostics_ping_submit" class="submitbutton"/></dt>
