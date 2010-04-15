@@ -255,7 +255,7 @@ class Scheduler implements Plugin,GeneratesRules {
 			$return_day = $return->sharing->schedule->addChild('day');
 			$return_day->addAttribute('id',$i);
 			
-			$xml_day = $this->scheduler_data->schedule->addChild('day');
+			$xml_day = $this->scheduler_data->schedule->days->addChild('day');
 			$xml_day->addAttribute('day_id',$i);
 			
 			$buffer = explode(',',$day);

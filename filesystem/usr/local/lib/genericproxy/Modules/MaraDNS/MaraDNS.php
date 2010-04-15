@@ -166,17 +166,17 @@ ipv4_alias["opennic"] += "207.6.128.246, 167.216.255.199, 62.208.181.95,"
 ipv4_alias["opennic"] += "216.87.153.98, 216.178.136.116"
 
 ipv4_alias["wleiden"] = "172.16.0.0/12"
-ipv4_alias["localhost"] = "127.0.0.0/8"';
+ipv4_alias["localhost"] = "127.0.0.0/8"'."\n";
 		
 $recursive_acl[0] = 'localhost';
 $recursive_acl[1] = 'wleiden';
 $recursive_acl[2] = $lansubnet;
 
 if(!is_null($lansubnet)){
-	$config .= 'ipv4_alias["local"] = "'.$lansubnet.'"';
+	$config .= 'ipv4_alias["local"] = "'.$lansubnet.'"'."\n";
 }
 
-$config .= 'recursive_acl = "'.implode(',',$recursive_acl).'"';
+$config .= 'recursive_acl = "'.implode(',',$recursive_acl).'"'."\n";
 
 $config .= 'upstream_servers = {}
 

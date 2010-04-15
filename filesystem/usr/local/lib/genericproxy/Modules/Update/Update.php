@@ -142,7 +142,7 @@ class Update implements Plugin{
 	private function getBootSlice(){
 		$nano_drive = str_replace("\n",'',str_replace('NANO_DRIVE=','',file_get_contents('/etc/nanobsd.conf')));
 		$check = Functions::shellCommand('mount | grep '.$nano_drive.'s2');
-		
+
 		if($check == ''){
 			//	We're not on slice 2, so update it
 			$slice = 2;
