@@ -249,6 +249,8 @@ class Scheduler implements Plugin,GeneratesRules {
 		$this->scheduler_data->schedule->optional->addChild('downspeed',$_POST['services_sharing_optional_download_speed']);
 		$this->scheduler_data->schedule->optional->addChild('upspeed',$_POST['services_sharing_optional_upspeed_speed']);
 		
+		$this->scheduler_data->schedule->addChild('days');
+		
 		$i = 0;
 		foreach($days as $day){
 			//		Return XML
