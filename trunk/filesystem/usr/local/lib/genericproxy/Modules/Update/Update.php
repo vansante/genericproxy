@@ -184,7 +184,7 @@ class Update implements Plugin{
 				 * 		information while upgrading from the shell
 				 */
 				chdir('/tmp/firmware');
-				Logger::getRootLogger()->debug('downloading the firmware ... ');
+				Logger::getRootLogger()->info('downloading the firmware ... ');
 				system('wget http://'.$this->data->server.'/'.$data->filename,$output);
 				if(file_exists('/tmp/firmware/'.$data->filename)){
 					//	TODO: Verify signature
