@@ -185,10 +185,12 @@ abstract class Interfaces implements Plugin {
 	 * @access public
 	 */
 	public function getSubnet() {
+		$str_bin = null;
+		
 		$tmp = Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $this->data->if . " | /usr/bin/grep -w \"inet\" | /usr/bin/cut -d\" \" -f 2");
 		$octets_hex = str_split($tmp,2);
 		
-		for ($i=2; $i < strlen($octets_hex); $i++) {
+		for ($i=2; $i < count($octets_hex); $i++) {
     		$str_bin .= decbin(hexdec($octets_hex[$i]));
   		}
   		
