@@ -238,13 +238,7 @@ class System implements Plugin {
 	private function getSystemStatus() {
 		$buffer = '<reply action="ok"><system>';
 		
-		//	Get the boot time
-		$data = Functions::shellCommand ( 'uptime' );
-		
-		$data = explode ( ',', $data );
-		$data [0] = substr ( $data [0], 12, strlen ( $data [0] ) );
-		
-		$buffer .= '<uptime>' . $data [0] . '' . $data [1] . '</uptime>';
+		$buffer .= '<uptime>' . Functions::getUptime() . '</uptime>';
 		
 		//	Get name
 		$buffer .= '<name>' . ( string ) $this->data->hostname . '</name>';

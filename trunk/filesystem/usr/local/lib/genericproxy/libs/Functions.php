@@ -33,12 +33,12 @@
  */
 
 class Functions {
-	
+
 	/**
 	 * 	Mount filesystem
 	 *
 	 * 	Mounts / unmounts the /cfg partition
-	 * 
+	 *
 	 * 	@static
 	 * 	@access public
 	 * 	@param String $mode Mode to mount in (r / rw)
@@ -46,14 +46,14 @@ class Functions {
 	 */
 	public static function mountFilesystem($mode) {
 		if($mode == 'unmount'){
-			Functions::shellCommand('umount /cfg',$errors,$returncode,null);	
+			Functions::shellCommand('umount /cfg',$errors,$returncode,null);
 		}
 		elseif($mode == 'mount'){
 			Functions::shellCommand('mount /cfg',$errors,$returncode,null);
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 	Validate IPv4 address
 	 *
@@ -70,10 +70,10 @@ class Functions {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Get IP address for $interface
-	 * 
+	 *
 	 * @static
 	 * @access public
 	 * @param  String	$interface 	interface identifier
@@ -84,10 +84,10 @@ class Functions {
 		$ip = str_replace ( "\n", "", $tmp );
 		return $ip;
 	}
-	
+
 	/**
 	 * Validate hostname
-	 * 
+	 *
 	 * @static
 	 * @param String $hostname
 	 * @return Bool
@@ -95,10 +95,10 @@ class Functions {
 	public static function is_hostname($hostname){
 		return eregi('^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$',$hostname);
 	}
-	
+
 	/**
 	 * Checks if $subnet is a subnet identifier (/1-32)
-	 * 
+	 *
 	 * @static
 	 * @param String $subnet
 	 * @return Boolean
@@ -115,12 +115,12 @@ class Functions {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * calculates network from the IPaddr and a subnet mask
-	 * 
+	 *
 	 * @static
-	 * @param String	$ipaddr 
+	 * @param String	$ipaddr
 	 * @param Integer	$subnetmask
 	 * @return String	$subnet
 	 * @access public
@@ -131,10 +131,10 @@ class Functions {
 
 		return $network.'/'.$subnetmask;
 	}
-	
+
 	/**
 	 * Converts CIDR notation into dotted netmask
-	 * 
+	 *
 	 * @static
 	 * @param unknown_type $cidr_mask
 	 */
@@ -145,9 +145,9 @@ class Functions {
 
 	/**
 	 * Converts dotted netmask into CIDR notation
-	 * 
+	 *
 	 * Courtecy of php.net comments
-	 * 
+	 *
 	 * @static
 	 * @param Netmask $mask
 	 */
@@ -160,10 +160,10 @@ class Functions {
 	        return false;
 	    return $prefix;
 	}
-	
+
 	/**
 	 * check if $mac is a valid MAC address
-	 * 
+	 *
 	 * @static
 	 * @param String $mac
 	 * @return Bool
@@ -171,10 +171,10 @@ class Functions {
 	public static function isMacAddress($mac) {
 		return preg_match("/^([0-9a-f]{2}([:-]|$)){6}$/i", $mac);
 	}
-	
+
 	/**
 	 * Execute shell command
-	 * 
+	 *
 	 * @static
 	 * @access public
 	 * @param string $command Command to execute
@@ -187,57 +187,105 @@ class Functions {
 		$descriptorspec [0] = array ("pipe", "r" ); // stdin is a pipe that the child will read from
 		$descriptorspec [1] = array ("pipe", "w" ); // stdout is a pipe that the child will write to
 		$descriptorspec [2] = array ("pipe", "w" ); // stderr is a pipe that the child will write to
-		
+
 		//Open and execute command
 		$process = proc_open ( $command, $descriptorspec, $pipes, null, $_ENV );
-		
+
 		if (is_resource ( $process )) {
 			if (isset ( $input )) {
 				fwrite ( $pipes [0], $input );
 			}
 			fclose ( $pipes [0] );
-			
+
 			$output = trim ( stream_get_contents ( $pipes [1] ) );
 			fclose ( $pipes [1] );
-			
+
 			$errors = trim ( stream_get_contents ( $pipes [2] ) );
 			fclose ( $pipes [2] );
-			
+
 			// It is important that you close any pipes before calling
 			// proc_close in order to avoid a deadlock
 			$returncode = proc_close ( $process );
-			
+
 			Logger::getRootLogger ()->debug ( "Running: " . $command . ((strlen ( $output ) > 0) ? (" Output: '" . $output . "'") : "") . ((strlen ( $errors ) > 0) ? (" Errors: '" . $errors . "'") : "") );
-			
+
 			return $output;
 		}
 	}
-	
+
 	/**
 	 * Custom error handling.
-	 * 
+	 *
 	 * @static
 	 * @param unknown_type $errno  the level of the error raised, as an integer.
-	 * @param unknown_type $errstr contains the error message, as a string. 
-	 * @param unknown_type $errfile which contains the filename that the error was raised in, as a string. 
-	 * @param unknown_type $errline which contains the line number the error was raised at, as an integer. 
+	 * @param unknown_type $errstr contains the error message, as a string.
+	 * @param unknown_type $errfile which contains the filename that the error was raised in, as a string.
+	 * @param unknown_type $errline which contains the line number the error was raised at, as an integer.
 	 */
 	public static function errorHandler($errno, $errstr, $errfile, $errline) {
 		$error = "[{$errno}] {$errstr} on line {$errline} in file {$errfile}";
 		Logger::getRootLogger ()->error ( $error );
 	}
-	
+
 	/**
 	 * Get the available free memory.
-	 * 
+	 *
 	 * @static
 	 * @return int free memory
 	 */
 	public static function getFreeMemory() {
 		$pagesize = Functions::shellCommand ( "/sbin/sysctl -n hw.pagesize" );
 		$freememory = Functions::shellCommand ( "/sbin/sysctl -n vm.stats.vm.v_free_count" );
-		
+
 		return round ( ($freememory * $pagesize) / (1024 * 1024) );
+	}
+	
+	/**
+	 * Get the system's uptime
+	 * See: http://dev.kafol.net/2008/09/php-freebsd-uptime-status.html
+	 * @static
+	 * @return string uptime
+	 */
+	public static function getUptime() {  
+		$s = explode(" ", exec("/sbin/sysctl -n kern.boottime") );
+		$a = str_replace(",", "", $s[3]);
+		return Functions::getDuration($a);
+	}  
+	
+	/**
+	 * Get the duration between 2 time stamps
+	 * See: http://dev.kafol.net/2008/09/php-calculating-time-span-duration.html
+	 * @static
+	 * @return string duration
+	 */
+	public static function getDuration($start, $end = time()) {
+		$seconds = $end - $start;
+
+		$days = floor($seconds / 60 / 60 / 24);
+		$hours = $seconds / 60 / 60 %24;
+		$mins = $seconds / 60 % 60;
+		$secs = $seconds % 60;
+
+		$duration='';
+		if ($days > 0) {
+			$duration .= "$days days ";
+		}
+		if ($hours > 0) {
+			$duration .= "$hours hours ";
+		}
+		if ($mins > 0) {
+			$duration .= "$mins minutes ";
+		}
+		if ($secs > 0) {
+			$duration .= "$secs seconds ";
+		}
+
+		$duration = trim($duration);
+		if ($duration == null) {
+			$duration = '0 seconds';
+		}
+
+		return $duration;
 	}
 }
 
