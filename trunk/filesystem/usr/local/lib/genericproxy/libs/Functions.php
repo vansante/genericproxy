@@ -258,7 +258,10 @@ class Functions {
 	 * @static
 	 * @return string duration
 	 */
-	public static function getDuration($start, $end = time()) {
+	public static function getDuration($start, $end = false) {
+		if (!$end) {
+			$end = time();
+		}
 		$seconds = $end - $start;
 
 		$days = floor($seconds / 60 / 60 / 24);
