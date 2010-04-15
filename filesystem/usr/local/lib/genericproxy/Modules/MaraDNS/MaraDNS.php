@@ -103,10 +103,11 @@ class MaraDNS implements Plugin {
 			$lanaddress = $lan->getIpAddress ();
 			if (Functions::is_ipAddr ( $lanaddress )) {
 				$listen ['lan'] = $lanaddress;
+				
+				$subnet = $lan->getSubnet();
+				$subnet = Functions::prefix2mask($subnet);
+				$lansubnet = Functions::calculateNetwork($lanaddress,$subnet);
 			}
-			$subnet = $lan->getSubnet();
-			$subnet = Functions::prefix2mask($subnet);
-			$lansubnet = Functions::calculateNetwork($lanaddress,$subnet);
 		}
 		
 		$ext = $this->framework->getPlugin ( 'Ext' );
@@ -122,7 +123,6 @@ class MaraDNS implements Plugin {
 		 *	This config file is a 1:1 copy of all the settings (sans comments) from the 
 		 *	wleiden config file
 		 *
-		 * 	TODO make these settings changeable in the configuration xml
 		 */
 		$config = '
 # Wleiden mararc file (abridged version)
@@ -170,7 +170,7 @@ ipv4_alias["localhost"] = "127.0.0.0/8"'."\n";
 		
 $recursive_acl[0] = 'localhost';
 $recursive_acl[1] = 'wleiden';
-$recursive_acl[2] = $lansubnet;
+$recursive_acl[2] = 'local';
 
 if(!is_null($lansubnet)){
 	$config .= 'ipv4_alias["local"] = "'.$lansubnet.'"'."\n";
