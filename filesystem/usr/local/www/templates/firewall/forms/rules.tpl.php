@@ -1,10 +1,10 @@
 <form id="firewall_rules_form" action="ajaxserver.php" method="post" class="dialog">
-<div class="form-error" id="firewall_rules_form_error">
-</div>
+    <div class="form-error" id="firewall_rules_form_error">
+    </div>
 
-<input type="hidden" name="module" value="Firewall"/>
-<input type="hidden" name="page" value="addrule" id="firewall_rules_form_page"/>
-<input type="hidden" name="firewall_rules_id" value="" id="firewall_rules_id"/>
+    <input type="hidden" name="module" value="Firewall"/>
+    <input type="hidden" name="page" value="addrule" id="firewall_rules_form_page"/>
+    <input type="hidden" name="firewall_rules_id" value="" id="firewall_rules_id"/>
 
     <dl>
         <dt><label for="firewall_rules_interface">Interface</label></dt>

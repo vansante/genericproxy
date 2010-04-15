@@ -1,5 +1,7 @@
 <h2 class="help_anchor"><a class="open_all_help" rel="cp_services_dhcpd_settings"></a>DHCPD settings</h2>
 
+<p class="intro">This screen allows you to enable and configure the DHCP server.</p>
+
 <div class="note">
     <h3>Note:</h3>
     <p>The DNS servers entered in System: General setup (or the DNS forwarder, if enabled) will be assigned to clients by the DHCP server.<br/> The DHCP lease table can be viewed on the Diagnostics: DHCP leases page. </p>

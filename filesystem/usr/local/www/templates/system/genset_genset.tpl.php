@@ -1,5 +1,7 @@
 <h2 class="help_anchor"><a class="open_all_help" rel="cp_system_genset_genset"></a>General settings</h2>
 
+<p class="intro">The General Settings screen allows you to control some general parameters of your device.</p>
+
 <form id="system_genset_form" action="ajaxserver.php" method="post">
     <div class="form-error" id="system_genset_form_error">
     </div>

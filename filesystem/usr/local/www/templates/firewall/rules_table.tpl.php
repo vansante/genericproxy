@@ -3,6 +3,11 @@
 <div class="form-error" id="<?=$id?>_table_error">
 </div>
 
+<div class="note">
+    <h3>Note:</h3>
+    <p>Rules are evaluated on a first-match basis (i.e. the action of the first rule to match a packet will be executed). This means that if you use block rules, you'll have to pay attention to the rule order. Everything that isn't explicitly passed is blocked by default.</p>
+</div>
+
 <table id="<?=$id?>_table">
     <thead>
         <tr>
