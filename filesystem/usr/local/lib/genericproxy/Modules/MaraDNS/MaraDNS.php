@@ -93,7 +93,7 @@ class MaraDNS implements Plugin {
 		
 		//	Check if the db.wleiden.net file exists, if not we need to fetch it
 		if (! file_exists ( self::ZONEFILE_PATH . 'db.' . $this->data->zone )) {
-			$this->fetchZone ();
+			//$this->fetchZone ();
 		}
 		
 		$listen ['localhost'] = '127.0.0.1';
