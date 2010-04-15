@@ -180,6 +180,16 @@ class Diagnostics implements Plugin{
 	 */
 	private function doNmap(){
 		
+		if(ErrorHandler::errorCount() == 0){
+			$buffer .= '<reply action="ok"><nmap><result>';
+			$buffer .= Functions::shellCommand('nmap '.$_POST['diagnostics_nmap_options']);
+			$buffer .= '</result></nmap></reply>';
+			
+			echo $buffer;
+		}
+		else{
+			throw new Exception('There is invalid form input');
+		}
 	}
 	
 	/**
@@ -221,7 +231,8 @@ class Diagnostics implements Plugin{
 		if(!Functions::is_ipAddr($_POST['diagnostics_ping_host'])){
 			ErrorHandler::addError('formerror','diagnostics_ping_host');
 		}
-		if($_POST['diagnostics_ping_interface'] != 'wan' && $_POST['diagnostics_ping_interface'] != 'lan' && $_POST['diagnostics_ping_interface'] != 'ext'){
+		if(strlen($_POST['diagnostics_ping_interface']) && $_POST['diagnostics_ping_interface'] != 'wan'
+				&& $_POST['diagnostics_ping_interface'] != 'lan' && $_POST['diagnostics_ping_interface'] != 'ext'){
 			ErrorHandler::addError('formerror','diagnostics_ping_interface');
 		}
 		if(!is_numeric($_POST['diagnostics_ping_count'])){
@@ -236,13 +247,16 @@ class Diagnostics implements Plugin{
 				$count = 10;
 			}
 			
-			$iface = $this->framework->getPlugin(ucfirst($_POST['diagnostics_ping_interface']));
-			if($iface != null){
-				$interface = $iface->getIpAddress();
+			$interface = '';
+			if (strlen($_POST['diagnostics_ping_interface'])) {
+				$iface = $this->framework->getPlugin(ucfirst($_POST['diagnostics_ping_interface']));
+				if($iface != null){
+					$interface = ' -S '.$iface->getIpAddress().' ';
+				}
 			}
 			
 			$buffer .= '<reply action="ok"><ping><result>';
-			$buffer .= Functions::shellCommand('ping -c '.$count.' -S '.$interface.' '.$_POST['diagnostics_ping_host']);
+			$buffer .= Functions::shellCommand('ping -c '.$count.$interface.' '.$_POST['diagnostics_ping_host']);
 			$buffer .= '</result></ping></reply>';
 			
 			echo $buffer;
