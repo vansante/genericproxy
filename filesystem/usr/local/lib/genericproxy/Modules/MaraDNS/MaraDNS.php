@@ -213,7 +213,7 @@ spammers = "azmalink,hiddenonline"
 		
 		if ($this->data ['enable'] == 'true') {
 			Logger::getRootLogger()->info('Starting MaraDNS');
-			$dns_pid = Functions::shellCommand ( "ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'" );
+			$dns_pid = Functions::shellCommand ( "ps ax | pgrep 'maradns'" );
 			if (empty ( $dns_pid )) {
 				$status = Functions::shellCommand ( 'maradns -f ' . self::CONFIG_PATH .' &');
 				if ($status != 0) {
@@ -236,7 +236,7 @@ spammers = "azmalink,hiddenonline"
 	 * @return bool false when service failed to stop
 	 */
 	public function stop() {
-		$dns_pid = Functions::shellCommand ( "ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'" );
+		$dns_pid = Functions::shellCommand ( "ps ax | pgrep 'maradns''" );
 		if (empty ( $dns_pid )) {
 			$this->logger->info ( 'Stopping MaraDNS' );
 			Functions::shellCommand ( "kill $dns_pid" );
@@ -294,7 +294,7 @@ spammers = "azmalink,hiddenonline"
 	 * @return String Started|Error|Stopped
 	 */
 	public function getStatus() {
-		$dns_pid = Functions::shellCommand ( "ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'" );
+		$dns_pid = Functions::shellCommand ( "ps ax | pgrep 'maradns'" );
 		if (! empty ( $dns_pid )) {
 			return 'Started';
 		} else {
