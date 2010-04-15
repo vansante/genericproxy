@@ -1,5 +1,7 @@
 <h2 class="help_anchor"><a class="open_all_help" rel="cp_diagnostics_ping_ping"></a>Ping host</h2>
 
+<p class="intro">This screen gives you a GUI to ping (send ICMP echo request) from the device. Fill in the IP address or hostname of the machine to ping, choose the number of pings and click the ping button.</p>
+
 <form id="diagnostics_ping_form" action="ajaxserver.php" method="post">
     <div class="form-error" id="diagnostics_ping_form_error">
     </div>
