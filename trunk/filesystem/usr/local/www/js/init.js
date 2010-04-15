@@ -484,13 +484,17 @@ gp.showAjaxLoader = function(el_id) {
         loader = $('<div class="ajax-form-loader" id="'+el_id+'_loader"><img src="images/loader.gif" alt="loader"/> Loading..</div>');
         element.append(loader);
     }
-    var top, left;
+    var top = element.position().top;
+    var left = element.position().left;
     if (element.hasClass('dialog')) {
         top = element.height() / 2 - (32 / 2);
-        left = element.width() / 2 - (100 / 2);
+        left = element.width() / 2 - (120 / 2);
+    } else if (top == 0 && left == 0) {
+        top = 60;
+        left = 352;
     } else {
-        top = element.position().top + (element.height() / 2 - (32 / 2));
-        left = element.position().left + (element.width() / 2 - (100 / 2));
+        top = top + (element.height() / 2 - (32 / 2));
+        left = left + (element.width() / 2 - (120 / 2));
     }
     loader.css('top', top);
     loader.css('left', left);
