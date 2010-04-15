@@ -212,9 +212,10 @@ spammers = "azmalink,hiddenonline"
 		}
 		
 		if ($this->data ['enable'] == 'true') {
+			Logger::getRootLogger()->info('Starting MaraDNS');
 			$dns_pid = Functions::shellCommand ( "ps ax | egrep '/usr/sbin/maradns' | awk '{print $1}'" );
 			if (empty ( $dns_pid )) {
-				$status = Functions::shellCommand ( 'maradns -f ' . self::CONFIG_PATH );
+				$status = Functions::shellCommand ( 'maradns -f ' . self::CONFIG_PATH .' &');
 				if ($status != 0) {
 					Logger::getRootLogger ()->error ( 'MaraDNS failed to start' );
 					return false;
