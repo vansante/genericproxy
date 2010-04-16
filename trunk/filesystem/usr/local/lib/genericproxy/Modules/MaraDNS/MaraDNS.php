@@ -50,7 +50,7 @@ class MaraDNS implements Plugin {
 	/**
 	 * Path where MaraDNS will put the zone files
 	 */
-	const ZONEFILE_PATH = '/var/etc/maradns/';
+	const ZONEFILE_PATH = '/var/maradns/';
 	
 	/**
 	 *
@@ -91,9 +91,17 @@ class MaraDNS implements Plugin {
 			mkdir(self::ZONEFILE_PATH);
 		}
 		
-		//	Check if the db.wleiden.net file exists, if not we need to fetch it
+		//	Check if the db.wleiden.net file exists, if not we need to fetch the zone
 		if (! file_exists ( self::ZONEFILE_PATH . 'db.' . $this->data->zone )) {
-			//$this->fetchZone ();
+			$this->fetchZone ();
+		}
+		
+		// 	If there is no cron job configured add one to reload the zone file every hour 
+		if((string)$this->data->cron_id == ''){
+			$cron = $this->framework->getPlugin('Cron');
+			$job = $cron->addJob('*','*/1','*','*','*','root','/usr/local/bin/genericproxy MaraDNS fetchzone');
+			
+			$this->data->cron_id = (string)$job['id'];
 		}
 		
 		$listen ['localhost'] = '127.0.0.1';
@@ -213,9 +221,11 @@ spammers = "azmalink,hiddenonline"
 		
 		if ($this->data ['enable'] == 'true') {
 			Logger::getRootLogger()->info('Starting MaraDNS');
-			$dns_pid = Functions::shellCommand ( "ps ax | pgrep 'maradns'" );
-			if (empty ( $dns_pid )) {
-				$status = Functions::shellCommand ( 'maradns -f ' . self::CONFIG_PATH .' &');
+			if ($this->getStatus() == 'Stopped') {
+				if(!file_exists('/var/log/maradns.log')){
+					Functions::shellCommand('touch /var/log/maradns.log');
+				}
+				$status = Functions::shellCommand ( 'maradns -f ' . self::CONFIG_PATH .' > /var/log/maradns.log &');
 				if ($status != 0) {
 					Logger::getRootLogger ()->error ( 'MaraDNS failed to start' );
 					return false;
@@ -236,8 +246,8 @@ spammers = "azmalink,hiddenonline"
 	 * @return bool false when service failed to stop
 	 */
 	public function stop() {
-		$dns_pid = Functions::shellCommand ( "ps ax | pgrep 'maradns''" );
-		if (empty ( $dns_pid )) {
+		$dns_pid = Functions::shellCommand ( "ps ax | pgrep 'maradns'" );
+		if (!empty ( $dns_pid )) {
 			$this->logger->info ( 'Stopping MaraDNS' );
 			Functions::shellCommand ( "kill $dns_pid" );
 			return true;
@@ -252,7 +262,7 @@ spammers = "azmalink,hiddenonline"
 	 * 
 	 * @return Boolean	true on success, false on error
 	 */
-	private function fetchZone($return = false) {
+	public function fetchZone($return = false) {
 		$status = $this->getStatus ();
 		if ($status == 'Running') {
 			$this->stop ();
@@ -355,7 +365,7 @@ spammers = "azmalink,hiddenonline"
 			case 'getconfig' :
 				$this->echoConfig ();
 				break;
-			case 'saveconfig' :
+			case 'save' :
 				$this->saveConfig ();
 				break;
 			case 'fetchzone' :
