@@ -225,7 +225,7 @@ spammers = "azmalink,hiddenonline"
 				if(!file_exists('/var/log/maradns.log')){
 					Functions::shellCommand('touch /var/log/maradns.log');
 				}
-				$status = Functions::shellCommand ( 'nohup maradns -f ' . self::CONFIG_PATH .' > /var/log/maradns.log &');
+				$status = Functions::shellCommand ( 'nohup /usr/local/sbin/maradns -f ' . self::CONFIG_PATH .' > /var/log/maradns.log &');
 				if ($status != 0) {
 					Logger::getRootLogger ()->error ( 'MaraDNS failed to start' );
 					return false;
