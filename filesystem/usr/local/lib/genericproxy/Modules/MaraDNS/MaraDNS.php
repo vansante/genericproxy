@@ -225,7 +225,7 @@ spammers = "azmalink,hiddenonline"
 				if(!file_exists('/var/log/maradns.log')){
 					Functions::shellCommand('touch /var/log/maradns.log');
 				}
-				$status = Functions::shellCommand ( 'nohup /usr/local/sbin/maradns -f ' . self::CONFIG_PATH .' > /var/log/maradns.log 2>&1 &');
+				$status = Functions::shellCommand ( '/usr/local/duende /usr/local/sbin/maradns -f ' . self::CONFIG_PATH .' > /var/log/maradns.log 2>&1 &');
 				if ($status != 0) {
 					Logger::getRootLogger ()->error ( 'MaraDNS failed to start' );
 					return false;
@@ -268,7 +268,7 @@ spammers = "azmalink,hiddenonline"
 			$this->stop ();
 		}
 		//	Load the zone file
-		$status = Functions::shellCommand ( 'nohup fetchzone ' . $this->data->zone . ' ' . $this->data->server . ' > ' . self::ZONEFILE_PATH . 'db.' . $this->data->zone.' 2>&1 &');
+		$status = Functions::shellCommand ( 'fetchzone ' . $this->data->zone . ' ' . $this->data->server . ' > ' . self::ZONEFILE_PATH . 'db.' . $this->data->zone.' 2>&1 &');
 		
 		//	Restart MaraDNS if it was running when we started running
 		if ($status == 'Running') {
