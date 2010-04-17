@@ -34,6 +34,13 @@ require_once(PluginFramework::FRAMEWORK_PATH.'/libs/Interfaces.php');
  * @version 1.0
  */
 class Ext extends Interfaces {
+	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','OP');
 	
 	/**
 	 * Constructor
@@ -208,21 +215,25 @@ class Ext extends Interfaces {
 	 * @throws Exception
 	 */
 	public function getPage() {
-		if (isset ( $_POST ['page'] )) {
-			switch ($_POST ['page']) {
-				case 'getconfig' :
-					$this->getConfig();
-					break;
-				case 'save':
-					$this->saveConfig();
-					break;
-				default:
-					throw new Exception('Invalid page request');
-					break;	
+		if(in_array($_SESSION['group'],$this->acl)){
+			if (isset ( $_POST ['page'] )) {
+				switch ($_POST ['page']) {
+					case 'getconfig' :
+						$this->getConfig();
+						break;
+					case 'save':
+						$this->saveConfig();
+						break;
+					default:
+						throw new Exception('Invalid page request');
+						break;	
+				}
+			} else {
+				throw new Exception('Invalid page request');
 			}
-		} else {
-			$this->logger->error ( 'A page was requested without a page identifier' );
-			throw new Exception('Invalid page request');
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	

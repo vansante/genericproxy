@@ -41,6 +41,14 @@ class Nat implements Plugin, GeneratesRules {
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
+	
+	/**
 	 *
 	 * @param PluginFramework $framework Framework object, containing all information and plugins.
 	 * @param Config $config Object with System Configuration
@@ -78,44 +86,49 @@ class Nat implements Plugin, GeneratesRules {
 	 * 	@throws Exception
 	 */
 	public function getPage() {
-		switch($_POST['page']){
-			case 'getconfig':
-				echo '<reply action="ok">'.$this->data->asXML ().'</reply>';
-				break;
-			case 'save_outbound':
-				$this->saveSettings();
-				break;
-			case 'add_11nat_rule':
-				$this->newOneToOneRule();
-				break;
-			case 'delete_11nat_rule':
-				$this->removeRule('onetoone',$_POST['ruleid']);
-				break;
-			case 'edit_11nat_rule':
-				$this->editOneToOneRule();
-				break;
-			case 'add_inbound_rule':
-				$this->newInboundRule();
-				break;
-			case 'delete_inbound_rule':
-				$this->removeRule('inbound',$_POST['ruleid']);
-				break;
-			case 'edit_inbound_rule':
-				$this->editInboundRule();
-				break;
-			case 'add_outbound_rule':
-				$this->newOutboundRule();
-				break;
-			case 'delete_outbound_rule':
-				$this->removeRule('outbound',$_POST['ruleid']);
-				break;
-			case 'edit_outbound_rule':
-				$this->editOutboundRule();
-				break;
-			default:
-				Logger::getRootLogger()->error ( 'A page was requested without a valid page identifier' );
-				throw new Exception('Invalid page request');
-				break;
+		if(in_array($_SESSION['group'],$this->acl)){
+			switch($_POST['page']){
+				case 'getconfig':
+					echo '<reply action="ok">'.$this->data->asXML ().'</reply>';
+					break;
+				case 'save_outbound':
+					$this->saveSettings();
+					break;
+				case 'add_11nat_rule':
+					$this->newOneToOneRule();
+					break;
+				case 'delete_11nat_rule':
+					$this->removeRule('onetoone',$_POST['ruleid']);
+					break;
+				case 'edit_11nat_rule':
+					$this->editOneToOneRule();
+					break;
+				case 'add_inbound_rule':
+					$this->newInboundRule();
+					break;
+				case 'delete_inbound_rule':
+					$this->removeRule('inbound',$_POST['ruleid']);
+					break;
+				case 'edit_inbound_rule':
+					$this->editInboundRule();
+					break;
+				case 'add_outbound_rule':
+					$this->newOutboundRule();
+					break;
+				case 'delete_outbound_rule':
+					$this->removeRule('outbound',$_POST['ruleid']);
+					break;
+				case 'edit_outbound_rule':
+					$this->editOutboundRule();
+					break;
+				default:
+					Logger::getRootLogger()->error ( 'A page was requested without a valid page identifier' );
+					throw new Exception('Invalid page request');
+					break;
+			}
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	

@@ -73,13 +73,28 @@ class Scheduler implements Plugin,GeneratesRules {
 	}
 	
 	/**
-	 * Contains configuration data retrieved from $this->config
+	 * Contains configuration data for the altq shaper
 	 * 
 	 * @access private
 	 * @var SimpleXMLElement
 	 */
 	private $shaper_data;
+	
+	/**
+	 * Contains configuration data for the scheduler
+	 *
+	 * 	@access private
+	 * 	@var SimpleXMLElement
+	 */
 	private $scheduler_data;
+	
+	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
 	
 	/**
 	 * Constructor
@@ -115,22 +130,27 @@ class Scheduler implements Plugin,GeneratesRules {
 	 * 	@throws Exception
 	 */
 	public function getPage() {
-		switch($_POST['page']){
-			case 'getconfig':
-				$this->returnConfig();
-				break;
-			case 'save':
-				$this->saveConfig();
-				break;
-			case 'addconfig':
-				$this->saveUserConfig();
-				break;
-			case 'deleteconfig':
-				$this->removeUserSchedule(htmlentities($_POST['name']),true);
-				break;
-			default:
-				throw new Exception('Invalid page request');
-				break;
+		if(in_array($_SESSION['group'],$this->acl)){
+			switch($_POST['page']){
+				case 'getconfig':
+					$this->returnConfig();
+					break;
+				case 'save':
+					$this->saveConfig();
+					break;
+				case 'addconfig':
+					$this->saveUserConfig();
+					break;
+				case 'deleteconfig':
+					$this->removeUserSchedule(htmlentities($_POST['name']),true);
+					break;
+				default:
+					throw new Exception('Invalid page request');
+					break;
+			}
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	

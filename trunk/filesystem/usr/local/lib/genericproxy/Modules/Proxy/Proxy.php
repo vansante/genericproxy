@@ -71,6 +71,14 @@ class Proxy implements Plugin {
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','OP');
+	
+	/**
 	 * path and filename to the dhcpd config file
 	 * 
 	 * @var string
@@ -297,26 +305,31 @@ EOD;
 	 */
 	public function getPage() {
 		if (isset ( $_POST ['page'] )) {
-			switch ($_POST ['page']) {
-				case 'getconfig' :
-					echo '<reply action="ok">';
-					echo $this->data->asXML ();
-					echo '</reply>';
-					break;
-				case 'save' :
-					$this->save ();
-					break;
-				case 'editport' :
-					$this->saveRule ( $_POST ['services_proxy_port_id'] );
-					break;
-				case 'addport' :
-					$this->saveRule ( null );
-					break;
-				case 'deleteport' :
-					$this->delRule ($_POST['ruleid']);
-					break;
-				default :
-					throw new Exception ( "page request not valid" );
+			if(in_array($_SESSION['group'],$this->acl)){
+				switch ($_POST ['page']) {
+					case 'getconfig' :
+						echo '<reply action="ok">';
+						echo $this->data->asXML ();
+						echo '</reply>';
+						break;
+					case 'save' :
+						$this->save ();
+						break;
+					case 'editport' :
+						$this->saveRule ( $_POST ['services_proxy_port_id'] );
+						break;
+					case 'addport' :
+						$this->saveRule ( null );
+						break;
+					case 'deleteport' :
+						$this->delRule ($_POST['ruleid']);
+						break;
+					default :
+						throw new Exception ( "page request not valid" );
+				}
+			}
+			else{
+				throw new Exception('You are not allowed to do this');
 			}
 		} else {
 			throw new Exception ( "page request not valid" );

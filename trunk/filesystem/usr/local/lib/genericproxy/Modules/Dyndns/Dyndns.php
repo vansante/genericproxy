@@ -35,7 +35,6 @@
  */
 
 class Dyndns implements Plugin {
-	
 	/**
 	 * Contains a reference to the configuration object
 	 * 
@@ -67,6 +66,14 @@ class Dyndns implements Plugin {
 	 * @var SimpleXMLElement
 	 */
 	private $data;
+	
+	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
 	
 	/**
 	 *
@@ -167,21 +174,26 @@ class Dyndns implements Plugin {
 	 * Get info for a front-end page
 	 */
 	public function getPage() {
-		if (isset ( $_POST ['page'] )) {
-			switch ($_POST ['page']) {
-				case 'getconfig' :
-					echo '<reply action="ok">';
-					echo $this->data->asXML ();
-					echo '</reply>';
-					break;
-				case 'save' :
-					$this->save ();
-					break;
-				default :
-					throw new Exception ( "page request not valid" );
+		if(in_array($_SESSION['group'],$this->acl)){
+			if (isset ( $_POST ['page'] )) {
+				switch ($_POST ['page']) {
+					case 'getconfig' :
+						echo '<reply action="ok">';
+						echo $this->data->asXML ();
+						echo '</reply>';
+						break;
+					case 'save' :
+						$this->save ();
+						break;
+					default :
+						throw new Exception ( "page request not valid" );
+				}
+			} else {
+				throw new Exception ( "page request not valid" );
 			}
-		} else {
-			throw new Exception ( "page request not valid" );
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	

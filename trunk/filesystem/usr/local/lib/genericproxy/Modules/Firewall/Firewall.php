@@ -159,6 +159,8 @@ class Firewall implements Plugin {
 	 *	Returns XML for the requested page
 	 *
 	 *	page requested is deduced from the $_POST['page'] variable included by the AJAX frontend.
+	 *	Unlike other modules with access restriction Firewall does not have an ACL since all parties
+	 *	can access the page, but what rules they can see / alter depends on their user group.
 	 *
 	 *	@access public
 	 *	@throws Exception

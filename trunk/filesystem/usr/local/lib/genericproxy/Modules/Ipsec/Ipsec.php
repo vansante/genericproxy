@@ -64,29 +64,40 @@ class Ipsec implements Plugin {
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','OP');
+	
+	/**
 	 * path and filename to the IPSec config file
+	 * 
 	 * @var string
 	 */
 	const CONFIG_PATH = '/var/etc/racoon.conf';
 	
 	/**
 	 * Path and filename to the lighttpd PID file
+	 * 
 	 * @var string
 	 */
 	const PID_PATH = '/var/run/racoon.pid';
 	
 	/**
 	 * Path to the pre shared key file
+	 * 
 	 * @var string
 	 */
 	const PKS_PATH = '/var/etc/pks.txt';
 	
 	/**
 	 * Path to where certificates are stored
-	 * //TODO: find a location for CERT_PATH, not in /var
+	 * 
 	 * @var string Path with trailing slash
 	 */
-	const CERT_PATH = '/bla/bla/';
+	const CERT_PATH = '/var/etc/cert';
 	
 	/**
 	 * Path to the setkey file
@@ -502,36 +513,41 @@ EOD;
 	 * Get info for a front-end page
 	 */
 	public function getPage() {
-		if (isset ( $_POST ['page'] )) {
-			switch ($_POST ['page']) {
-				case 'getconfig' :
-					echo '<reply action="ok">';
-					echo $this->data->asXML ();
-					echo '</reply>';
-					break;
-				case 'addTunnel' :
-					$this->saveTunnel ( null );
-					break;
-				case 'editTunnel' :
-					$this->saveTunnel ( $_POST ['id'] );
-					break;
-				case 'delTunnel' :
-					$this->delTunnel ( $_POST ['id'] );
-					break;
-				case 'save' :
-					$this->save ();
-					break;
-				case 'addCertificate' :
-					$this->addCertificate ();
-					break;
-				case 'delCertificate' :
-					$this->delCertificate ();
-					break;
-				default :
-					throw new Exception ( "page request not valid" );
+		if(in_array($_SESSION['group'],$this->acl)){
+			if (isset ( $_POST ['page'] )) {
+				switch ($_POST ['page']) {
+					case 'getconfig' :
+						echo '<reply action="ok">';
+						echo $this->data->asXML ();
+						echo '</reply>';
+						break;
+					case 'addTunnel' :
+						$this->saveTunnel ( null );
+						break;
+					case 'editTunnel' :
+						$this->saveTunnel ( $_POST ['id'] );
+						break;
+					case 'delTunnel' :
+						$this->delTunnel ( $_POST ['id'] );
+						break;
+					case 'save' :
+						$this->save ();
+						break;
+					case 'addCertificate' :
+						$this->addCertificate ();
+						break;
+					case 'delCertificate' :
+						$this->delCertificate ();
+						break;
+					default :
+						throw new Exception ( "page request not valid" );
+				}
+			} else {
+				throw new Exception ( "page request not valid" );
 			}
-		} else {
-			throw new Exception ( "page request not valid" );
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	

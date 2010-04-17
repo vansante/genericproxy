@@ -34,7 +34,7 @@
  * @version 1.0
  */
 class DnsForward implements Plugin{
-/**
+	/**
 	 * Contains a reference to the configuration object
 	 * 
 	 * @var Config
@@ -97,6 +97,14 @@ class DnsForward implements Plugin{
 	 * @var SimpleXMLElement
 	 */
 	private $data;
+	
+	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
 	
 	/**
 	 * 
@@ -209,32 +217,36 @@ class DnsForward implements Plugin{
 	 * @throws Exception
 	 */
 	public function getPage(){
-		if($_POST['page'] == 'save'){
-			$this->saveSettings();
-		}
-		elseif($_POST['page'] == 'getconfig'){
-			$this->getSettings();
-		}
-		elseif($_POST['page'] == 'deletemask'){
-			$this->deleteMask();
-		}
-		elseif($_POST['page'] == 'addmask'){
-			$this->addMask();
-		}
-		elseif($_POST['page'] == 'editmask'){
-			$this->editMask();
-		}
-		elseif($_POST['page'] == 'deleteoverride'){
-			$this->deleteOverride();
-		}
-		elseif($_POST['page'] == 'addoverride'){
-			$this->addOverride();
-		}
-		elseif($_POST['page'] == 'editoverride'){
-			$this->editOverride();
+		if(in_array($_SESSION['group'],$this->acl)){
+			switch($_POST['page']){
+				case 'save':
+					$this->saveSettings();
+					break;
+				case 'getconfig':
+					$this->getSettings();
+					break;
+				case 'deletemask':
+					$this->deleteMask();
+					break;
+				case 'addmask':
+					$this->addMask();
+					break;
+				case 'editmask':
+					$this->editMask();
+					break;
+				case 'deleteoverride':
+					$this->deleteOverride();
+					break;
+				case 'editoverride':
+					$this->editOverride();
+					break;
+				default:
+					throw new Exception('Invalid page request');
+					break;
+			}
 		}
 		else{
-			throw new Exception('Invalid page request');
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	
@@ -246,7 +258,6 @@ class DnsForward implements Plugin{
 	 * @throws Exception
 	 */
 	private function checkOverrideForm(){
-		//todo: check form input
 		if(!Functions::is_ipAddr($_POST['services_dnsf_override_ipaddr'])){
 			ErrorHandler::addError('formerrror','services_dnsf_override_ipaddr');
 			throw new Exception('There is invalid form input');

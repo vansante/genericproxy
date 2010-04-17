@@ -76,6 +76,14 @@ class Httpd implements Plugin {
 	private $plugin;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
+	
+	/**
 	 * path and filename to the lighttpd config file
 	 * 
 	 * @var string
@@ -307,21 +315,26 @@ EOD;
 	 * Get info for a front-end page
 	 */
 	public function getPage() {
-		if (isset ( $_POST ['page'] )) {
-			switch ($_POST ['page']) {
-				case 'getconfig' :
-					echo '<reply action="ok">';
-					echo $this->data->asXML ();
-					echo '</reply>';
-					break;
-				case 'save' :
-					$this->save ();
-					break;
-				default :
-					throw new Exception ( "page request not valid" );
+		if(in_array($_SESSION['group'],$this->acl)){
+			if (isset ( $_POST ['page'] )) {
+				switch ($_POST ['page']) {
+					case 'getconfig' :
+						echo '<reply action="ok">';
+						echo $this->data->asXML ();
+						echo '</reply>';
+						break;
+					case 'save' :
+						$this->saveConfig ();
+						break;
+					default :
+						throw new Exception ('Invalid page request');
+				}
+			} else {
+				throw new Exception ('Invalid page request');
 			}
-		} else {
-			throw new Exception ( "page request not valid" );
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	
@@ -330,7 +343,7 @@ EOD;
 	 * 
 	 * After saving the config, the HTTPD server will be restarted. 
 	 */
-	private function save() {
+	private function saveConfig() {
 		//Check if the POST values are correct
 		if (empty ( $_POST ['services_httpd_protocol'] ) || ($_POST ['services_httpd_protocol'] != "http" ) && ( $_POST ['services_httpd_protocol'] != "https")) {
 			ErrorHandler::addError('formerror','services_httpd_protocol');

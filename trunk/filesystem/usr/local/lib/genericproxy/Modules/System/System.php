@@ -71,6 +71,14 @@ class System implements Plugin {
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
+	
+	/**
 	 * Plugin configuration retrieved from $this->config->module
 	 * 
 	 * @var SimpleXMLElement
@@ -149,31 +157,45 @@ class System implements Plugin {
 	 * @throws Exception
 	 */
 	public function getPage() {
-		if ($_POST ['page'] == 'getconfig') {
-			$this->echoConfig ();
-		} elseif ($_POST ['page'] == 'savegeneralsettings') {
-			$this->saveConfig ();
-		} elseif ($_POST ['page'] == 'reboot') {
-			$this->reboot ();
-		} elseif ($_POST ['page'] == 'getconfigxml') {
-			$this->backupConfig ();
-		} elseif ($_POST ['page'] == 'saveconfigxml') {
-			$this->restoreConfig ();
-		} elseif ($_POST ['page'] == 'reset') {
-			$this->resetToDefaults ();
-		} elseif ($_POST ['page'] == 'getservicesstatus') {
-			$this->getServiceStatus ();
-		} elseif ($_POST ['page'] == 'getstatus') {
-			$this->getSystemStatus ();
+		if(in_array($_SESSION['group'],$this->acl)){
+			switch($_POST['page']){
+				case 'getconfig':
+					$this->echoConfig();
+					break;
+				case 'savegeneralsettings':
+					$this->saveConfig();
+					break;
+				case 'reboot':
+					$this->reboot();
+					break;
+				case 'getconfigxml':
+					$this->backupConfig();
+					break;
+				case 'saveconfigxml':
+					$this->restoreConfig();
+					break;
+				case 'reset':
+					$this->resetToDefaults();
+					break;
+				case 'getservicestatus':
+					$this->getServiceStatus();
+					break;
+				case 'getstatus':
+					$this->getSystemStatus();
+					break;
+				case 'getntpconfig':
+					$this->getNtpConfig();
+					break;
+				case 'saventpconfig':
+					$this->saveNtpConfig();
+					break;
+				default:
+					throw new Exception('Invalid page request');
+					break;
+			}	
 		}
-		elseif($_POST['page'] == 'getntpconfig'){
-			$this->getntpconfig();
-		}
-		elseif($_POST['page'] == 'saventpconfig'){
-			$this->saventpconfig();
-		}
-		else {
-			throw new Exception ( 'Invalid page request' );
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	
@@ -478,7 +500,7 @@ class System implements Plugin {
 	/**
 	 * Echoes NTP configuration and all time zones
 	 */
-	private function getntpconfig(){
+	private function getNtpConfig(){
 		echo '<reply action="ok"><ntp>';
 		
 		echo '<timezones>';
@@ -502,7 +524,7 @@ class System implements Plugin {
 	 * 
 	 * @throws Exception
 	 */
-	private function saventpconfig(){
+	private function saveNtpConfig(){
 		if(empty($_POST['services_ntp_server'])){
 			ErrorHandler::addError('formerror','services_ntp_server');
 		}
