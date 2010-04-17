@@ -68,6 +68,14 @@ class AssignInterfaces implements Plugin {
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
+	
+	/**
 	 *
 	 * @param PluginFramework $framework Framework object, containing all information and plugins.
 	 * @param Config $config Object with System Configuration
@@ -128,21 +136,26 @@ class AssignInterfaces implements Plugin {
 	 */
 	public function getPage() {
 		if (!empty( $_POST ['page'] )) {
-			switch ($_POST ['page']) {
-				case 'getconfig' :
-					$this->getSettings ();
-					break;
-				case 'save' :
-					$this->save ();
-					break;
-				case 'getinterfaces' :
-					$this->getSettings ();
-					break;
-				case 'getstatus':
-					$this->getInterfaceStatus();
-					break;
-				default :
-					throw new Exception ( "Invalid page identifier" );
+			if(in_array($_SESSION['group'],$this->acl)){
+				switch ($_POST ['page']) {
+					case 'getconfig' :
+						$this->getSettings ();
+						break;
+					case 'save' :
+						$this->save ();
+						break;
+					case 'getinterfaces' :
+						$this->getSettings ();
+						break;
+					case 'getstatus':
+						$this->getInterfaceStatus();
+						break;
+					default :
+						throw new Exception ( "Invalid page identifier" );
+				}
+			}
+			else{
+				throw new Exception('You do not have permission to do this');
 			}
 		} else {
 			throw new Exception ( "page request not valid" );

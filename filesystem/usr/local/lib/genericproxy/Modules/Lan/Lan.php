@@ -31,6 +31,13 @@ require_once (PluginFramework::FRAMEWORK_PATH . '/libs/Interfaces.php');
  * Plugin to set up the Lan interface
  */
 class Lan extends Interfaces {
+	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
 	
 	/**
 	 * Constructor
@@ -111,21 +118,26 @@ class Lan extends Interfaces {
 	 * @throws Exception
 	 */
 	public function getPage() {
-		if (isset ( $_POST ['page'] )) {
-			switch ($_POST ['page']) {
-				case 'getconfig' :
-					$this->getConfig();
-					break;
-				case 'save':
-					$this->saveConfig();
-					break;
-				default:
-					throw new Exception('Invalid page request');
-					break;
+		if(in_array($_SESSION['group'],$this->acl)){
+			if (isset ( $_POST ['page'] )) {
+				switch ($_POST ['page']) {
+					case 'getconfig' :
+						$this->getConfig();
+						break;
+					case 'save':
+						$this->saveConfig();
+						break;
+					default:
+						throw new Exception('Invalid page request');
+						break;
+				}
+			} else {
+				$this->logger->error ( 'A page was requested without a page identifier' );
+				throw new Exception('Invalid page request');
 			}
-		} else {
-			$this->logger->error ( 'A page was requested without a page identifier' );
-			throw new Exception('Invalid page request');
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 

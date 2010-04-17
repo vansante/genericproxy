@@ -69,6 +69,14 @@ class Dhcpd implements Plugin {
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
+	
+	/**
 	 * path and filename to the dhcpd config file
 	 * 
 	 * @var string
@@ -345,29 +353,34 @@ EOD;
 	 */
 	public function getPage() {
 		if (isset ( $_POST ['page'] )) {
-			switch ($_POST ['page']) {
-				case 'getconfig' :
-					echo '<reply action="ok">';
-					echo $this->data->asXML ();
-					echo '</reply>';
-					break;
-				case 'save' :
-					$this->save ();
-					break;
-				case 'editrule' :
-					$this->saveStaticMap ( $_POST ['services_dhcpd_rule_id'] );
-					break;
-				case 'addrule' :
-					$this->saveStaticMap (null);
-					break;
-				case 'deleterule' :
-					$this->delStaticMap ( $_POST ['ruleid'] );
-					break;
-				case 'getstatus' :
-					$this->echoStatus();
-					break;
-				default :
-					throw new Exception ( "page request not valid" );
+			if(in_array($_SESSION['group'],$this->acl)){
+				switch ($_POST ['page']) {
+					case 'getconfig' :
+						echo '<reply action="ok">';
+						echo $this->data->asXML ();
+						echo '</reply>';
+						break;
+					case 'save' :
+						$this->save ();
+						break;
+					case 'editrule' :
+						$this->saveStaticMap ( $_POST ['services_dhcpd_rule_id'] );
+						break;
+					case 'addrule' :
+						$this->saveStaticMap (null);
+						break;
+					case 'deleterule' :
+						$this->delStaticMap ( $_POST ['ruleid'] );
+						break;
+					case 'getstatus' :
+						$this->echoStatus();
+						break;
+					default :
+						throw new Exception ( "page request not valid" );
+				}
+			}
+			else{
+				throw new Exception('You do not have permission to do this');
 			}
 		} else {
 			throw new Exception ( "page request not valid" );

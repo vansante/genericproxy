@@ -34,6 +34,14 @@ class MaraDNS implements Plugin {
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','OP');
+	
+	/**
 	 * Plugin configuration retrieved from $this->config->module
 	 * 
 	 * @var SimpleXMLElement
@@ -361,19 +369,24 @@ spammers = "azmalink,hiddenonline"
 	 * 
 	 */
 	public function getPage() {
-		switch ($_POST ['page']) {
-			case 'getconfig' :
-				$this->echoConfig ();
-				break;
-			case 'save' :
-				$this->saveConfig ();
-				break;
-			case 'fetchzone' :
-				$this->fetchZone ( true );
-				break;
-			default :
-				throw new Exception ( 'Invalid page request' );
-				break;
+		if(in_array($_SESSION['group'],$this->acl)){
+			switch ($_POST ['page']) {
+				case 'getconfig' :
+					$this->echoConfig ();
+					break;
+				case 'save' :
+					$this->saveConfig ();
+					break;
+				case 'fetchzone' :
+					$this->fetchZone ( true );
+					break;
+				default :
+					throw new Exception ( 'Invalid page request' );
+					break;
+			}
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	

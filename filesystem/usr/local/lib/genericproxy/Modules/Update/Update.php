@@ -67,6 +67,14 @@ class Update implements Plugin{
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
+	
+	/**
 	 * Is the Plugin a service?
 	 * 
 	 * @return bool
@@ -113,21 +121,26 @@ class Update implements Plugin{
 	 * 	@throws Exception
 	 */
 	public function getPage() {
-		switch($_POST['page']){
-			case 'check':
-				$this->checkForUpdates(true);
-				break;
-			case 'getconfig':
-				$this->echoConfig();
-				break;
-			case 'save':
-				$this->saveConfig();
-				break;
-			case 'updatefirmware':
-				$this->updateFirmware();
-				break;
-			default:
-				throw new Exception('Invalid page request');
+		if(in_array($_SESSION['group'],$this->acl)){
+			switch($_POST['page']){
+				case 'check':
+					$this->checkForUpdates(true);
+					break;
+				case 'getconfig':
+					$this->echoConfig();
+					break;
+				case 'save':
+					$this->saveConfig();
+					break;
+				case 'updatefirmware':
+					$this->updateFirmware();
+					break;
+				default:
+					throw new Exception('Invalid page request');
+			}
+		}
+		else{
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	

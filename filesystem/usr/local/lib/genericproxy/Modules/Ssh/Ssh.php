@@ -83,6 +83,14 @@ class Ssh implements Plugin {
 	private $data;
 	
 	/**
+	 * 	Webinterface access control list
+	 * 
+	 * 	@access private
+	 * 	@var 	Array
+	 */
+	private $acl = array('ROOT','USR');
+	
+	/**
 	 * 
 	 * @param Framework $framework
 	 * @param Config $config
@@ -212,16 +220,21 @@ class Ssh implements Plugin {
 	 * @throws Exception
 	 */
 	public function getPage(){
-		if($_POST['page'] == 'getconfig'){
-			echo '<reply action="ok">';
-			echo $this->data->asXML();
-			echo '</reply>';
-		}
-		elseif($_POST['page'] == 'save'){
-			$this->saveSettings();
+		if(in_array($_SESSION['group'],$this->acl)){
+			if($_POST['page'] == 'getconfig'){
+				echo '<reply action="ok">';
+				echo $this->data->asXML();
+				echo '</reply>';
+			}
+			elseif($_POST['page'] == 'save'){
+				$this->saveSettings();
+			}
+			else{
+				throw new Exception('Invalid page request');
+			}
 		}
 		else{
-			throw new Exception('Invalid page request');
+			throw new Exception('You do not have permission to do this');
 		}
 	}
 	
