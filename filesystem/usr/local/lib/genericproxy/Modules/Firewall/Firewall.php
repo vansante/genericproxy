@@ -644,9 +644,9 @@ class Firewall implements Plugin {
 	public function configure() {
 		//	 		OPTIONS
 		$buffer = '';
-		if (( string ) $this->data->maximumStates != 0) {
+		if (( string ) $this->data->maximumstates != 0) {
 			$buffer .= "# maximum number of states \n";
-			$buffer .= 'set limit states ' . $this->data->maximumStates . "\n\n";
+			$buffer .= 'set limit states ' . $this->data->maximumstates . "\n\n";
 		}
 
 		$buffer .= "# Optimization \n";
