@@ -443,8 +443,11 @@ gp.confirm = function(title, message, successFn, successTxt, failFn, failTxt) {
     });
 };
 
-gp.rebootNotice = function() {
-    $('<div><p>The device is rebooting, please wait. The page will refresh in <span id="reboot_countdown_timer">75</span> seconds.</p></div>').dialog({
+gp.rebootNotice = function(seconds) {
+    if (!seconds) {
+        seconds = 75;
+    }
+    $('<div><p>The device is rebooting, please wait. The page will refresh in <span id="reboot_countdown_timer">'+seconds+'</span> seconds.</p></div>').dialog({
         title: 'Device rebooting',
         autoOpen: true,
         resizable: false,
@@ -456,7 +459,7 @@ gp.rebootNotice = function() {
             return false;
         }
     });
-    gp.data.reboot_seconds = 75;
+    gp.data.reboot_seconds = seconds;
     window.setInterval('gp.rebootCountDown();', 1000);
 };
 

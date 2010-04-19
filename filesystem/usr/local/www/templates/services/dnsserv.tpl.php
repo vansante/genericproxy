@@ -59,7 +59,7 @@
                 error_element: $('#services_dnsserv_form_error'),
                 content_id: 'cp_services_dnsserv_dnsserv',
                 successFn: function(json) {
-                    gp.alert("Success", "DNS zone was fetched successfully.");
+                    gp.alert("Success", "The DNS zone is being fetched..");
                 }
             });
             return false;

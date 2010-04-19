@@ -69,7 +69,7 @@
                     form_id: 'system_upgrade_auto_form',
                     error_element: $('#system_upgrade_auto_form_error'),
                     successFn: function(json) {
-                        gp.rebootNotice();
+                        gp.rebootNotice(90);
                     }
                 });
             });
