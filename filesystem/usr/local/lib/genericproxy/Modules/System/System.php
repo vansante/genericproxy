@@ -273,13 +273,15 @@ class System implements Plugin {
 	private function getSystemStatus() {
 		$buffer = '<reply action="ok"><system>';
 		
-		$buffer .= '<uptime>' . Functions::getUptime() . '</uptime>';
-		
 		//	Get name
 		$buffer .= '<name>' . ( string ) $this->data->hostname . '</name>';
 		$buffer .= '<version>' . PluginFramework::VERSION . '</version>';
-		
-		//	Get processor 
+
+                $buffer .= '<uptime>' . Functions::getUptime() . '</uptime>';
+
+		//	Get processor
+                $data = Functions::shellCommand ( 'uptime' );
+                $data = explode ( ',', $data );
 		$cpu = str_replace ( ' Load averages: ', $data [3] );
 		$cpu = explode ( ',', $cpu );
 		
