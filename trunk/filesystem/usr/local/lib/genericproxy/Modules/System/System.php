@@ -135,6 +135,7 @@ class System implements Plugin {
 	 */
 	public function configure() {
 		$this->configure_ntp_client ();
+		$this->configure_users();
 	}
 	
 	/**
@@ -145,9 +146,21 @@ class System implements Plugin {
 		$this->configure ();
 		$this->start ();
 		
-	//TODO: Check if the following is changed in the config, and if so then update the system: <hostname>, <domain>, <timezone>(also update php using date_default_timezone_set), <harddiskstandby>, etc. See config->system
+		//TODO: Check if the following is changed in the config, and if so then update the system: <hostname>, <domain>, <timezone>(also update php using date_default_timezone_set), <harddiskstandby>, etc. See config->system
 	
 
+	}
+	
+	/**
+	 * Set users in the master.passwd file so they can log in through SSH
+	 */
+	private function configure_users(){
+		$fd = fopen('/etc/master.passwd','a');
+		foreach($this->data->users->user as $user){
+			$userString = (string)$user['username'].':'.(string)$user['password'].':'.(string)$user['uid'].':'.(string)$user['uid'].'::0:0:User &:/nonexistent:/bin/csh'."\n";
+			fwrite($fd,$userString);
+		}
+		fclose($fd);
 	}
 	
 	/**
