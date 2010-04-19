@@ -401,7 +401,7 @@ class System implements Plugin {
 				foreach ( $this->data->users->user as $user ) {
 					if (strtolower ( $user ['name'] ) == strtolower ( $_POST ['system_genset_username'] )) {
 						//		Check if we have the rights to edit this user (ROOT can overwrite passwords for recovery purposes)
-						if (strtolower ( $_POST ['system_genset_username'] ) == ($this->framework->user->name) || $this->framework->user->group == 'ROOT') {
+						if (strtolower ( $_POST ['system_genset_username'] ) == ($this->data->user->name) || $this->data->user->group == 'ROOT') {
 							$user ['password'] = crypt ( $_POST ['system_genset_password1'] );
 							break;
 						} else {
