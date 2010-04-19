@@ -630,7 +630,7 @@ EOD;
 	 * @return string Status of the service/plugin
 	 */
 	public function getStatus() {
-		$pid = file_exists ( (string)$this->data->chroot_path.self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . (string)$this->data->chroot_path.self::PID_PATH ) : 0;
+		$pid = Functions::shellCommand('pgrep dhcpd');
 		if ($pid > 0) {
 			return 'Started';
 		} else {
