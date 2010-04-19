@@ -116,7 +116,7 @@ class Nat implements Plugin, GeneratesRules {
 					$this->newOutboundRule();
 					break;
 				case 'delete_outbound_rule':
-					$this->removeRule('outbound',$_POST['ruleid']);
+					$this->removeRule('advancedoutbound',$_POST['ruleid']);
 					break;
 				case 'edit_outbound_rule':
 					$this->editOutboundRule();
