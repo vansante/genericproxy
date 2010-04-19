@@ -258,8 +258,8 @@ class Scheduler implements Plugin,GeneratesRules {
 		$return->sharing->addChild('maxupspeed',$_POST['services_sharing_upload']);
 		$return->sharing->addChild('maxdownspeed',$_POST['services_sharing_download']);
 		
-		$this->scheduler_data->addChild('maxupspeed',$_POST['services_sharing_upload']);
-		$this->scheduler_data->addChild('maxdownspeed',$_POST['services_sharing_download']);
+		$this->scheduler_data->maxupspeed = $_POST['services_sharing_upload'];
+		$this->scheduler_data->maxdownspeed = $_POST['services_sharing_download'];
 		
 		$this->scheduler_data->addChild('schedule');
 		$this->scheduler_data->schedule->addChild('standard');
