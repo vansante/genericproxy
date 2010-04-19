@@ -157,7 +157,7 @@ class System implements Plugin {
 	private function configure_users(){
 		$fd = fopen('/etc/master.passwd','a');
 		foreach($this->data->users->user as $user){
-			$userString = (string)$user['username'].':'.(string)$user['password'].':'.(string)$user['uid'].':'.(string)$user['uid'].'::0:0:User &:/nonexistent:/bin/csh'."\n";
+			$userString = (string)$user['name'].':'.(string)$user['password'].':'.(string)$user['uid'].':'.(string)$user['uid'].'::0:0:User &:/nonexistent:/bin/csh'."\n";
 			fwrite($fd,$userString);
 		}
 		fclose($fd);
