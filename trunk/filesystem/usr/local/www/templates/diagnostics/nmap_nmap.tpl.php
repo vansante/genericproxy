@@ -15,7 +15,7 @@
     <dl>
         <dt><label for="diagnostics_nmap_options">Nmap options</label></dt>
         <dd>
-            <input name="diagnostics_nmap_options" type="text" size="60" id="diagnostics_nmap_options" />
+            <input name="diagnostics_nmap_options" type="text" size="45" id="diagnostics_nmap_options" />
         </dd>
 
         <dt><input type="submit" value="Nmap" id="diagnostics_nmap_submit" class="submitbutton"/></dt>
