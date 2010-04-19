@@ -412,7 +412,7 @@ EOD;
 	 * @return string Status of the service/plugin
 	 */
 	public function getStatus() {
-		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F '". self::PID_PATH."'" ) : 0;
+		$pid = Functions::shellCommand('pgrep lighttpd');
 		Logger::getRootLogger()->debug('HTTPD PID: '.$pid);
 		if ($pid > 0) {
 			Logger::getRootLogger()->info('Httpd plugin started');
