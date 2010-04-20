@@ -91,7 +91,7 @@ class Ext extends Interfaces {
 					/*   this is not a valid mac address. */
 					$this->logger->info ( "Generating new MAC address for WAN interface." );
 					$random_mac = $this->generateMacAddress();
-					Functions::shellCommand ( "/sbin/ifconfig " . escapeshellarg ( $this->data[$interface - 1]->if ) . " link " . escapeshellarg ( $random_mac ) );
+					Functions::shellCommand ( "/sbin/ifconfig " . escapeshellarg ( $this->data[$interface - 1]->if ) ." link " . escapeshellarg ( $random_mac ) );
 					$this->data->mac = $random_mac;
 					
 					$this->config->saveConfig();
@@ -103,7 +103,7 @@ class Ext extends Interfaces {
 			if (( string ) $this->data[$interface - 1]->ipaddr == 'dhcp') {
 				$this->configureDHCP ();
 			} elseif (Functions::is_ipAddr ( ( string ) $this->data[$interface - 1]->ipaddr )) {
-				Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $this->data[$interface - 1]->if . " " . ( string ) $this->data[$interface - 1]->ipaddr . "/" . ( string ) $this->data[$interface - 1]->subnet );
+				Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $this->data[$interface - 1]->if . " " . ( string ) $this->data[$interface - 1]->ipaddr . "/" . Functions::mask2prefix(( string )$this->data[$interface - 1]->subnet));
 			}
 		}
 	}
