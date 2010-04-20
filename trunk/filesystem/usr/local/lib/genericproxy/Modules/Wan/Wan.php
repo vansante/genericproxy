@@ -93,7 +93,7 @@ class Wan extends Interfaces {
 		if (( string ) $this->data->ipaddr == 'dhcp') {
 			$this->configureDHCP ();
 		} elseif (Functions::is_ipAddr ( ( string ) $this->data->ipaddr )) {
-			Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $this->data->if . " " . ( string ) $this->data->ipaddr . "/" . ( string ) $this->data->subnet );
+			Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $this->data->if . " " . ( string ) $this->data->ipaddr . "/" . Functions::mask2prefix(( string ) $this->data->subnet) );
 			//		Default gateway
 			if ($this->data->gateway != '') {
 				if (Functions::is_ipAddr ( ( string ) $this->data->gateway )) {
@@ -218,6 +218,9 @@ class Wan extends Interfaces {
 		if($_POST['interfaces_wan_type'] == 'dhcp' && !Functions::is_hostname($_POST['interfaces_wan_dhcp_hostname'])){
 			ErrorHandler::addError('formerror','interfaces_wan_dhcp_hostname');
 		}
+		if($_POST['interfaces_wan_type'] == 'static' && !Functions::is_ipAddr($_POST['interfaces_wan_static_subnetmask'])){
+			ErrorHandler::addError('formerror','interfaces_wan_static_subnetmask');
+		}
 		
 		//	Propagate exit on errors
 		if(ErrorHandler::errorCount() > 0){
@@ -239,6 +242,7 @@ class Wan extends Interfaces {
 		elseif($_POST['interfaces_wan_type'] == 'static'){
 			$this->data->ipaddr = $_POST['interfaces_wan_static_ipaddr'];
 			$this->data->gateway = $_POST['interfaces_wan_static_gateway'];
+			$this->data->subnet = $_POST['interfaces_wan_static_subnetmask'];
 		}
 		echo '<reply action="ok">';
 		echo $this->data->asXML();
