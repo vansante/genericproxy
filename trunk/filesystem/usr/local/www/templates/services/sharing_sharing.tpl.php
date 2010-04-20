@@ -97,8 +97,6 @@
                 <option value="100">100%</option>
             </select>
         </dd>
-
-        <dt><input type="submit" value="Save" id="services_sharing_submit" class="submitbutton"/></dt>
     </dl>
 
     <p style="clear: both;"></p>
@@ -136,8 +134,6 @@
             </tr>
         </tbody>
     </table>
-    
-    <p style="clear: both;"></p>
 
     <input type="submit" value="Save" id="services_sharing_submit" class="submitbutton"/>
 
