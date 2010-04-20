@@ -263,6 +263,9 @@ class Ext extends Interfaces {
 		if($_POST['interfaces_ext_type'] == 'dhcp' && !Functions::is_hostname($_POST['interfaces_ext_dhcp_hostname'])){
 			ErrorHandler::addError('formerror','interfaces_ext_dhcp_hostname');
 		}
+		if($_POST['interfaces_ext_type'] == 'static' && !Functions::is_ipAddr($_POST['interfaces_ext_static_subnetmask'])){
+			ErrorHandler::addError('formerror','interfaces_ext_static_subnetmask');
+		}
 		
 		//	Propagate exit on errors
 		if(ErrorHandler::errorCount() > 0){
@@ -284,6 +287,7 @@ class Ext extends Interfaces {
 		elseif($_POST['interfaces_ext_type'] == 'static'){
 			$this->data[$interface -1]->ipaddr = $_POST['interfaces_ext_static_ipaddr'];
 			$this->data[$interface -1]->gateway = $_POST['interfaces_ext_static_gateway'];
+			$this->data[$interface -1]->subnet = $_POST['interfaces_ext_static_subnetmask'];
 		}
 		echo '<reply action="ok">';
 		echo $this->data[$interface -1]->asXML();

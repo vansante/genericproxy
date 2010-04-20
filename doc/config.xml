@@ -11,7 +11,7 @@
 		<!-- 
 		group= OP|SOP|NOOB -->
 		<users>
-			<user name="admin" password="bob" group="SOP" />
+			<user name="admin" password="$1$sP/CnCyw$dO4om5apZe048GOz/QloG0" group="SOP" />
 			<default-user name="admin" password="" group="" />
 		</users>
 		
