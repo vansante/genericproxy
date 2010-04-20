@@ -4,7 +4,7 @@
 		<update>
 			<check_signature>false</check_signature>
 			<check_hash>true</check_hash>
-			<server>www.genericproxy.org/releases</server>
+			<server>195.169.84.60/releases</server>
 		</update>
 
 		<hostname>GenericProxy</hostname>
@@ -19,10 +19,10 @@
 		<!-- 
 		group= OP|ROOT|USR -->
 		<users>
-			<user name="admin" password="$1$ukIQJrl6$Lsc1JP5RfQKw6wyl1coJv1" uid="1001" group="ROOT" />
-			<user name="wleiden" uid="1002" password="" group="SOP" />
-			<user name="bob" uid="1003" password="" group="USR" />
-			<default-user name="admin" password="$1$jywX2i/e$cpWMnU86R0pTl/V6WJvcM." group="ROOT" />
+			<user name="admin" password="$1$sP/CnCyw$dO4om5apZe048GOz/QloG0" uid="1001" group="ROOT" />
+			<user name="wleiden" uid="1002" password="$1$sP/CnCyw$dO4om5apZe048GOz/QloG0" group="SOP" />
+			<user name="bob" uid="1003" password="$1$sP/CnCyw$dO4om5apZe048GOz/QloG0" group="USR" />
+			<default-user name="admin" password="$1$sP/CnCyw$dO4om5apZe048GOz/QloG0" group="ROOT" />
 		</users>
 
 		<ntp cronid="">
@@ -834,10 +834,10 @@
 	</ipsec>
 
 	<proxy enable="true">
-		<port>8888</port>
+		<port>3128</port>
 		<allow_from>
-			<ip>172.0.0.0</ip>
-			<subnet>8</subnet>
+			<ip>172.16.0.0</ip>
+			<subnet>12</subnet>
 		</allow_from>
 		<proxyname>GenericProxy Alpha</proxyname>
 		<maxclients>10</maxclients>
