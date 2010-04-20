@@ -32,7 +32,12 @@
                     <input name="<?=$this->ipconfig_id?>_static_ipaddr" type="text" size="12" id="<?=$this->ipconfig_id?>_static_ipaddr" />
                 </dd>
 
-                <dt><label for="<?=$this->ipconfig_id?>_static_gateway">IP address gateway</label></dt>
+                <dt><label for="<?=$this->ipconfig_id?>_static_subnetmask">Subnet mask</label></dt>
+                <dd>
+                    <input name="<?=$this->ipconfig_id?>_static_subnetmask" type="text" size="12" id="<?=$this->ipconfig_id?>_static_subnetmask" />
+                </dd>
+
+                <dt><label for="<?=$this->ipconfig_id?>_static_gateway">Default gateway</label></dt>
                 <dd>
                     <input name="<?=$this->ipconfig_id?>_static_gateway" type="text" size="12" id="<?=$this->ipconfig_id?>_static_gateway" />
                 </dd>
@@ -58,6 +63,7 @@
     <div class="help" id="help_<?=$this->ipconfig_id?>_mac">This field can be used to modify (spoof) the MAC address of the WAN interface (may be required with some cable connections) Enter a MAC address in the following format: xx:xx:xx:xx:xx:xx or leave blank</div>
     <div class="help" id="help_<?=$this->ipconfig_id?>_mtu">Maximum transmission unit. Leave blank for default</div>
     <div class="help" id="help_<?=$this->ipconfig_id?>_type">Choose the type of IP configuration you want to use</div>
+    <div class="help" id="help_<?=$this->ipconfig_id?>_static_subnetmask">Enter the subnet mask of the interface in the following format: xxx.xxx.xxx.xxx</div>
     <div class="help" id="help_<?=$this->ipconfig_id?>_static_ipaddr">Enter the IP address of the interface in the following format: xxx.xxx.xxx.xxx</div>
     <div class="help" id="help_<?=$this->ipconfig_id?>_static_gateway">Enter the IP address of the default gateway in the following format: xxx.xxx.xxx.xxx</div>
     <div class="help" id="help_<?=$this->ipconfig_id?>_dhcp_hostname">The value in this field is sent as the DHCP client identifier and hostname when requesting a DHCP lease. Some ISPs may require this (for client identification).</div>
