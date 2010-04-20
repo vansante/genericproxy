@@ -36,6 +36,7 @@
             $('#<?=$this->ipconfig_id?>_subform_static input').removeAttr('disabled');
             $('#<?=$this->ipconfig_id?>_type_static').attr('checked', 'checked');
             $('#<?=$this->ipconfig_id?>_static_ipaddr').val(data.ipaddr);
+            $('#<?=$this->ipconfig_id?>_static_subnetmask').val(data.subnet);
             $('#<?=$this->ipconfig_id?>_static_gateway').val(data.gateway);
         }
     };
