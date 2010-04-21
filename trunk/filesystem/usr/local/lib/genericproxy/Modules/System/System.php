@@ -342,7 +342,7 @@ class System implements Plugin {
 	 * @throws Exception
 	 */
 	private function resetToDefaults() {
-		if (file_exists ( '/etc/GenericProxy/default.config.xml' )) {
+		if (file_exists ( '/etc/GenericProxy/default-config.xml' )) {
 			Functions::mountFilesystem ( 'mount' );
 			Functions::shellCommand ( 'cp /etc/GenericProxy/default.config.xml /cfg/GenericProxy/config.xml' );
 			Functions::mountFilesystem ( 'unmount' );

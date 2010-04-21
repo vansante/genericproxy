@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <config version="0.9" lastchange="">
 	<system>
-		<optimization>normal</optimization>
+		<update>
+			<check_signature>false</check_signature>
+			<check_hash>true</check_hash>
+			<server>195.169.84.60/releases</server>
+		</update>
 
 		<hostname>GenericProxy</hostname>
 		<domain>local</domain>
@@ -15,28 +19,21 @@
 		<!-- 
 		group= OP|ROOT|USR -->
 		<users>
-			<user name="admin" password="$1$ukIQJrl6$Lsc1JP5RfQKw6wyl1coJv1" group="ROOT" />
-			<default-user name="admin" password="$1$jywX2i/e$cpWMnU86R0pTl/V6WJvcM." group="ROOT" />
+			<user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" uid="1001" group="ROOT" />
+			<user name="wleiden" uid="1002" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="SOP" />
+			<user name="bob" uid="1003" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="USR" />
+			<default-user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="ROOT" />
 		</users>
 
-		<!--
-			<username>admin</username>
-			<password>$1$dSJImFph$GvZ7.1UbuWu.Yb8etC0re.</password>
-			<default-username>admin</default-username>
-			<default-password>blaat</default-password>
-		-->
-
-		<timezone>ETC/GMT+1</timezone>
-		<time-update-interval>300</time-update-interval>
-		<!--
-			Values: -1 does not update time. 0 only updates at boot. > 0 updates using
-			the interval and at boot
-		-->
-		<timeservers>0.pfsense.pool.ntp.org</timeservers>
-
-		<consolemenu>enabled</consolemenu>
-		<firmwarecheck>disabled</firmwarecheck>
-		<harddiskstandby>100</harddiskstandby>
+		<ntp cronid="">
+			<timeservers>0.pfsense.pool.ntp.org</timeservers>
+			<timezone>ETC/GMT+1</timezone>
+			<!--
+				Values: -1 does not update time. 0 only updates at boot. > 0 updates using
+				the interval and at boot
+			-->
+			<time-update-interval>300</time-update-interval>
+		</ntp>
 
 		<!-- Commands to be executed before plugins are loaded -->
 		<earlyshellcmd>
@@ -86,7 +83,9 @@
 			can_uninstall="true" />
 		<plugin name="DnsForward" startup_order="41" enabled="true"
 			can_uninstall="true" />
-
+		<plugin name="MaraDNS" startup_order="42" enabled="true" 
+			can_uninstall="true"/>
+		
 		<plugin name="Firewall" startup_order="50" enabled="true"
 			can_uninstall="true" />
 
@@ -102,19 +101,23 @@
 			can_uninstall="true" />
 		<plugin name="Diagnostics" startup_order="99" enabled="true"
 			can_uninstall="true" />
+		<plugin name="Snmp" startup_order="100" enabled="true"
+			can_uninstall="true" />
+		<plugin name="Update" startup_order="999" enabled="true" 
+			can_uninstall="false" />
 		<plugin name="PluginManager" startup_order="1000" enabled="true"
 			can_uninstall="false" />
 	</modules>
 
 	<interfaces>
 		<interface type="Lan">
-			<if>sis1</if>
+			<if>sis0</if>
 			<ipaddr>10.0.1.1</ipaddr>
 			<subnet>255.255.255.0</subnet>
 			<mtu></mtu>
 		</interface>
 		<interface type="Wan">
-			<if>sis0</if>
+			<if>sis1</if>
 			<mtu></mtu>
 			<ipaddr>dhcp</ipaddr>
 			<mac></mac>
@@ -137,7 +140,7 @@
 			<blockpriv />
 			<blockbogons />
 			<disableftpproxy />
-			<dhcphostname></dhcphostname>
+			<dhcphostname>GPAlpha</dhcphostname>
 			<bandwidth>100</bandwidth>
 			<bandwidthtype>Mb</bandwidthtype>
 		</interface>
@@ -147,9 +150,9 @@
 		<route></route>
 	</staticroutes>
 
-	<dyndns enable="true">
+	<dyndns enable="false">
 		<client>
-			<type>dyndns</type>
+			<type></type>
 			<username></username>
 			<password></password>
 			<server></server>
@@ -175,53 +178,44 @@
 			<winsserver ip="10.0.1.1" />
 			<winsserver ip="10.0.1.2" />
 		</winsservers>
-		<!-- <next-server filename=""></next-server>-->
 
 		<staticmaps>
 			<!--
-				<map id="1" mac="xx:xx:xx:xx:xx:xx" hostname="fido.genericproxy"
-				ipaddr="xxx.xxx.xxx.xxx"> <description>Blat</description> </map>
+				<map id="" mac="" hostname="" ipaddr=""><description></description></map>
 			-->
 		</staticmaps>
 	</dhcpd>
 
-	<dnsmasq enable="true" regdhcp='true'>
+	<dnsmasq enable="false" regdhcp="true">
 		<hosts>
-			<host id="1244" name="localtest.blat">
-				<domain>blat.com</domain>
-				<ip>192.168.2.2</ip>
-				<description>Test!</description>
+			<!--
+			<host id="" name="">
+				<domain></domain>
+				<ip></ip>
+				<description></description>
 			</host>
+			-->
 		</hosts>
 		<overrides>
-			<override id="13459">
-				<domain>www.idiot.com</domain>
-				<ip>127.0.0.1</ip>
-				<description>bleh</description>
+			<!--
+			<override id="">
+				<domain></domain>
+				<ip></ip>
+				<description></description>
 			</override>
+			-->
 		</overrides>
 	</dnsmasq>
 
 	<ssh enable="true">
 		<port>22</port>
 		<login>password</login>
-		<authorizedKey></authorizedKey>
+		<authorizedkey></authorizedkey>
 	</ssh>
-
-	<snmpd enable="true">
-		<syslocation></syslocation>
-		<syscontact></syscontact>
-		<rocommunity>public</rocommunity>
-	</snmpd>
 
 	<nat>
 		<natreflection>enabled</natreflection>
 		<reflectiontimeout>0</reflectiontimeout>
-		<ipsecpassthru>enabled</ipsecpassthru>
-		<!--
-			Why is this here? This is a change in the IPSEC kernel module... we
-			have no nat service to enforce this on?
-		-->
 
 		<inbound>
 			<!-- <rule id="">
@@ -236,33 +230,35 @@
 		</inbound>
 
 		<onetoone>
-			<!-- <rule id="1468">
-				<interface>Lan</interface>
-				<external>195.169.160.2</external>
-				<subnet>32</subnet>
-				<internal>192.168.2.1</internal>
-				<description>nonsensical test row</description>
+			<!-- <rule id="">
+				<interface></interface>
+				<external></external>
+				<subnet></subnet>
+				<internal></internal>
+				<description></description>
 			</rule> -->
 		</onetoone>
 
 		<advancedoutbound enable="false">
-			<rule nonat="false" id="1225">
+			<!--
+			<rule nonat="false" id="">
 				<interface>Ext</interface>
 				<source>
-					<address>192.168.2.24</address>
-					<subnet>24</subnet>
-					<port>250</port>
+					<address></address>
+					<subnet></subnet>
+					<port></port>
 				</source>
 				<destination>
-					<address>195.169.160.2</address>
-					<subnet>24</subnet>
-					<port>255</port>
+					<address></address>
+					<subnet></subnet>
+					<port></port>
 				</destination>
-				<natport>17000</natport>
-				<staticnatport>15</staticnatport>
-				<target>127.0.0.1</target>
-				<description>Test row, nonsensical data</description>
+				<natport></natport>
+				<staticnatport></staticnatport>
+				<target></target>
+				<description></description>
 			</rule>
+			-->
 		</advancedoutbound>
 	</nat>
 
@@ -270,32 +266,34 @@
 		<module name="Nat" call="enabled" category="nat" />
 		<module name="Shaper" call="disabled" category="altq" />
 
-		<maximumStates>300</maximumStates>
+		<maximumstates>300</maximumstates>
 		<optimization>normal</optimization>
-		<rule order="0" enable="true" addedBy="user">
-			<action>pass</action>
-			<direction>in</direction>
-			<protocol>tcp</protocol>
-			<icmptype>any</icmptype>
-			<description>Default LAN -&gt; any</description>
-			<interface>Lan</interface>
+		
+		<!--
+		<rule order="0" enable="false" addedBy="">
+			<action></action>
+			<direction></direction>
+			<protocol></protocol>
+			<icmptype></icmptype>
+			<description></description>
+			<interface></interface>
 			<source>
-				<type invert="true">Lan</type>
-				<port>22:25</port>
-				<address>192.168.19.2</address>
-				<network>lan</network>
+				<type invert="false"></type>
+				<port></port>
+				<address></address>
 			</source>
 			<destination>
-				<type invert="true">Lan</type>
-				<port>25</port>
-				<address>192.168.19.2</address>
+				<type invert="false"></type>
+				<port></port>
+				<address></address>
 			</destination>
-			<fragments>enabled</fragments>
-			<log>enabled</log>
+			<fragments></fragments>
+			<log></log>
 		</rule>
+		-->
 	</firewall>
 
-	<scheduler>
+	<scheduler enable="true">
 		<maxupspeed>50</maxupspeed>
 		<maxdownspeed>500</maxdownspeed>
 
@@ -312,191 +310,201 @@
 
 			<days>
 				<day day_id="0">
-					<block start="0" config="2" />
-					<block start="13" config="2" />
-					<block start="15" config="2" />
-					<block start="17" config="2" />
-					<block start="20" config="2" />
+					<block start="0" config="2"/>
+					<block start="1" config="1"/>
+					<block start="7" config="2"/>
+					<block start="10" config="1"/>
+					<block start="16" config="2"/>
+					<block start="19" config="0"/>
+					<block start="23" config="2"/>
 				</day>
 				<day day_id="1">
-					<block start="0" config="0" />
-					<block start="13" config="0" />
-					<block start="15" config="0" />
-					<block start="17" config="0" />
-					<block start="20" config="0" />
+					<block start="0" config="2"/>
+					<block start="1" config="1"/>
+					<block start="7" config="2"/>
+					<block start="10" config="1"/>
+					<block start="16" config="2"/>
+					<block start="19" config="0"/>
+					<block start="23" config="2"/>
 				</day>
 				<day day_id="2">
-					<block start="0" config="1" />
-					<block start="13" config="1" />
-					<block start="15" config="1" />
-					<block start="17" config="1" />
-					<block start="20" config="1" />
+					<block start="0" config="2"/>
+					<block start="1" config="1"/>
+					<block start="7" config="2"/>
+					<block start="10" config="1"/>
+					<block start="16" config="2"/>
+					<block start="19" config="0"/>
+					<block start="23" config="2"/>
 				</day>
 				<day day_id="3">
-					<block start="0" config="2" />
-					<block start="13" config="2" />
-					<block start="15" config="2" />
-					<block start="17" config="2" />
-					<block start="20" config="2" />
+					<block start="0" config="2"/>
+					<block start="1" config="1"/>
+					<block start="7" config="2"/>
+					<block start="10" config="1"/>
+					<block start="16" config="2"/>
+					<block start="19" config="0"/>
+					<block start="23" config="2"/>
 				</day>
 				<day day_id="4">
-					<block start="0" config="0" />
-					<block start="13" config="0" />
-					<block start="15" config="0" />
-					<block start="17" config="0" />
-					<block start="20" config="0" />
+					<block start="0" config="2"/>
+					<block start="1" config="1"/>
+					<block start="7" config="2"/>
+					<block start="10" config="1"/>
+					<block start="16" config="2"/>
+					<block start="19" config="0"/>
+					<block start="23" config="2"/>
 				</day>
 				<day day_id="5">
-					<block start="0" config="1" />
-					<block start="13" config="1" />
-					<block start="15" config="1" />
-					<block start="17" config="1" />
-					<block start="20" config="1" />
+					<block start="0" config="2"/>
+					<block start="1" config="1"/>
+					<block start="9" config="2"/>
+					<block start="19" config="0"/>
+					<block start="23" config="2"/>
 				</day>
 				<day day_id="6">
-					<block start="0" config="2" />
-					<block start="13" config="2" />
-					<block start="15" config="2" />
-					<block start="17" config="2" />
-					<block start="20" config="2" />
+					<block start="0" config="2"/>
+					<block start="1" config="1"/>
+					<block start="9" config="2"/>
+					<block start="19" config="0"/>
+					<block start="23" config="2"/>
 				</day>
 			</days>
 		</schedule>
-		
-		<userdefined name="blaat">
+
+		<predefined name="Default config">
 			<day id="0">
-				<h0>0</h0>
-				<h1>0</h1>
+				<h0>2</h0>
+				<h1>2</h1>
 				<h2>1</h2>
-				<h3>0</h3>
-				<h4>0</h4>
+				<h3>1</h3>
+				<h4>1</h4>
 				<h5>1</h5>
-				<h6>0</h6>
-				<h7>0</h7>
-				<h8>1</h8>
-				<h9>1</h9>
-				<h10>1</h10>
-				<h11>0</h11>
-				<h12>0</h12>
+				<h6>1</h6>
+				<h7>1</h7>
+				<h8>2</h8>
+				<h9>2</h9>
+				<h10>2</h10>
+				<h11>1</h11>
+				<h12>1</h12>
 				<h13>1</h13>
-				<h14>0</h14>
-				<h15>0</h15>
+				<h14>1</h14>
+				<h15>1</h15>
 				<h16>1</h16>
-				<h17>1</h17>
-				<h18>1</h18>
-				<h19>1</h19>
-				<h20>1</h20>
-				<h21>1</h21>
-				<h22>1</h22>
-				<h23>1</h23>
+				<h17>2</h17>
+				<h18>2</h18>
+				<h19>2</h19>
+				<h20>0</h20>
+				<h21>0</h21>
+				<h22>0</h22>
+				<h23>0</h23>
 			</day>
 			<day id="1">
-				<h0>1</h0>
-				<h1>1</h1>
+				<h0>2</h0>
+				<h1>2</h1>
 				<h2>1</h2>
 				<h3>1</h3>
 				<h4>1</h4>
 				<h5>1</h5>
 				<h6>1</h6>
 				<h7>1</h7>
-				<h8>1</h8>
-				<h9>1</h9>
-				<h10>1</h10>
+				<h8>2</h8>
+				<h9>2</h9>
+				<h10>2</h10>
 				<h11>1</h11>
 				<h12>1</h12>
 				<h13>1</h13>
 				<h14>1</h14>
 				<h15>1</h15>
 				<h16>1</h16>
-				<h17>1</h17>
-				<h18>1</h18>
-				<h19>1</h19>
-				<h20>1</h20>
-				<h21>1</h21>
-				<h22>1</h22>
-				<h23>1</h23>
+				<h17>2</h17>
+				<h18>2</h18>
+				<h19>2</h19>
+				<h20>0</h20>
+				<h21>0</h21>
+				<h22>0</h22>
+				<h23>0</h23>
 			</day>
 			<day id="2">
-				<h0>1</h0>
-				<h1>1</h1>
+				<h0>2</h0>
+				<h1>2</h1>
 				<h2>1</h2>
 				<h3>1</h3>
 				<h4>1</h4>
 				<h5>1</h5>
 				<h6>1</h6>
 				<h7>1</h7>
-				<h8>1</h8>
-				<h9>1</h9>
-				<h10>1</h10>
+				<h8>2</h8>
+				<h9>2</h9>
+				<h10>2</h10>
 				<h11>1</h11>
 				<h12>1</h12>
 				<h13>1</h13>
 				<h14>1</h14>
 				<h15>1</h15>
 				<h16>1</h16>
-				<h17>1</h17>
-				<h18>1</h18>
-				<h19>1</h19>
-				<h20>1</h20>
-				<h21>1</h21>
-				<h22>1</h22>
-				<h23>1</h23>
+				<h17>2</h17>
+				<h18>2</h18>
+				<h19>2</h19>
+				<h20>0</h20>
+				<h21>0</h21>
+				<h22>0</h22>
+				<h23>0</h23>
 			</day>
 			<day id="3">
-				<h0>1</h0>
-				<h1>1</h1>
+				<h0>2</h0>
+				<h1>2</h1>
 				<h2>1</h2>
 				<h3>1</h3>
 				<h4>1</h4>
 				<h5>1</h5>
 				<h6>1</h6>
 				<h7>1</h7>
-				<h8>1</h8>
-				<h9>1</h9>
-				<h10>1</h10>
+				<h8>2</h8>
+				<h9>2</h9>
+				<h10>2</h10>
 				<h11>1</h11>
 				<h12>1</h12>
 				<h13>1</h13>
 				<h14>1</h14>
 				<h15>1</h15>
 				<h16>1</h16>
-				<h17>1</h17>
-				<h18>1</h18>
-				<h19>1</h19>
-				<h20>1</h20>
-				<h21>1</h21>
-				<h22>1</h22>
-				<h23>1</h23>
+				<h17>2</h17>
+				<h18>2</h18>
+				<h19>2</h19>
+				<h20>0</h20>
+				<h21>0</h21>
+				<h22>0</h22>
+				<h23>0</h23>
 			</day>
 			<day id="4">
-				<h0>0</h0>
-				<h1>0</h1>
-				<h2>0</h2>
-				<h3>0</h3>
-				<h4>0</h4>
-				<h5>0</h5>
-				<h6>0</h6>
-				<h7>0</h7>
-				<h8>0</h8>
-				<h9>0</h9>
-				<h10>0</h10>
-				<h11>0</h11>
-				<h12>0</h12>
-				<h13>0</h13>
-				<h14>0</h14>
-				<h15>0</h15>
-				<h16>0</h16>
-				<h17>0</h17>
-				<h18>0</h18>
-				<h19>0</h19>
+				<h0>2</h0>
+				<h1>2</h1>
+				<h2>1</h2>
+				<h3>1</h3>
+				<h4>1</h4>
+				<h5>1</h5>
+				<h6>1</h6>
+				<h7>1</h7>
+				<h8>2</h8>
+				<h9>2</h9>
+				<h10>2</h10>
+				<h11>1</h11>
+				<h12>1</h12>
+				<h13>1</h13>
+				<h14>1</h14>
+				<h15>1</h15>
+				<h16>1</h16>
+				<h17>2</h17>
+				<h18>2</h18>
+				<h19>2</h19>
 				<h20>0</h20>
 				<h21>0</h21>
 				<h22>0</h22>
 				<h23>0</h23>
 			</day>
 			<day id="5">
-				<h0>1</h0>
-				<h1>1</h1>
+				<h0>2</h0>
+				<h1>2</h1>
 				<h2>1</h2>
 				<h3>1</h3>
 				<h4>1</h4>
@@ -505,24 +513,24 @@
 				<h7>1</h7>
 				<h8>1</h8>
 				<h9>1</h9>
-				<h10>1</h10>
-				<h11>1</h11>
-				<h12>1</h12>
-				<h13>1</h13>
-				<h14>1</h14>
-				<h15>1</h15>
-				<h16>1</h16>
-				<h17>1</h17>
-				<h18>1</h18>
-				<h19>1</h19>
-				<h20>1</h20>
-				<h21>1</h21>
-				<h22>1</h22>
-				<h23>1</h23>
+				<h10>2</h10>
+				<h11>2</h11>
+				<h12>2</h12>
+				<h13>2</h13>
+				<h14>2</h14>
+				<h15>2</h15>
+				<h16>2</h16>
+				<h17>2</h17>
+				<h18>2</h18>
+				<h19>2</h19>
+				<h20>0</h20>
+				<h21>0</h21>
+				<h22>0</h22>
+				<h23>0</h23>
 			</day>
 			<day id="6">
-				<h0>1</h0>
-				<h1>1</h1>
+				<h0>2</h0>
+				<h1>2</h1>
 				<h2>1</h2>
 				<h3>1</h3>
 				<h4>1</h4>
@@ -531,24 +539,23 @@
 				<h7>1</h7>
 				<h8>1</h8>
 				<h9>1</h9>
-				<h10>1</h10>
-				<h11>1</h11>
-				<h12>1</h12>
-				<h13>1</h13>
-				<h14>1</h14>
-				<h15>1</h15>
-				<h16>1</h16>
-				<h17>1</h17>
-				<h18>1</h18>
-				<h19>1</h19>
-				<h20>1</h20>
-				<h21>1</h21>
-				<h22>1</h22>
-				<h23>1</h23>
+				<h10>2</h10>
+				<h11>2</h11>
+				<h12>2</h12>
+				<h13>2</h13>
+				<h14>2</h14>
+				<h15>2</h15>
+				<h16>2</h16>
+				<h17>2</h17>
+				<h18>2</h18>
+				<h19>2</h19>
+				<h20>0</h20>
+				<h21>0</h21>
+				<h22>0</h22>
+				<h23>0</h23>
 			</day>
-		</userdefined>
-
-		<predefined name="vacation mode">
+		</predefined>
+		<predefined name="Vacation mode">
 			<day id="0">
 				<h0>1</h0>
 				<h1>1</h1>
@@ -654,30 +661,30 @@
 				<h23>1</h23>
 			</day>
 			<day id="4">
-				<h0>0</h0>
-				<h1>0</h1>
-				<h2>0</h2>
-				<h3>0</h3>
-				<h4>0</h4>
-				<h5>0</h5>
-				<h6>0</h6>
-				<h7>0</h7>
-				<h8>0</h8>
-				<h9>0</h9>
-				<h10>0</h10>
-				<h11>0</h11>
-				<h12>0</h12>
-				<h13>0</h13>
-				<h14>0</h14>
-				<h15>0</h15>
-				<h16>0</h16>
-				<h17>0</h17>
-				<h18>0</h18>
-				<h19>0</h19>
-				<h20>0</h20>
-				<h21>0</h21>
-				<h22>0</h22>
-				<h23>0</h23>
+				<h0>1</h0>
+				<h1>1</h1>
+				<h2>1</h2>
+				<h3>1</h3>
+				<h4>1</h4>
+				<h5>1</h5>
+				<h6>1</h6>
+				<h7>1</h7>
+				<h8>1</h8>
+				<h9>1</h9>
+				<h10>1</h10>
+				<h11>1</h11>
+				<h12>1</h12>
+				<h13>1</h13>
+				<h14>1</h14>
+				<h15>1</h15>
+				<h16>1</h16>
+				<h17>1</h17>
+				<h18>1</h18>
+				<h19>1</h19>
+				<h20>1</h20>
+				<h21>1</h21>
+				<h22>1</h22>
+				<h23>1</h23>
 			</day>
 			<day id="5">
 				<h0>1</h0>
@@ -732,7 +739,6 @@
 				<h23>1</h23>
 			</day>
 		</predefined>
-
 	</scheduler>
 
 	<shaper enable="true">
@@ -827,26 +833,21 @@
 		</keys>
 	</ipsec>
 
-	<proxy>
-		<port>8888</port>
-		<rule id="0">
-			<protocol>SSL</protocol>
-			<port>443</port>
-		</rule>
-		<rule id="1">
-			<protocol>SSL</protocol>
-			<port>563</port>
-		</rule>
+	<proxy enable="true">
+		<port>3128</port>
+		<allow_from>
+			<ip>172.16.0.0</ip>
+			<subnet>12</subnet>
+		</allow_from>
+		<proxyname>GenericProxy Alpha</proxyname>
+		<maxclients>10</maxclients>
+		<timeout>600</timeout>
+		
+		<ports>
+			<port id="443" />
+			<port id="563" />
+		</ports>
 	</proxy>
-
-	<!-- Possibly remove -->
-	<wol>
-		<wolentry>
-			<interface>lan|opt[n]</interface>
-			<mac>xx:xx:xx:xx:xx:xx</mac>
-			<descr></descr>
-		</wolentry>
-	</wol>
 
 	<!-- See cron on making cron jobs. -->
 	<cron>
@@ -868,14 +869,11 @@
 			<who>root</who>
 			<command>/usr/libexec/atrun</command>
 		</item>
-	</cron>
-	
-	<snmp>
-		<location>SomewhereOverTheRainbow</location>
-		<contact>bob@nondescript.ufo</contact>
-		<rocommunity>private</rocommunity>
-		<rwcommunity>public</rwcommunity>
-		<master>yes</master>
-	</snmp>
-	
+	</cron>	
+
+	<maradns enable="true">
+		<cron_id></cron_id>
+		<server>195.169.86.131</server>
+		<zone>wleiden.net</zone>
+	</maradns>
 </config>
