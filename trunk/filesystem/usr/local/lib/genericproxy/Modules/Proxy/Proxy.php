@@ -207,6 +207,7 @@ Timeout 600
 # but not both.
 # Logfile "/var/log/tinyproxy.log" OR Syslog On
 #LogLevel Warning
+Logfile "/var/log/tinyproxy.log"
 
 # Include the X-Tinyproxy header, which has the client's IP address when
 # connecting to the sites listed.
