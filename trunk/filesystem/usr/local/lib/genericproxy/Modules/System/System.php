@@ -175,6 +175,7 @@ class System implements Plugin {
 				$cmd = 'pw useradd -n '.(string)$user->name.' -g '.$group.' -s /bin/csh -d /nonexistent -H 0 2>&1';
 				$fd = popen($cmd,"w");
 				fwrite($fd,$user->password);
+				pclose($fd);
 			}	
 		}
 	}
