@@ -172,7 +172,8 @@ class System implements Plugin {
 				 *	pre-encrypted password to the shell stream to set it.
 				 *	Security measures and all that, see man pw(8) for details
 				 */
-				$cmd = 'pw useradd -n '.(string)$user->name.' -g '.$group.' -s /bin/csh -d /nonexistent -H 0 2>&1';
+				$cmd = 'pw useradd -n '.(string)$user->name.' -g '.$group.' -s /bin/csh -d /nonexistent -H 0 2>&/dev/null';
+				Logger::getRootLogger()->debug('Running: '.$cmd);
 				$fd = popen($cmd,"w");
 				fwrite($fd,$user->password);
 				pclose($fd);
