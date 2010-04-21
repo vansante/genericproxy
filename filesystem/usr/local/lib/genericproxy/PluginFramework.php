@@ -163,7 +163,7 @@ class PluginFramework {
 	 * 
 	 * @var String
 	 */
-	const VERSION = '0.8.8';
+	const VERSION = '0.8.9';
 	
 	/**
 	 * This class is the start of the application.
