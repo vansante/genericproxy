@@ -137,8 +137,7 @@ class Dhcpd implements Plugin {
 	 * @return bool false when service failed to start
 	 */
 	public function start() {
-		$pid = file_exists ( (string)$this->data->chroot_path.self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . (string)$this->data->chroot_path.self::PID_PATH ) : 0;
-		if ($pid > 0) {
+		if ($this->getStatus == 'Started') {
 			Logger::getRootLogger ()->info ( 'DHCPD was already running' );
 			return true;
 		}
@@ -208,8 +207,8 @@ class Dhcpd implements Plugin {
 	 */
 	public function stop() {
 		Logger::getRootLogger ()->info ( "Stopping DHCPD" );
-		$pid = file_exists ( (string)$this->data->chroot_path.self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . (string)$this->data->chroot_path.self::PID_PATH ) : 0;
-		if ($pid > 0) {
+		$pid = Functions::shellCommand('pgrep dhcpd');
+		if ($this->getStatus() == 'Started') {
 			Functions::shellCommand ( "/bin/kill {$pid}" );
 		}
 	}
