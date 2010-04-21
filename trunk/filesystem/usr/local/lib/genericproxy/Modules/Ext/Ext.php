@@ -330,6 +330,7 @@ class Ext extends Interfaces {
 			$this->logger->info ( 'Initializing EXT[' . ($i + 1) . '] interface' );
 			$this->configure ( $i + 1 );
 			$this->start ( $i + 1 );
+			$i++;
 		}
 	}
 	

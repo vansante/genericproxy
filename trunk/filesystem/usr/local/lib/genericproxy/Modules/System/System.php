@@ -136,6 +136,9 @@ class System implements Plugin {
 	public function configure() {
 		$this->configure_ntp_client ();
 		$this->configure_users();
+		
+		//	Sync the password database?
+		Functions::shellCommand('/usr/sbin/pwd_mkdb -d /etc/ /etc/master.passwd');
 	}
 	
 	/**
@@ -157,7 +160,22 @@ class System implements Plugin {
 	 */
 	private function configure_users(){
 		foreach($this->data->users->user as $user){
-			//Functions::shellCommand('pw -n '.(string)$user->name.' ');	
+			if($user->name != 'root'){
+				if($user->group == 'ROOT'){
+					$group = 'wheel';
+				}
+				else{
+					$group = 'nobody';
+				}
+				/*
+				 *	Use popen directly instead of Functions::shellCommand because we need to write the
+				 *	pre-encrypted password to the shell stream to set it.
+				 *	Security measures and all that, see man pw(8) for details
+				 */
+				$cmd = 'pw useradd -n '.(string)$user->name.' -g '.$group.' -s /bin/csh -d /nonexistent -H 0 2>&1';
+				$fd = popen($cmd,"w");
+				fwrite($fd,$user->password);
+			}	
 		}
 	}
 	
