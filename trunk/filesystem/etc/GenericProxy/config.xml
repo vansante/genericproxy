@@ -19,9 +19,9 @@
 		<!-- 
 		group= OP|ROOT|USR -->
 		<users>
-			<user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" uid="1001" group="ROOT" />
-			<user name="wleiden" uid="1002" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="SOP" />
-			<user name="bob" uid="1003" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="USR" />
+			<user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="ROOT" />
+			<user name="wleiden" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="SOP" />
+			<user name="bob" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="USR" />
 			<default-user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="ROOT" />
 		</users>
 
