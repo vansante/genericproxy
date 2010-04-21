@@ -153,14 +153,12 @@ class System implements Plugin {
 	
 	/**
 	 * Set users in the master.passwd file so they can log in through SSH
+	 * @todo Finish
 	 */
 	private function configure_users(){
-		$fd = fopen('/etc/master.passwd','a');
 		foreach($this->data->users->user as $user){
-			$userString = (string)$user['name'].':'.(string)$user['password'].':'.(string)$user['uid'].':'.(string)$user['uid'].'::0:0:User &:/nonexistent:/bin/csh'."\n";
-			fwrite($fd,$userString);
+			//Functions::shellCommand('pw -n '.(string)$user->name.' ');	
 		}
-		fclose($fd);
 	}
 	
 	/**

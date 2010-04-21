@@ -325,11 +325,11 @@ class Ext extends Interfaces {
 	 * Initializes all interfaces during boot time
 	 */
 	public function runAtBoot() {
-		$i = 1;
-		while ( $i < count ( $this->data ) ) {
-			$this->logger->info ( 'Initializing EXT[' . $i . '] interface' );
-			$this->configure ( $i );
-			$this->start ( $i );
+		$i = 0;
+		while ( $i < (count ( $this->data )) ) {
+			$this->logger->info ( 'Initializing EXT[' . ($i + 1) . '] interface' );
+			$this->configure ( $i + 1 );
+			$this->start ( $i + 1 );
 		}
 	}
 	
