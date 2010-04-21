@@ -190,7 +190,7 @@ class System implements Plugin {
 				case 'reset':
 					$this->resetToDefaults();
 					break;
-				case 'getservicestatus':
+				case 'getservicesstatus':
 					$this->getServiceStatus();
 					break;
 				case 'getstatus':
@@ -277,11 +277,11 @@ class System implements Plugin {
 		$buffer .= '<name>' . ( string ) $this->data->hostname . '</name>';
 		$buffer .= '<version>' . PluginFramework::VERSION . '</version>';
 
-                $buffer .= '<uptime>' . Functions::getUptime() . '</uptime>';
+        $buffer .= '<uptime>' . Functions::getUptime() . '</uptime>';
 
 		//	Get processor
-                $data = Functions::shellCommand ( 'uptime' );
-                $data = explode ( ',', $data );
+        $data = Functions::shellCommand ( 'uptime' );
+        $data = explode ( ',', $data );
 		$cpu = str_replace ( ' Load averages: ', $data [3] );
 		$cpu = explode ( ',', $cpu );
 		
@@ -403,7 +403,7 @@ class System implements Plugin {
 				foreach ( $this->data->users->user as $user ) {
 					if (strtolower ( $user ['name'] ) == strtolower ( $_POST ['system_genset_username'] )) {
 						//		Check if we have the rights to edit this user (ROOT can overwrite passwords for recovery purposes)
-						if (strtolower ( $_POST ['system_genset_username'] ) == ($this->data->user->name) || $this->data->user->group == 'ROOT') {
+						if (strtolower ( $_POST ['system_genset_username'] ) == ($user->name) || $_SESSION['group'] == 'ROOT') {
 							$user ['password'] = crypt ( $_POST ['system_genset_password1'] );
 							break;
 						} else {
