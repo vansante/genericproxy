@@ -442,9 +442,9 @@ class Scheduler implements Plugin,GeneratesRules {
 	 * @return String
 	 */
 	public function generateQueues() {
-		$subs = null;
+		$pipes = null;
 		
-		foreach ( $this->data->rootqueue as $queue ) {
+		foreach ( $this->shaper_data->rootqueue as $queue ) {
 			//	altq on {interface} bandwidth {bandwidth} queue {subqueue,subqueue}
 			foreach ( $queue->subqueue as $pipes ) {
 				// queue {name} bandwidth (bandwidth) priority (priority) cbq(borrow)
@@ -496,7 +496,7 @@ class Scheduler implements Plugin,GeneratesRules {
 	 * @return String
 	 */
 	private function generateFilterRules() {
-		foreach ( $this->data->rule as $rule ) {
+		foreach ( $this->shaper_data->rule as $rule ) {
 			//		Parse source
 			if (( string ) $rule->source ['invert'] == "true") {
 				$source .= 'not ';
@@ -516,7 +516,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				//		Destination is the lan subnet, so fetch it
 				$lanconfig = $this->config->getElement ( 'interfaces' );
 				foreach ( $lanconfig as $interface ) {
-					if (( string ) $interface->type == 'lan') {
+					if (( string ) $interface->type == 'Lan') {
 						$subnet = ( string ) $interface->subnet;
 						$ip = ( string ) $interface->ipaddr;
 						

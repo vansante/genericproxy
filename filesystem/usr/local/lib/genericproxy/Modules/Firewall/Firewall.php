@@ -186,6 +186,10 @@ class Firewall implements Plugin {
 				case 'swaprule':
 					$this->swapRules();
 					break;
+				case 'reloadrules':
+					$this->configure();
+					echo '<reply action="ok" />';
+					break;
 				default:
 					throw new Exception('Invalid page request');
 			}
