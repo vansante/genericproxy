@@ -379,6 +379,51 @@ class Scheduler implements Plugin,GeneratesRules {
 		return $return;
 	}
 	
+	private function getBandwidth($type){
+		//	Get current time
+		$day = date('N');
+		$hour = date('G');
+		
+		//	Loop over blocks until you find the current active one
+		foreach($this->scheduler_data->schedule->days as $day){
+			if($day['day_id'] == $day){
+				foreach($day->block as $block){
+					if($block['start'] <= $hour){
+						$bandwidth_setting = $block['config'];
+						break;
+					}
+				}
+				break;
+			}
+		}
+		
+		if($type == 'up' || $type == 'down'){
+			switch($bandwidth_setting){
+				case '0':
+					return 0;
+				case '1':
+					if($type == 'up'){
+						return $this->scheduler_data->schedule->optional->upspeed;	
+					}
+					elseif($type == 'down'){
+						return $this->scheduler_data->schedule->optional->downspeed;
+					}
+					break;
+				case '2':
+					if($type == 'up'){
+						return $this->scheduler_data->schedule->standard->upspeed;
+					}
+					elseif($type == 'down'){
+						return $this->scheduler_data->schedule->standard->downspeed;
+					}
+					break;
+			}
+		}
+		else{
+			return 0;
+		}
+	}
+	
 	/**
 	 * Generates altq rules 
 	 * 
@@ -389,14 +434,45 @@ class Scheduler implements Plugin,GeneratesRules {
 		$subs = null;
 		
 		foreach ( $this->data->rootqueue as $queue ) {
-			$subqueues = implode ( ',', $subs [$queue->name] );
 			//	altq on {interface} bandwidth {bandwidth} queue {subqueue,subqueue}
 			foreach ( $queue->subqueue as $pipes ) {
 				// queue {name} bandwidth (bandwidth) priority (priority) cbq(borrow)
-				$pipes .= "queue " . $pipes->name . " bandwidth " . $pipes->bandwidth . " priority " . $pipes->priority . " ".$pipes->queuetype."(borrow)\n";
-				$subqueues .= $pipes->name;
+				if(is_numeric($pipes->bandwidth)){
+					$bandwidth = $pipes->bandwidth;
+				}
+				elseif($pipes->bandwidth == 'schedule_up'){
+					$bandwidth = (string)$this->getBandwidth('up');
+				}
+				elseif($pipes->bandwidth == 'schedule_down'){
+					$bandwidth = (string)$this->getBandwidth('down');
+				}
+				
+				$pipes .= "queue " . $pipes->name . " bandwidth " . $bandwidth . "Kb priority " . $pipes->priority . " ".$pipes->queuetype."\n";
+				$subqueues[] = $pipes->name;
 			}
-			$queues .= "altq on " . $queue->interface . " bandwidth " . $queue->bandwidth . " queue {" . $subqueues . "}\n";
+			$subs = implode(',',$subqueues);
+			
+			if((string)$queue->interface == 'Wan' || (string)$queue->interface == 'Lan' || (string)$queue->interface == 'Ext'){
+				$plugin = $this->framework->getPlugin((string)$queue->interface);
+				if($plugin != null){
+					$interface = $plugin->getRealInterfaceName();
+				}
+			}
+			else{
+				Logger::getRootLogger()->error('Error parsing root queue, invalid interface: '.(string)$queue->interface);
+				
+			}
+			
+			if($queue->bandwidth == 'schedule_up'){
+				$root_bandwidth = (string)$this->scheduler_data->maxupspeed;
+
+			}
+			elseif($queue->bandwidth == 'schedule_down'){
+				$root_bandwidth = (string)$this->scheduler_data->maxdownspeed;
+				
+			}
+
+			$queues .= "altq on " . $interface . " bandwidth " . $root_bandwidth . " qlimit ". $queue->qlimit. " queue {" . $subs . "}\n";
 		}
 		
 		return $queues . $pipes;
