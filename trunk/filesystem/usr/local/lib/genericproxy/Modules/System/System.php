@@ -364,7 +364,6 @@ class System implements Plugin {
 			Functions::mountFilesystem ( 'mount' );
 			Functions::shellCommand ( 'cp /etc/GenericProxy/default.config.xml /cfg/GenericProxy/config.xml' );
 			Functions::mountFilesystem ( 'unmount' );
-			echo '<reply action="ok" />';
 			$this->reboot ();
 		} else {
 			throw new Exception ( 'The file containing the default configuration could not be loaded' );
