@@ -159,7 +159,19 @@ class Scheduler implements Plugin,GeneratesRules {
 	 * 	it has no services or configurations of it's own and only returns firewall rules
 	 */
 	public function getStatus() {}
-	public function runAtBoot() {}
+	
+	/**
+	 *	@access public
+	 */
+	public function runAtBoot() {
+		if((string)$this->scheduler_data['cron_id'] == ''){
+			$cron = $this->framework->getPlugin('Cron');			
+			$job = $cron->addJob('*','*/1','*','*','*','root','/usr/local/bin/genericproxy Firewall configure');
+			
+			$this->data->cron_id = (string)$job['id'];
+		}
+	}
+	
 	public function shutdown() {}
 	public function start() {}
 	public function stop() {}

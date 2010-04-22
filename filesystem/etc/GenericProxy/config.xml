@@ -293,7 +293,7 @@
 		-->
 	</firewall>
 
-	<scheduler enable="true">
+	<scheduler enable="true" cron_id="">
 		<maxupspeed>50</maxupspeed>
 		<maxdownspeed>500</maxdownspeed>
 
