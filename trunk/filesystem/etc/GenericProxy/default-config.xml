@@ -19,10 +19,10 @@
 		<!-- 
 		group= OP|ROOT|USR -->
 		<users>
-			<user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" uid="1001" group="ROOT" />
-			<user name="wleiden" uid="1002" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="SOP" />
-			<user name="bob" uid="1003" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="USR" />
-			<default-user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="ROOT" />
+			<user name="admin" password="$1$PaPyUOQY$DfluxPB6sJrqWbDp1lp/H." group="ROOT" />
+			<user name="wleiden" password="$1$PaPyUOQY$DfluxPB6sJrqWbDp1lp/H." group="SOP" />
+			<user name="bob" password="$1$PaPyUOQY$DfluxPB6sJrqWbDp1lp/H." group="USR" />
+			<default-user name="admin" password="$1$PaPyUOQY$DfluxPB6sJrqWbDp1lp/H." group="ROOT" />
 		</users>
 
 		<ntp cronid="">
@@ -293,7 +293,7 @@
 		-->
 	</firewall>
 
-	<scheduler enable="true">
+	<scheduler enable="true" cron_id="">
 		<maxupspeed>50</maxupspeed>
 		<maxdownspeed>500</maxdownspeed>
 
@@ -745,38 +745,60 @@
 		<rule enable="true">
 			<descr></descr>
 
-			<interface>lan</interface>
+			<interface>Ext</interface>
 			<protocol>tcp</protocol>
 			<direction>in</direction>
 
 			<source>
-				<type invert="true">lan</type>
-				<port></port>
+				<type invert="false">any</type>
+				<port>3128</port>
 			</source>
 			<destination invert="false">
-				<type invert="true">lan</type>
-				<port></port>
+				<type invert="false">any</type>
 			</destination>
 
 			<iptos></iptos>
 			<tcpflags></tcpflags>
-			<queue></queue>
+			<queue>upload</queue>
+		</rule>
+		<rule enable="true">
+			<descr></descr>
+
+			<interface>Ext</interface>
+			<protocol>tcp</protocol>
+			<direction>out</direction>
+
+			<source>
+				<type invert="false">any</type>
+			</source>
+			<destination invert="false">
+				<type invert="false">any</type>
+			</destination>
+
+			<iptos></iptos>
+			<tcpflags></tcpflags>
+			<queue>download</queue>
 		</rule>
 
-		<rootqueue id="">
-			<interface></interface>
-			<descr></descr>
-			<targetpipe></targetpipe>
-			<weight></weight>
-			<mask></mask>
-
-			<!--  Sub queues, aka pipes, where data actually gets queued -->
-			<subqueue id="">
-				<name></name>
-				<descr></descr>
-				<bandwidth></bandwidth>
-				<priority></priority>
-				<queuetype></queuetype>
+		<rootqueue id="0">
+			<interface>Ext</interface>
+			<descr>Root Queue</descr>
+			<bandwidth>schedule_up</bandwidth>
+			<qlimit>50</qlimit>
+			
+			<subqueue id="0">
+				<name>upload</name>
+				<descr>Wleiden upload limiter</descr>
+				<bandwidth>schedule_up</bandwidth>
+				<priority>1</priority>
+				<queuetype>cbq</queuetype>
+			</subqueue>
+			<subqueue id="1">
+				<name>download</name>
+				<descr>Wleiden download limiter</descr>
+				<bandwidth>schedule_down</bandwidth>
+				<priority>1</priority>
+				<queuetype>cbq</queuetype>
 			</subqueue>
 		</rootqueue>
 	</shaper>
