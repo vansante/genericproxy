@@ -25,6 +25,11 @@
                 <dd>
                     <input name="services_dnsserv_zone" type="text" size="20" id="services_dnsserv_zone" />
                 </dd>
+
+                <dt><label for="services_dnsserv_fetchzone">Fetch zone now</label></dt>
+                <dd>
+                    <a class="icon_add" href="#services_dnsserv" id="services_dnsserver_fetchzone">Fetch zone</a>
+                </dd>
             </dl>
         </dd>
 
@@ -35,10 +40,6 @@
 
     <p style="clear: both;"></p>
 </form>
-
-<p>
-    <br><a class="icon_add" href="#services_dnsserv" id="services_dnsserver_fetchzone">Fetch zone</a>
-</p>
 
 <div class="help_pool">
     
