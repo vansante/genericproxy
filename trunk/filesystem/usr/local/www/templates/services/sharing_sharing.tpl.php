@@ -107,7 +107,7 @@
         <dd>
             <select id="services_sharing_schedule_configs">
             </select>
-            <a class="icon_add" href="#services_sharing" id="services_sharing_save_config_link">Save</a>
+            <a class="icon_add" href="#services_sharing" id="services_sharing_save_config_link">Save schedule</a>
             <a class="icon_add" href="#services_sharing" id="services_sharing_delete_config_link">Delete</a>
         </dd>
     </dl>
