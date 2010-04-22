@@ -745,38 +745,60 @@
 		<rule enable="true">
 			<descr></descr>
 
-			<interface>lan</interface>
+			<interface>Ext</interface>
 			<protocol>tcp</protocol>
 			<direction>in</direction>
 
 			<source>
-				<type invert="true">lan</type>
-				<port></port>
+				<type invert="false">any</type>
+				<port>3128</port>
 			</source>
 			<destination invert="false">
-				<type invert="true">lan</type>
-				<port></port>
+				<type invert="false">any</type>
 			</destination>
 
 			<iptos></iptos>
 			<tcpflags></tcpflags>
-			<queue></queue>
+			<queue>upload</queue>
+		</rule>
+		<rule enable="true">
+			<descr></descr>
+
+			<interface>Ext</interface>
+			<protocol>tcp</protocol>
+			<direction>out</direction>
+
+			<source>
+				<type invert="false">any</type>
+			</source>
+			<destination invert="false">
+				<type invert="false">any</type>
+			</destination>
+
+			<iptos></iptos>
+			<tcpflags></tcpflags>
+			<queue>download</queue>
 		</rule>
 
-		<rootqueue id="">
-			<interface></interface>
-			<descr></descr>
-			<targetpipe></targetpipe>
-			<weight></weight>
-			<mask></mask>
-
-			<!--  Sub queues, aka pipes, where data actually gets queued -->
-			<subqueue id="">
-				<name></name>
-				<descr></descr>
-				<bandwidth></bandwidth>
-				<priority></priority>
-				<queuetype></queuetype>
+		<rootqueue id="0">
+			<interface>Ext</interface>
+			<descr>Root Queue</descr>
+			<bandwidth>schedule_up</bandwidth>
+			<qlimit>50</qlimit>
+			
+			<subqueue id="0">
+				<name>upload</name>
+				<descr>Wleiden upload limiter</descr>
+				<bandwidth>schedule_up</bandwidth>
+				<priority>1</priority>
+				<queuetype>cbq</queuetype>
+			</subqueue>
+			<subqueue id="1">
+				<name>download</name>
+				<descr>Wleiden download limiter</descr>
+				<bandwidth>schedule_down</bandwidth>
+				<priority>1</priority>
+				<queuetype>cbq</queuetype>
 			</subqueue>
 		</rootqueue>
 	</shaper>
