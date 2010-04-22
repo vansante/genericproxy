@@ -160,6 +160,20 @@ include $this->template('firewall/forms/rules.tpl.php');
             $('#firewall_rules_form').dialog('open');
         });
 
+        //Click handler for applying changes
+        $('.firewall_rules_apply_link').click(function() {
+            gp.doAction({
+                url: 'testxml/reply.xml',
+                module: 'Firewall',
+                page: 'reloadrules',
+                error_element: $('#firewall_rules_'+$(this).attr('rel')+'_table_error'),
+                content_id: 'cp_firewall_rules_'+$(this).attr('rel'),
+                successFn: function(json) {
+                    gp.alert('Rules loading', 'The rules are being reloaded.')
+                }
+            });
+        });
+
         //Click handler(s) for editing
         //Live handler because edit button doesn't exist on document.ready
         $('.edit_firewall_rule').live('click', function() {
