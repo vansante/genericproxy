@@ -82,6 +82,7 @@
 
 <p>
     <a class="icon_add" href="#firewall_nat" id="firewall_nat_outbound_add_link">Add new rule</a>
+    <a class="icon_add firewall_nat_apply_link" href="#firewall_nat" rel="outbound">Apply changes</a>
 </p>
 
 <form id="firewall_nat_outbound_form" action="ajaxserver.php" method="post" class="dialog" title="Add new rule">

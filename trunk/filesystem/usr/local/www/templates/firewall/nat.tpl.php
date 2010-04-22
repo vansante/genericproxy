@@ -56,4 +56,20 @@
             }
         });
     };
+
+    $(function(){
+        //Click handler for applying changes
+        $('.firewall_nat_apply_link').click(function() {
+            gp.doAction({
+                url: 'testxml/reply.xml',
+                module: 'Firewall',
+                page: 'reloadrules',
+                error_element: $('#firewall_nat_'+$(this).attr('rel')+'_table_error'),
+                content_id: 'cp_firewall_nat_'+$(this).attr('rel'),
+                successFn: function(json) {
+                    gp.alert('Rules loading', 'The rules are being reloaded.')
+                }
+            });
+        });
+    });
 </script>

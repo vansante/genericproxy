@@ -34,4 +34,5 @@
 
 <p>
     <a class="icon_add firewall_rules_add_link" href="#firewall_rules" rel="<?=$this->rules_template_id?>">Add new rule</a>
+    <a class="icon_add firewall_rules_apply_link" href="#firewall_rules" rel="<?=$this->rules_template_id?>">Apply changes</a>
 </p>
