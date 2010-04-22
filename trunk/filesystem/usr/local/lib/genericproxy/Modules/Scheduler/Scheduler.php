@@ -167,8 +167,7 @@ class Scheduler implements Plugin,GeneratesRules {
 		if((string)$this->scheduler_data['cron_id'] == ''){
 			$cron = $this->framework->getPlugin('Cron');			
 			$job = $cron->addJob('*','*/1','*','*','*','root','/usr/local/bin/genericproxy Firewall configure');
-			
-			$this->data->cron_id = (string)$job['id'];
+			$this->scheduler_data->cron_id = (string)$job['id'];
 		}
 	}
 	
