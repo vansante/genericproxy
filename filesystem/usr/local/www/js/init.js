@@ -13,7 +13,8 @@ $(function() {
 
     // Initialize the accordion for the menu
     $('#menu').accordion({
-        autoHeight: false
+        autoHeight: false,
+        collapsible: true
     });
 
     //Initilize the click handlers to make the menu work.
