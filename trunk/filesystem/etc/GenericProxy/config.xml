@@ -264,7 +264,7 @@
 
 	<firewall enable="true">
 		<module name="Nat" call="enabled" category="nat" />
-		<module name="Shaper" call="disabled" category="altq" />
+		<module name="Scheduler" call="enabled" category="altq" />
 
 		<maximumstates>300</maximumstates>
 		<optimization>normal</optimization>
