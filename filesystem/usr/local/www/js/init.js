@@ -119,7 +119,11 @@ $(function() {
                 window.location.reload(true);
             }
         });
-    });
+        return false;
+    })
+    // Hide arrow for logout option...
+    .prev('.ui-icon-triangle-1-e').hide();
+
 
     gp.checkForUpdates();
 });
