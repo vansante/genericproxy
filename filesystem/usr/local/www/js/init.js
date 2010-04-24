@@ -13,7 +13,8 @@ $(function() {
 
     // Initialize the accordion for the menu
     $('#menu').accordion({
-        autoHeight: false
+        autoHeight: false,
+        collapsible: true
     });
 
     //Initilize the click handlers to make the menu work.
@@ -119,7 +120,10 @@ $(function() {
                 window.location.reload(true);
             }
         });
-    });
+        return false;
+    })
+    // Hide arrow for logout option...
+    .prev('.ui-icon-triangle-1-e').hide();
     
     if (gp.system.upgrade.auto) {
         gp.system.upgrade.auto.checkUpdates(true);
