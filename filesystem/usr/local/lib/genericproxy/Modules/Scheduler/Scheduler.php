@@ -448,14 +448,14 @@ class Scheduler implements Plugin,GeneratesRules {
 			//	altq on {interface} bandwidth {bandwidth} queue {subqueue,subqueue}
 			foreach ( $queue->subqueue as $pipes ) {
 				// queue {name} bandwidth (bandwidth) priority (priority) cbq(borrow)
-				if(is_numeric($pipes->bandwidth)){
+				if(is_numeric($pipes->bandwidt)){
 					$bandwidth = $pipes->bandwidth;
 				}
 				elseif($pipes->bandwidth == 'schedule_up'){
-					$bandwidth = (string)$this->getBandwidth('up');
+					$bandwidth = ((int)$this->scheduler_data->maxupspeed / 100) * (int)$this->getBandwidth('up');
 				}
 				elseif($pipes->bandwidth == 'schedule_down'){
-					$bandwidth = (string)$this->getBandwidth('down');
+					$bandwidth = ((int)$this->scheduler_data->maxdownspeed / 100) * (int)$this->getBandwidth('down');
 				}
 				
 				$pipes .= "queue " . $pipes->name . " bandwidth " . $bandwidth . "Kb priority " . $pipes->priority . " ".$pipes->queuetype."\n";
