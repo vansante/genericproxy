@@ -13,8 +13,7 @@ $(function() {
 
     // Initialize the accordion for the menu
     $('#menu').accordion({
-        autoHeight: false,
-        collapsible: true
+        autoHeight: false
     });
 
     //Initilize the click handlers to make the menu work.
@@ -120,13 +119,11 @@ $(function() {
                 window.location.reload(true);
             }
         });
-        return false;
-    })
-    // Hide arrow for logout option...
-    .prev('.ui-icon-triangle-1-e').hide();
-
-
-    gp.checkForUpdates();
+    });
+    
+    if (gp.system.upgrade.auto) {
+        gp.system.upgrade.auto.checkUpdates(true);
+    }
 });
 
 gp.showHomepage = function() {
@@ -137,40 +134,6 @@ gp.showHomepage = function() {
     $('#status_system').addClass('active');
     $('#menu').accordion('activate' , '#status');
     gp.status.system.clickHandler();
-}
-
-gp.checkForUpdates = function() {
-    if (gp.system && !gp.update_alert_given) {
-        gp.doAction({
-            url: 'testxml/update.xml',
-            module: 'Update',
-            page: 'check',
-            error_element: $('#system_upgrade_auto_form_error'),
-            successFn: function(json) {
-                if (json.release) {
-                    gp.data.new_release = json.release;
-                    
-                    var txt = '<p>There is a new firmware with version <strong>'
-                        +json.release.version+'</strong> issued on <strong>'+json.release.date+'</strong>.'
-                        +'<br>Do you want to go to the firmware upgrade page to apply it?</p>';
-
-                    gp.confirm('New firmware', txt, function() {
-                        gp.update_alert_given = true;
-                        // Go to the firmware upgrade page
-                        $('.module').hide();
-                        $('.page').hide();
-                        $('a.active').removeClass('active');
-                        $('#cp_system_upgrade').show().parent().show();
-                        $('#system_upgrade').addClass('active');
-                        $('#menu').accordion('activate' , '#system');
-                    });
-                } else {
-                    gp.data.no_release = true;
-                }
-                gp.system.upgrade.auto.loadForm();
-            }
-        });
-    }
 };
 
 /*
