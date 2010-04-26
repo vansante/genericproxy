@@ -766,6 +766,8 @@ class Firewall implements Plugin {
 		foreach ( $this->data->rule as $rule ) {
 			if (( string ) $rule['enable'] == "true") {
 				$source = '';
+				$log = '';
+				
 				//      Rule example
 				//      <action> <direction> <log> quick on <interface> proto <protocol> from <source> <sourceport> to <destination> <destinationport> keep state label "<added-by> : <description>"
 
