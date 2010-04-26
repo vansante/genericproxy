@@ -448,14 +448,15 @@ class Scheduler implements Plugin,GeneratesRules {
 			//	altq on {interface} bandwidth {bandwidth} queue {subqueue,subqueue}
 			foreach ( $queue->subqueue as $pipes ) {
 				// queue {name} bandwidth (bandwidth) priority (priority) cbq(borrow)
-				if(is_numeric($pipes->bandwidt)){
+				$bandwidth = 0;
+				if(is_numeric($pipes->bandwidth)){
 					$bandwidth = $pipes->bandwidth;
 				}
 				elseif($pipes->bandwidth == 'schedule_up'){
-					$bandwidth = ((int)$this->scheduler_data->maxupspeed / 100) * (int)$this->getBandwidth('up');
+					$bandwidth = (string)$this->getBandwidth('up');
 				}
 				elseif($pipes->bandwidth == 'schedule_down'){
-					$bandwidth = ((int)$this->scheduler_data->maxdownspeed / 100) * (int)$this->getBandwidth('down');
+					$bandwidth = (string)$this->getBandwidth('down');
 				}
 				
 				$pipes .= "queue " . $pipes->name . " bandwidth " . $bandwidth . "Kb priority " . $pipes->priority . " ".$pipes->queuetype."\n";
@@ -468,10 +469,14 @@ class Scheduler implements Plugin,GeneratesRules {
 				if($plugin != null){
 					$interface = $plugin->getRealInterfaceName();
 				}
+				else{
+					Logger::getRootLogger()->error('Error parsing root queue, could not load the interface module: '.(string)$queue->interface);
+					continue;
+				}
 			}
 			else{
 				Logger::getRootLogger()->error('Error parsing root queue, invalid interface: '.(string)$queue->interface);
-				
+				continue;
 			}
 			
 			if($queue->bandwidth == 'schedule_up'){
@@ -497,8 +502,18 @@ class Scheduler implements Plugin,GeneratesRules {
 	 */
 	private function generateFilterRules() {
 		foreach ( $this->shaper_data->rule as $rule ) {
+			$source = '';
+			//		Check protocol
+			if (( string ) $rule->protocol == 'tcp/udp') {
+				$protocol = '{ tcp, udp }';
+			} elseif (( string ) $rule->protocol == 'tcp' || ( string ) $rule->protocol == 'udp') {
+				$protocol = ( string ) $rule->protocol;
+			} elseif (( string ) $rule->protocol == 'icmp') {
+				$protocol = 'icmp-type '.(string) $rule->icmptype;
+			}
+
 			//		Parse source
-			if (( string ) $rule->source ['invert'] == "true") {
+			if (( string ) $rule->source['invert'] == "true" ) {
 				$source .= 'not ';
 			}
 			
@@ -507,116 +522,145 @@ class Scheduler implements Plugin,GeneratesRules {
 				$source .= 'any';
 			} elseif (( string ) $rule->source->type == 'address') {
 				//		Source is an IP address
-				if (empty ( $rule->source->subnet )) {
-					$source .= ( string ) $rule->source->address;
-				} else {
-					$source .= ( string ) $rule->source->address . '/' . $rule->source->subnet;
-				}
-			} elseif (( string ) $rule->source->type == 'Lansubnet') {
+				$source .= ( string ) $rule->source->address;
+			}
+			elseif((string)$rule->source->type == 'network'){
+				//		Source is a subnet / network
+				$source .= ( string ) $rule->source->address.'/'.$rule->source->subnet;
+			} elseif((string) $rule->source->type == 'lan_subnet'){
 				//		Destination is the lan subnet, so fetch it
-				$lanconfig = $this->config->getElement ( 'interfaces' );
-				foreach ( $lanconfig as $interface ) {
-					if (( string ) $interface->type == 'Lan') {
-						$subnet = ( string ) $interface->subnet;
-						$ip = ( string ) $interface->ipaddr;
+				$lanconfig = $this->config->getElement('interfaces');
+				foreach($lanconfig as $interface){
+					if((string)$interface->type == 'lan'){
+						$subnet = Functions::prefix2mask((string)$interface->subnet);
+						$ip = (string)$interface->ipaddr;
 						
 						//	Calculate network
-						$network = Functions::calculateNetwork ( $ip, $subnet );
-						$source .= $network . '/' . $subnet;
+						$network = Functions::calculateNetwork($ip,$subnet);
+						$source .= $network.'/'.$subnet;
 					}
 				}
-			} elseif (( string ) $rule->source->type == 'Wanaddress') {
+			}
+			elseif((string) $rule->source->type == 'wan_address'){
 				//		Destination is WAN address, fetch it
-				$wan = $this->framework->getPlugin ( 'Wan' );
-				$ipaddr = $wan->getInterfaceIP ();
+				$wan = $this->framework->getPlugin('Wan');
+				$ipaddr = $wan->getIpAddress();
 				$source .= $ipaddr;
-			} elseif (( string ) $rule->source->type == 'Lan' || ( string ) $rule->source->type == 'Wan') {
+			}
+			elseif (( string ) $rule->source->type == 'Lan' || ( string ) $rule->source->type == 'Wan') {
 				//		Source is an interface
 				$module = $this->framework->getPlugin ( ( string ) $rule->source->type );
 				$interface = $module->getRealInterfaceName ();
-				
+					
 				$source .= $interface;
-			
+
 			} elseif (stristr ( 'Ext', ( string ) $rule->source->type )) {
-				/*	Source is the EXT interface, this one's a bit special since there could be multiple ones
+				/*		Source is the EXT interface, this one's a bit special since there could be multiple ones
 				 *		that are all handled by the same module
 				 */
 				$module = $this->framework->getPlugin ( 'Ext' );
-				$interface = $module->getRealInterfaceName ( $rule->source->type );
-				
+				$interface = $module->getRealInterfaceName ( substr($rule->source->type,-1));
+					
 				$source .= $interface;
 			}
-			
-			if (! empty ( $rule->source->port )) {
+
+			if (( string ) $rule->source->port != '') {
 				//		Source includes a specific port
-				$source .= ' port = ' . ( string ) $rule->source->port;
+				if(is_numeric($rule->source->port)){
+					$source .= ' port = ' . ( string ) $rule->source->port;
+				}
+				else{
+					$source .= ' port '.(string)$rule->source->port;
+				}
 			}
-			
+
+			$destination = '';
 			//		Parse destination
-			if (( string ) $rule->destination ['invert'] == "true") {
-				$destination .= 'not ';
+			if (( string ) $rule->destination['invert'] == "true") {
+				$destination = 'not ';
 			}
 			if (( string ) $rule->destination->type == 'any') {
 				//		Destination is any
 				$destination .= 'any';
 			} elseif (( string ) $rule->destination->type == 'address') {
 				//		Destination is an IP address
-				if (empty ( $rule->destination->address )) {
-					$destination .= ( string ) $rule->destination->address;
-				} else {
-					$destination .= ( string ) $rule->destination->address . '/' . $rule->destination->subnet;
-				}
-			} elseif (( string ) $rule->destination->type == 'Lansubnet') {
+				$destination .= ( string ) $rule->destination->address;
+			}
+			elseif((string)$rule->destination->type == 'network'){
+				//		Destination is a subnet / network
+				$destination .= ( string ) $rule->destination->address.'/'.$rule->destination->subnet;
+			}
+			elseif((string) $rule->destination->type == 'lan_subnet'){
 				//		Destination is the lan subnet, so fetch it
-				$lanconfig = $this->config->getElement ( 'interfaces' );
-				foreach ( $lanconfig as $interface ) {
-					if (( string ) $interface->type == 'lan') {
-						$subnet = ( string ) $interface->subnet;
-						$ip = ( string ) $interface->ipaddr;
+				$lanconfig = $this->config->getElement('interfaces');
+				foreach($lanconfig as $interface){
+					if((string)$interface->type == 'lan'){
+						$subnet = Functions::mask2prefix((string)$interface->subnet);
+						$ip = (string)$interface->ipaddr;
 						
 						//	Calculate network
-						$network = Functions::calculateNetwork ( $ip, $subnet );
-						$destination .= $network . '/' . $subnet;
+						$network = Functions::calculateNetwork($ip,$subnet);
+						$destination .= $network.'/'.$subnet;
 					}
 				}
-			} elseif (( string ) $rule->destination->type == 'Wanaddress') {
+			}
+			elseif((string) $rule->destination->type == 'wan_address'){
 				//		Destination is WAN address, fetch it
-				$wan = $this->framework->getPlugin ( 'Wan' );
-				$ipaddr = $wan->getInterfaceIP ();
+				$wan = $this->framework->getPlugin('Wan');
+				$ipaddr = $wan->getInterfaceIP();
 				$destination .= $ipaddr;
-			} elseif (( string ) $rule->destination->type == 'Lan' || ( string ) $rule->destination->type == 'Wan') {
+			}
+			elseif (( string ) $rule->destination->type == 'Lan' || ( string ) $rule->destination->type == 'Wan') {
 				//		Destination is an interface
-				$module = $this->framework->getPlugin ( $rule->source );
-				$tmp_interface = $module->getRealInterfaceName ();
-				
-				$destination .= $tmp_interface;
-			
-			} elseif (stristr ( 'ext', ( string ) $rule->destination->type )) {
-					/*		Source is the EXT interface, this one's a bit special since there could be multiple
-					 *		that are all handled by the same module
-					 */
+				$module = $this->framework->getPlugin ((string) $rule->destination->type );
+				if(is_object($module)){
+					$tmp_interface = $module->getRealInterfaceName ();
+				}
+				Logger::getRootLogger('Could not load the plugin '.((string) $rule->destination->type));
+				$destination = $tmp_interface;
+
+			} elseif (stristr ( 'Ext', ( string ) $rule->destination->type )) {
+				/*		Source is the EXT interface, this one's a bit special since there could be multiple
+				 *		that are all handled by the same module
+				 */
 				$module = $this->framework->getPlugin ( 'Ext' );
-				$tmp_interface = $module->getRealInterfaceName ( $rule->destination );
 				
+				if(is_object($module)){
+					$tmp_interface = $module->getRealInterfaceName ( substr($rule->destination->type,-1) );
+				}
+				
+				Logger::getRootLogger('Could not load the plugin '. (string) $rule->destination->type);
 				$destination .= $tmp_interface;
 			}
 			
 			if (( string ) $rule->destination->port != '') {
 				//		Destination includes a specific port
-				$destination .= ' port = ' . ( string ) $rule->destination->port;
+				if(is_numeric($rule->destination->port)){
+					$destination .= ' port = ' . ( string ) $rule->destination->port;
+				}
+				else{
+					$destination .= ' port '.(string)$rule->destination->port;
+				}
 			}
-			
+
 			//		Parse interface
 			if (stristr ( 'ext', $rule->interface )) {
 				$module = $this->framework->getPlugin ( 'Ext' );
-				$interface = $module->getRealInterfaceName ( $rule->interface );
+				if($module != null){
+					$interface = $module->getRealInterfaceName ( substr($rule->interface,-1) );
+				}
+				
 			} else {
-				$module = $this->framework->getPlugin ( $rule->source );
-				$interface = $module->getRealInterfaceName ();
-			
+				$module = $this->framework->getPlugin ((string) $rule->interface );
+				if($module != null){
+					$interface = $module->getRealInterfaceName ();
+				}
+				else{
+					Logger::getRootLogger()->error('Could not get the '.$rule->source.' plugin');
+				}
 			}
-			
-			$buffer .= "pass " . $rule->direction . " on " . $interface . " inet proto " . $rule->protocol . " from " . $source . " to " . $destination . " \ queue" . $rule->queue . "\n";
+							
+			$buffer .= "pass " . $rule->direction . " on " . $interface . " inet proto " . $protocol . " from " . $source . " to " . $destination . " \ queue" . $rule->queue . "\n";
 		}
 	}
 
