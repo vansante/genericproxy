@@ -137,7 +137,7 @@ class Dhcpd implements Plugin {
 	 * @return bool false when service failed to start
 	 */
 	public function start() {
-		if ($this->getStatus == 'Started') {
+		if ($this->getStatus() == 'Started') {
 			Logger::getRootLogger ()->info ( 'DHCPD was already running' );
 			return true;
 		}
