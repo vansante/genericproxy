@@ -446,6 +446,7 @@ class Scheduler implements Plugin,GeneratesRules {
 	 */
 	public function generateQueues() {
 		$pipes = null;
+		$queues = null;
 		
 		foreach ( $this->shaper_data->rootqueue as $queue ) {
 			//	altq on {interface} bandwidth {bandwidth} queue {subqueue,subqueue}
@@ -488,7 +489,6 @@ class Scheduler implements Plugin,GeneratesRules {
 			}
 			elseif($queue->bandwidth == 'schedule_down'){
 				$root_bandwidth = (string)$this->scheduler_data->maxdownspeed;
-				
 			}
 
 			$queues .= "altq on " . $interface . " bandwidth " . $root_bandwidth . " qlimit ". $queue->qlimit. " queue {" . $subs . "}\n";
@@ -504,6 +504,8 @@ class Scheduler implements Plugin,GeneratesRules {
 	 * @return String
 	 */
 	private function generateFilterRules() {
+		$buffer = null;
+		
 		foreach ( $this->shaper_data->rule as $rule ) {
 			$source = '';
 			//		Check protocol
