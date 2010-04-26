@@ -450,11 +450,11 @@ class Scheduler implements Plugin,GeneratesRules {
 		
 		foreach ( $this->shaper_data->rootqueue as $queue ) {
 			//	altq on {interface} bandwidth {bandwidth} queue {subqueue,subqueue}
-			foreach ( $queue->subqueue as $pipes ) {
+			foreach ( $queue->subqueue as $pipe ) {
 				// queue {name} bandwidth (bandwidth) priority (priority) cbq(borrow)
 				$bandwidth = 0;
 				if(is_numeric($pipes->bandwidth)){
-					$bandwidth = $pipes->bandwidth;
+					$bandwidth = $pipe->bandwidth;
 				}
 				elseif($pipes->bandwidth == 'schedule_up'){
 					$bandwidth = $this->getBandwidth('up');
@@ -464,7 +464,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				}
 				
 				$pipes .= "queue " . $pipes->name . " bandwidth " . $bandwidth . "Kb priority " . $pipes->priority . " ".$pipes->queuetype."\n";
-				$subqueues[] = $pipes->name;
+				$subqueues[] = $pipe->name;
 			}
 			$subs = implode(',',$subqueues);
 			
@@ -649,14 +649,14 @@ class Scheduler implements Plugin,GeneratesRules {
 			}
 
 			//		Parse interface
-			if (stristr ( 'ext', $rule->interface )) {
+			if (stristr ( 'Ext', $rule->interface )) {
 				$module = $this->framework->getPlugin ( 'Ext' );
 				if($module != null){
 					$interface = $module->getRealInterfaceName ( substr($rule->interface,-1) );
 				}
 				
 			} else {
-				$module = $this->framework->getPlugin ((string) $rule->interface );
+				$module = $this->framework->getPlugin (ucfirst((string) $rule->interface));
 				if($module != null){
 					$interface = $module->getRealInterfaceName ();
 				}
