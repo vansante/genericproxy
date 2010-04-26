@@ -491,7 +491,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				$root_bandwidth = (string)$this->scheduler_data->maxdownspeed;
 			}
 
-			$queues .= "altq on " . $interface . " bandwidth " . $root_bandwidth . " qlimit ". $queue->qlimit. " queue {" . $subs . "}\n";
+			$queues .= "altq on " . $interface . " bandwidth " . $root_bandwidth . "Kb qlimit ". $queue->qlimit. " queue {" . $subs . "}\n";
 		}
 		
 		return $queues . $pipes;
@@ -656,17 +656,19 @@ class Scheduler implements Plugin,GeneratesRules {
 				}
 				
 			} else {
-				$module = $this->framework->getPlugin (ucfirst((string) $rule->interface));
+				$module = $this->framework->getPlugin ((string) $rule->interface);
 				if($module != null){
 					$interface = $module->getRealInterfaceName ();
 				}
 				else{
-					Logger::getRootLogger()->error('Could not get the '.$rule->source.' plugin');
+					Logger::getRootLogger()->error('Could not get the '.(string)$rule->interface.' plugin');
 				}
 			}
 							
 			$buffer .= "pass " . $rule->direction . " on " . $interface . " inet proto " . $protocol . " from " . $source . " to " . $destination . " \ queue" . $rule->queue . "\n";
 		}
+		
+		return $buffer;
 	}
 
 }
