@@ -18,8 +18,8 @@ if (empty($_SESSION['uid'])) {
     /*
      * DEBUG, REMOVE LATER !!!!!!!!!
      */
-//    $_SESSION['uid'] = 1;
-//    $_SESSION['group'] = 'ROOT';
+    $_SESSION['uid'] = 1;
+    $_SESSION['group'] = 'ROOT';
 } else {
     if (!in_array($_SESSION['group'], array('ROOT','USR','OP'))) {
         die('Unknown group!');
