@@ -399,7 +399,7 @@ class Scheduler implements Plugin,GeneratesRules {
 		//	Loop over blocks until you find the current active one
 		Logger::getRootLogger()->debug('Day: '.$day.' Hour: '.$hour);
 		foreach($this->scheduler_data->schedule->days->day as $day){
-			if($day['day_id'] == $day){
+			if((string)$day['day_id'] == $day){
 				foreach($day->block as $block){
 					Logger::getRootLogger()->debug('Block start: '.$block['start']);
 					if((string)$block['start'] <= $hour){
