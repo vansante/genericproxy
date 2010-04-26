@@ -491,7 +491,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				$root_bandwidth = (string)$this->scheduler_data->maxdownspeed;
 			}
 
-			$queues .= "altq on " . $interface . " bandwidth " . $root_bandwidth . "Kb qlimit ". $queue->qlimit. " queue {" . $subs . "}\n";
+			$queues .= "altq on " . $interface . " cbq bandwidth " . $root_bandwidth . "Kb qlimit ". $queue->qlimit. " queue {" . $subs . "}\n";
 		}
 		
 		return $queues . $pipes;
@@ -665,7 +665,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				}
 			}
 							
-			$buffer .= "pass " . $rule->direction . " on " . $interface . " inet proto " . $protocol . " from " . $source . " to " . $destination . " \ queue" . $rule->queue . "\n";
+			$buffer .= "pass " . $rule->direction . " on " . $interface . " inet proto " . $protocol . " from " . $source . " to " . $destination . "  queue " . $rule->queue . "\n";
 		}
 		
 		return $buffer;
