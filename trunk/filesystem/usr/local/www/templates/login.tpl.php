@@ -44,7 +44,7 @@
                     $('#login_form_error').slideUp(150);
                     gp.showAjaxLoader('login_form');
                     $.ajax({
-                        url: 'testxml/loginsuccess.xml',
+                        url: gp.debug ? 'testxml/loginsuccess.xml' : 'ajaxserver.php',
                         type: 'POST',
                         data: $('#login_form').serialize(),
                         error: function(request, textStatus) {
