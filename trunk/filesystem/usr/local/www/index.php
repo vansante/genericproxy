@@ -17,11 +17,9 @@ if (empty($_SESSION['uid'])) {
     $tpl->display('login.tpl.php');
     /*
      * DEBUG, REMOVE LATER !!!!!!!!!
-     * IK HEB HET HIER GESTOPT ZODAT JE EERSTE KEER ALTIJD LOGIN KRIJGT.
-     * EN NA REFRESHEN REST.
      */
-    $_SESSION['uid'] = 1;
-    $_SESSION['group'] = 'ROOT';
+//    $_SESSION['uid'] = 1;
+//    $_SESSION['group'] = 'ROOT';
 } else {
     if (!in_array($_SESSION['group'], array('ROOT','USR','OP'))) {
         die('Unknown group!');
