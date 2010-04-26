@@ -397,11 +397,13 @@ class Scheduler implements Plugin,GeneratesRules {
 		
 		$bandwidth_setting = -1;
 		//	Loop over blocks until you find the current active one
+		Logger::getRootLogger()->debug('Day: '.$day.' Hour: '.$hour);
 		foreach($this->scheduler_data->schedule->days->day as $day){
 			if($day['day_id'] == $day){
 				foreach($day->block as $block){
-					if($block['start'] <= $hour){
-						$bandwidth_setting = $block['config'];
+					Logger::getRootLogger()->debug('Block start: '.$block['start']);
+					if((string)$block['start'] <= $hour){
+						$bandwidth_setting = (string)$block['config'];
 						break;
 					}
 				}
