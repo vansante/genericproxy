@@ -395,8 +395,9 @@ class Scheduler implements Plugin,GeneratesRules {
 		$day = date('N');
 		$hour = date('G');
 		
+		$bandwidth_setting = -1;
 		//	Loop over blocks until you find the current active one
-		foreach($this->scheduler_data->schedule->days as $day){
+		foreach($this->scheduler_data->schedule->days->day as $day){
 			if($day['day_id'] == $day){
 				foreach($day->block as $block){
 					if($block['start'] <= $hour){
@@ -410,6 +411,8 @@ class Scheduler implements Plugin,GeneratesRules {
 		
 		if($type == 'up' || $type == 'down'){
 			switch($bandwidth_setting){
+				case '-1':
+					return 0;
 				case '0':
 					return 0;
 				case '1':
@@ -453,10 +456,10 @@ class Scheduler implements Plugin,GeneratesRules {
 					$bandwidth = $pipes->bandwidth;
 				}
 				elseif($pipes->bandwidth == 'schedule_up'){
-					$bandwidth = (string)$this->getBandwidth('up');
+					$bandwidth = $this->getBandwidth('up');
 				}
 				elseif($pipes->bandwidth == 'schedule_down'){
-					$bandwidth = (string)$this->getBandwidth('down');
+					$bandwidth = $this->getBandwidth('down');
 				}
 				
 				$pipes .= "queue " . $pipes->name . " bandwidth " . $bandwidth . "Kb priority " . $pipes->priority . " ".$pipes->queuetype."\n";
