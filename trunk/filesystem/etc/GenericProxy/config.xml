@@ -783,17 +783,16 @@
 		<rootqueue id="0">
 			<interface>Ext</interface>
 			<descr>Root Queue</descr>
-			<bandwidth>schedule_up</bandwidth>
 			<qlimit>50</qlimit>
 			
-			<subqueue id="0">
+			<subqueue id="0" default="false">
 				<name>upload</name>
 				<descr>Wleiden upload limiter</descr>
 				<bandwidth>schedule_up</bandwidth>
 				<priority>1</priority>
 				<queuetype>cbq</queuetype>
 			</subqueue>
-			<subqueue id="1">
+			<subqueue id="1" default="true">
 				<name>download</name>
 				<descr>Wleiden download limiter</descr>
 				<bandwidth>schedule_down</bandwidth>

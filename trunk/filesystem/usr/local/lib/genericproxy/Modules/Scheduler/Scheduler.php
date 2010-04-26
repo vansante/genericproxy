@@ -412,10 +412,13 @@ class Scheduler implements Plugin,GeneratesRules {
 		if($type == 'up' || $type == 'down'){
 			switch($bandwidth_setting){
 				case '-1':
+					Logger::getRootLogger()->error('No valid scheduler configuration found');
 					return 0;
 				case '0':
+					Logger::getRootLogger()->debug('Schedule setting: off');
 					return 0;
 				case '1':
+					Logger::getRootLogger()->debug('Schedule setting: opt');
 					if($type == 'up'){
 						return $this->scheduler_data->schedule->optional->upspeed;	
 					}
@@ -424,6 +427,7 @@ class Scheduler implements Plugin,GeneratesRules {
 					}
 					break;
 				case '2':
+					Logger::getRootLogger()->debug('Schedule setting: full');
 					if($type == 'up'){
 						return $this->scheduler_data->schedule->standard->upspeed;
 					}
@@ -457,13 +461,19 @@ class Scheduler implements Plugin,GeneratesRules {
 					$bandwidth = $pipe->bandwidth;
 				}
 				elseif($pipe->bandwidth == 'schedule_up'){
-					$bandwidth = $this->getBandwidth('up');
+					Logger::getRootLogger();
+					$bandwidth =  (string)$this->scheduler_data->maxupspeed * $this->getBandwidth('up');
 				}
 				elseif($pipe->bandwidth == 'schedule_down'){
-					$bandwidth = $this->getBandwidth('down');
+					$bandwidth =  (string)$this->scheduler_data->maxdownspeed * $this->getBandwidth('down');
 				}
 				
-				$pipes .= "queue " . (string)$pipe->name . " bandwidth " . $bandwidth . "Kb priority " . (string)$pipe->priority . " ".(string)$pipe->queuetype."\n";
+				$default = '';
+				if((string)$pipe['default'] == 'true'){
+					$default = 'default ';
+				}
+				
+				$pipes .= "queue " . (string)$pipe->name . " bandwidth " . $bandwidth . "Kb ".$default."priority " . (string)$pipe->priority . " ".(string)$pipe->queuetype."\n";
 				$subqueues[] = (string)$pipe->name;
 			}
 			$subs = implode(',',$subqueues);
@@ -483,13 +493,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				continue;
 			}
 			
-			if($queue->bandwidth == 'schedule_up'){
-				$root_bandwidth = (string)$this->scheduler_data->maxupspeed;
-
-			}
-			elseif($queue->bandwidth == 'schedule_down'){
-				$root_bandwidth = (string)$this->scheduler_data->maxdownspeed;
-			}
+			$root_bandwidth = $this->getBandwidth('up') + $this->getBandwidth('down');
 
 			$queues .= "altq on " . $interface . " cbq bandwidth " . $root_bandwidth . "Kb qlimit ". $queue->qlimit. " queue {" . $subs . "}\n";
 		}
