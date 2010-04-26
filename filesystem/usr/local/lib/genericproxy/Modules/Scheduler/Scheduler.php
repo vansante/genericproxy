@@ -453,18 +453,18 @@ class Scheduler implements Plugin,GeneratesRules {
 			foreach ( $queue->subqueue as $pipe ) {
 				// queue {name} bandwidth (bandwidth) priority (priority) cbq(borrow)
 				$bandwidth = 0;
-				if(is_numeric($pipes->bandwidth)){
+				if(is_numeric($pipe->bandwidth)){
 					$bandwidth = $pipe->bandwidth;
 				}
-				elseif($pipes->bandwidth == 'schedule_up'){
+				elseif($pipe->bandwidth == 'schedule_up'){
 					$bandwidth = $this->getBandwidth('up');
 				}
-				elseif($pipes->bandwidth == 'schedule_down'){
+				elseif($pipe->bandwidth == 'schedule_down'){
 					$bandwidth = $this->getBandwidth('down');
 				}
 				
-				$pipes .= "queue " . $pipes->name . " bandwidth " . $bandwidth . "Kb priority " . $pipes->priority . " ".$pipes->queuetype."\n";
-				$subqueues[] = $pipe->name;
+				$pipes .= "queue " . (string)$pipe->name . " bandwidth " . $bandwidth . "Kb priority " . (string)$pipe->priority . " ".(string)$pipe->queuetype."\n";
+				$subqueues[] = (string)$pipe->name;
 			}
 			$subs = implode(',',$subqueues);
 			
