@@ -71,7 +71,7 @@ class Ext extends Interfaces {
 	 * 
 	 * @param integer $interface	Interface number
 	 */
-	public function configure($interface = null) {
+	public function configure($interface = 1) {
 		if ($interface >= 1) {
 			//		Configure specific interface
 			$this->logger->info ( 'Setting up EXT['.($interface).'] interface: ' . ( string ) $this->data[$interface - 1]->if );
@@ -113,7 +113,7 @@ class Ext extends Interfaces {
 	 * 
 	 * @param integer $interface Interface number
 	 */
-	public function configureDHCP($interface = null) {
+	public function configureDHCP($interface = 1) {
 		if ($interface >= 1) {
 			$fd = fopen ( "/var/etc/dhclient_" . ( string ) $this->data [$interface - 1]->if . ".conf", "w" );
 			if (! $fd) {
@@ -152,7 +152,7 @@ class Ext extends Interfaces {
 	 * 
 	 * @param integer $interface Interface number
 	 */
-	public function disableDHCP($interface = null) {
+	public function disableDHCP($interface = 1) {
 		Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $this->data [$interface - 1]->if . " down" );
 		sleep ( 1 );
 		$pid = Functions::shellCommand ( `ps awwwux | grep dhclient | grep -v grep | grep ` . ( string ) $this->data [$interface - 1]->if . ` | awk '{ print \$2 }'` );
@@ -166,7 +166,7 @@ class Ext extends Interfaces {
 	 * 
 	 * @param integer $interface Interface number
 	 */
-	public function enableDHCP($interface = null) {
+	public function enableDHCP($interface = 1) {
 		/* fire up dhclient */
 		Functions::shellCommand ( "/sbin/dhclient -c /var/etc/dhclient_" . ( string ) $this->data [$interface - 1]->if . ".conf " . ( string ) $this->data [$interface - 1]->if . " >/tmp/" . ( string ) $this->data [$interface - 1]->if . "_output >/tmp/" . ( string ) $this->data [$interface - 1]->if . "_error_output" );
 	}
@@ -195,7 +195,7 @@ class Ext extends Interfaces {
 	 * @returns String
 	 * @access public
 	 */
-	public function getMacAddress($interface = null) {
+	public function getMacAddress($interface = 1) {
 		if ($interface >= 1) {
 			$mac = Functions::shellCommand ( "ifconfig " . (( string ) $this->data [$interface - 1]->if) . " | awk '/ether/ {print $2}'" );
 			if (Functions::isMacAddress ( $mac )) {
@@ -300,7 +300,7 @@ class Ext extends Interfaces {
 	 * 
 	 * @access private
 	 */
-	private function getConfig($iface = null) {
+	private function getConfig($iface = 1) {
 		echo '<reply action="ok">';
 		foreach($this->data as $interface){
 			if($interface['type'] == 'Ext'.$iface){
@@ -317,7 +317,7 @@ class Ext extends Interfaces {
 	 * @access public
 	 * @return String
 	 */
-	public function getRealInterfaceName($interface = null) {
+	public function getRealInterfaceName($interface = 1) {
 		return ( string ) $this->data [$interface - 1]->if;
 	}
 	
@@ -339,7 +339,7 @@ class Ext extends Interfaces {
 	 * 
 	 * @param Integer $interface	Interface number
 	 */
-	public function start($interface = null) {
+	public function start($interface = 1) {
 		if ($interface >= 1) {
 			Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $this->data [$interface - 1]->if . " up" );
 			if (( string ) $this->data [$interface - 1]->ipaddr == 'dhcp') {
@@ -353,7 +353,7 @@ class Ext extends Interfaces {
 	 * 
 	 * @param Integer $interface	Interface number
 	 */
-	public function stop($interface = null) {
+	public function stop($interface = 1) {
 		if ($interface >= 1) {
 			if (( string ) $this->data [$interface - 1]->ipaddr == 'dhcp') {
 				$this->disableDHCP ( $interface );
@@ -368,7 +368,7 @@ class Ext extends Interfaces {
 	 * @return Integer
 	 * @param Integer $interface Interface number
 	 */
-	public function getSubnet($interface = null) {
+	public function getSubnet($interface = 1) {
 		$real_if = $this->data[$interface - 1]->if;
 		
 		$tmp = Functions::shellCommand ( "/sbin/ifconfig " . ( string ) $real_if . " | /usr/bin/grep -w \"inet\" | /usr/bin/cut -d\" \" -f 2");
