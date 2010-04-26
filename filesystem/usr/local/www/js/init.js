@@ -125,7 +125,7 @@ $(function() {
     // Hide arrow for logout option...
     .prev('.ui-icon-triangle-1-e').hide();
     
-    if (gp.system.upgrade.auto) {
+    if (gp.system && gp.system.upgrade && gp.system.upgrade.auto) {
         gp.system.upgrade.auto.checkUpdates(true);
     }
 });
