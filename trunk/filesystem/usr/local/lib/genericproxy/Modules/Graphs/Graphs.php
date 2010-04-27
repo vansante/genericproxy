@@ -200,7 +200,7 @@ class Graphs implements Plugin{
 			$config .= "Target[ext]: \\".$ext->getRealInterfaceName(1).":public@localhost\n";
 		}
 		
-		$fp = fopen('w',self::CONFIG_FILE);
+		$fp = fopen(self::CONFIG_FILE,'w');
 		fwrite($fp,$config);
 		fclose($fp);
 	}
