@@ -4,7 +4,7 @@
 		<update>
 			<check_signature>false</check_signature>
 			<check_hash>true</check_hash>
-			<server>195.169.84.60/releases</server>
+			<server>www.genericproxy.org/releases</server>
 		</update>
 
 		<hostname>GenericProxy</hostname>
@@ -19,15 +19,15 @@
 		<!-- 
 		group= OP|ROOT|USR -->
 		<users>
-			<user name="admin" password="$1$PaPyUOQY$DfluxPB6sJrqWbDp1lp/H." group="ROOT" />
-			<user name="wleiden" password="$1$PaPyUOQY$DfluxPB6sJrqWbDp1lp/H." group="SOP" />
-			<user name="bob" password="$1$PaPyUOQY$DfluxPB6sJrqWbDp1lp/H." group="USR" />
-			<default-user name="admin" password="$1$PaPyUOQY$DfluxPB6sJrqWbDp1lp/H." group="ROOT" />
+			<user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="ROOT" />
+			<user name="wleiden" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="SOP" />
+			<user name="user" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="USR" />
+			<default-user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="ROOT" />
 		</users>
 
 		<ntp cronid="">
-			<timeservers>0.pfsense.pool.ntp.org</timeservers>
-			<timezone>ETC/GMT+1</timezone>
+			<timeservers>nl.pool.ntp.org</timeservers>
+			<timezone>GMT+1</timezone>
 			<!--
 				Values: -1 does not update time. 0 only updates at boot. > 0 updates using
 				the interval and at boot
@@ -111,13 +111,13 @@
 
 	<interfaces>
 		<interface type="Lan">
-			<if>sis0</if>
+			<if>sis1</if>
 			<ipaddr>10.0.1.1</ipaddr>
 			<subnet>255.255.255.0</subnet>
 			<mtu></mtu>
 		</interface>
 		<interface type="Wan">
-			<if>sis1</if>
+			<if>sis0</if>
 			<mtu></mtu>
 			<ipaddr>dhcp</ipaddr>
 			<mac></mac>
@@ -264,7 +264,7 @@
 
 	<firewall enable="true">
 		<module name="Nat" call="enabled" category="nat" />
-		<module name="Shaper" call="disabled" category="altq" />
+		<module name="Scheduler" call="enabled" category="altq" />
 
 		<maximumstates>300</maximumstates>
 		<optimization>normal</optimization>
@@ -783,17 +783,16 @@
 		<rootqueue id="0">
 			<interface>Ext</interface>
 			<descr>Root Queue</descr>
-			<bandwidth>schedule_up</bandwidth>
 			<qlimit>50</qlimit>
 			
-			<subqueue id="0">
+			<subqueue id="0" default="false">
 				<name>upload</name>
 				<descr>Wleiden upload limiter</descr>
 				<bandwidth>schedule_up</bandwidth>
 				<priority>1</priority>
 				<queuetype>cbq</queuetype>
 			</subqueue>
-			<subqueue id="1">
+			<subqueue id="1" default="true">
 				<name>download</name>
 				<descr>Wleiden download limiter</descr>
 				<bandwidth>schedule_down</bandwidth>

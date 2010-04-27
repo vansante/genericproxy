@@ -4,7 +4,7 @@
 		<update>
 			<check_signature>false</check_signature>
 			<check_hash>true</check_hash>
-			<server>195.169.84.60/releases</server>
+			<server>www.genericproxy.org/releases</server>
 		</update>
 
 		<hostname>GenericProxy</hostname>
@@ -21,7 +21,7 @@
 		<users>
 			<user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="ROOT" />
 			<user name="wleiden" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="SOP" />
-			<user name="bob" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="USR" />
+			<user name="user" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="USR" />
 			<default-user name="admin" password="$1$nDZ.9MK2$Ce0sl20.ycOxbLtYwPhce0" group="ROOT" />
 		</users>
 
@@ -111,13 +111,13 @@
 
 	<interfaces>
 		<interface type="Lan">
-			<if>sis0</if>
+			<if>sis1</if>
 			<ipaddr>10.0.1.1</ipaddr>
 			<subnet>255.255.255.0</subnet>
 			<mtu></mtu>
 		</interface>
 		<interface type="Wan">
-			<if>sis1</if>
+			<if>sis0</if>
 			<mtu></mtu>
 			<ipaddr>dhcp</ipaddr>
 			<mac></mac>
