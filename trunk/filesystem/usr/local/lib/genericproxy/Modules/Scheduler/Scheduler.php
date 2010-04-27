@@ -168,6 +168,7 @@ class Scheduler implements Plugin,GeneratesRules {
 			$cron = $this->framework->getPlugin('Cron');			
 			$job = $cron->addJob('*','*/1','*','*','*','root','/usr/local/bin/genericproxy Firewall configure');
 			$this->scheduler_data->cron_id = (string)$job['id'];
+			$this->config->saveConfig();
 		}
 	}
 	
@@ -392,17 +393,16 @@ class Scheduler implements Plugin,GeneratesRules {
 	
 	private function getBandwidth($type){
 		//	Get current time
-		$day = date('N');
-		$hour = date('G');
+		$cur_day = date('N');
+		$cur_hour = date('G');
 		
 		$bandwidth_setting = -1;
 		//	Loop over blocks until you find the current active one
-		Logger::getRootLogger()->debug('Day: '.$day.' Hour: '.$hour);
 		foreach($this->scheduler_data->schedule->days->day as $day){
-			if((string)$day['day_id'] == $day){
+			if((string)$day['day_id'] == $cur_day){
 				foreach($day->block as $block){
 					Logger::getRootLogger()->debug('Block start: '.$block['start']);
-					if((string)$block['start'] <= $hour){
+					if((string)$block['start'] <= $cur_hour){
 						$bandwidth_setting = (string)$block['config'];
 						break;
 					}
