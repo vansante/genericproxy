@@ -469,10 +469,10 @@ class Scheduler implements Plugin,GeneratesRules {
 				
 				$default = '';
 				if((string)$pipe['default'] == 'true'){
-					$default = 'default ';
+					$default = '(default)';
 				}
 				
-				$pipes .= "queue " . (string)$pipe->name . " bandwidth " . $bandwidth . "Kb ".$default."priority " . (string)$pipe->priority . " ".(string)$pipe->queuetype."\n";
+				$pipes .= "queue " . (string)$pipe->name . " bandwidth " . $bandwidth . "Kb priority " . (string)$pipe->priority . " ".(string)$pipe->queuetype.".$default."."\n";
 				$subqueues[] = (string)$pipe->name;
 			}
 			$subs = implode(',',$subqueues);
