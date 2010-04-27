@@ -184,7 +184,25 @@ class Graphs implements Plugin{
 		$config = "RunAsDaemon: Yes\n
 		LogDir: /var/log\n
 		ImageDir: /usr/local/www/images/mrtg\n
-		Interval: 10\n";
+		Interval: 10\n
+		MaxBytes[_]: 500\n
+		";
+		
+		//	Find targets
+		$wan = $this->framework->getPlugin('Wan');
+		if($wan != null){
+			$config .= "Target[wan]: \\".$wan->getRealInterfaceName().":public@localhost\n";	
+		}
+		
+		$lan = $this->framework->getPlugin('Lan');
+		if($lan != null){
+			$config .= "Target[lan]: \\".$lan->getRealInterfaceName().":public@localhost\n";
+		}
+		
+		$ext = $this->framework->getPlugin('Ext');
+		if($ext != null){
+			$config .= "Target[ext]: \\".$ext->getRealInterfaceName(1).":public@localhost\n";
+		}
 		
 		$fp = fopen('w',self::CONFIG_FILE);
 		fwrite($fp,$config);
