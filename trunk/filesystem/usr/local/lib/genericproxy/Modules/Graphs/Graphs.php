@@ -98,7 +98,7 @@ class Graphs implements Plugin{
 	 * 
 	 * @var String
 	 */
-	const CONFIG_FILE = '/usr/local/etc/mrtg.cfg';
+	const CONFIG_FILE = '/var/etc/mrtg.cfg';
 	
 	/**
 	 * Stop MRTG daemon
