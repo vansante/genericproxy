@@ -417,10 +417,8 @@ class Scheduler implements Plugin,GeneratesRules {
 					Logger::getRootLogger()->error('No valid scheduler configuration found');
 					return 0;
 				case '0':
-					Logger::getRootLogger()->debug('Schedule setting: off');
 					return 0;
 				case '1':
-					Logger::getRootLogger()->debug('Schedule setting: opt');
 					if($type == 'up'){
 						return $this->scheduler_data->schedule->optional->upspeed;	
 					}
@@ -429,7 +427,6 @@ class Scheduler implements Plugin,GeneratesRules {
 					}
 					break;
 				case '2':
-					Logger::getRootLogger()->debug('Schedule setting: full');
 					if($type == 'up'){
 						return $this->scheduler_data->schedule->standard->upspeed;
 					}
@@ -464,10 +461,10 @@ class Scheduler implements Plugin,GeneratesRules {
 				}
 				elseif($pipe->bandwidth == 'schedule_up'){
 					Logger::getRootLogger();
-					$bandwidth =  (string)$this->scheduler_data->maxupspeed * $this->getBandwidth('up');
+					$bandwidth =  ((string)$this->scheduler_data->maxupspeed / 100) * $this->getBandwidth('up');
 				}
 				elseif($pipe->bandwidth == 'schedule_down'){
-					$bandwidth =  (string)$this->scheduler_data->maxdownspeed * $this->getBandwidth('down');
+					$bandwidth =  ((string)$this->scheduler_data->maxdownspeed / 100) * $this->getBandwidth('down');
 				}
 				
 				$default = '';
