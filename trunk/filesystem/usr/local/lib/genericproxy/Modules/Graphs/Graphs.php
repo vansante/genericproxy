@@ -177,10 +177,6 @@ class Graphs implements Plugin{
 	 * Configure the MRTG daemon
 	 */
 	public function configure() {
-		if(!is_dir('/usr/local/www/images/mrtg')){
-			mkdir('/usr/local/www/images/mrtg');
-		}
-		
 		$config = "RunAsDaemon: Yes\n
 		LogDir: /var/log\n
 		ImageDir: /usr/local/www/images/mrtg\n
@@ -208,7 +204,4 @@ class Graphs implements Plugin{
 		fwrite($fp,$config);
 		fclose($fp);
 	}
-
-	
-	
 }
