@@ -492,7 +492,7 @@ class Scheduler implements Plugin,GeneratesRules {
 				continue;
 			}
 			
-			$root_bandwidth = $this->getBandwidth('up') + $this->getBandwidth('down');
+			$root_bandwidth = (string)$this->scheduler_data->maxupspeed + (string)$this->scheduler_data->maxdownspeed;
 
 			$queues .= "altq on " . $interface . " cbq bandwidth " . $root_bandwidth . "Kb qlimit ". $queue->qlimit. " queue {" . $subs . "}\n";
 		}
