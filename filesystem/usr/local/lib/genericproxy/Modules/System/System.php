@@ -475,6 +475,13 @@ class System implements Plugin {
 	 * @return int Returns 0 on success, >0 on error.
 	 */
 	private function configure_ntp_client() {
+		Logger::getRootLogger()->info('Setting timezone');
+		if(file_exists('/usr/share/zoneinfo/Etc/'.(string)$this->data->ntp->timezone)){
+			Functions::shellCommand('cp /usr/share/zoneinfo/Etc/'.(string)$this->data->ntp->timezone.' /etc/localtime');
+		}
+		else{
+			Logger::getRootLogger()->error('Error setting timezone to /usr/share/zoneinfo/Etc/'.(string)$this->data->ntp->timezone);
+		}
 		Logger::getRootLogger ()->info ( "Setting/updating Ntp in Cron" );
 		
 		$cron = $this->framework->getPlugin ( "Cron" );

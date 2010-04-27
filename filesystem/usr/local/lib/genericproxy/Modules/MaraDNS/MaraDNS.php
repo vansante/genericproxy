@@ -110,6 +110,7 @@ class MaraDNS implements Plugin {
 			$job = $cron->addJob('*','*/1','*','*','*','root','/usr/local/bin/genericproxy MaraDNS fetchzone');
 			
 			$this->data->cron_id = (string)$job['id'];
+			$this->config->saveConfig();
 		}
 		
 		$listen ['localhost'] = '127.0.0.1';
