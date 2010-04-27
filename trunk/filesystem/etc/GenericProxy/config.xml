@@ -26,7 +26,7 @@
 		</users>
 
 		<ntp cronid="">
-			<timeservers>0.pfsense.pool.ntp.org</timeservers>
+			<timeservers>nl.pool.ntp.org</timeservers>
 			<timezone>GMT+1</timezone>
 			<!--
 				Values: -1 does not update time. 0 only updates at boot. > 0 updates using
