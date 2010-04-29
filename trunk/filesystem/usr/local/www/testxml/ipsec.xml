@@ -20,7 +20,6 @@
 					<mode></mode>
 					<identifier type="my_ip, ipaddr, domainname, fqdn, dyndns">192.168.2.1</identifier>
 					<encryption_algorithm>des|3des|blowfish|cast128|aes|aes256</encryption_algorithm>
-					<hash_algorithm>md5|sha1|sha256|sha384|sha512</hash_algorithm>
 					<dhgroup>2</dhgroup>
 					<lifetime></lifetime>
 					<authentication-method type="rsasig">56</authentication-method>
@@ -29,9 +28,7 @@
 					<protocol></protocol>
 					<pfsgroup></pfsgroup>
 					<lifetime></lifetime>
-					<encryption_algorithm>des|3des|blowfish|cast128|aes|aes256</encryption_algorithm>
-					<hash_algorithm>md5|sha1|sha256|sha384|sha512</hash_algorithm>
-					<authentication-method type="psk|rsasig">identifier</authentication-method>
+                                        <authentication-algorithm>des|3des|hmac_md5|hmac_sha1</authentication-algorithm>
 				</phase2>
 			</tunnel>
 		</tunnels>
