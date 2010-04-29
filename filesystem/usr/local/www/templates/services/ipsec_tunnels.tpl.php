@@ -142,22 +142,26 @@
 
         <dt><label for="services_ipsec_tunnel_p1_encryption_alg">Encryption algorithm</label></dt>
         <dd>
-            <select name="services_ipsec_tunnel_p1_encryption_alg" id="services_ipsec_tunnel_p1_encryption_alg">
-                <option value="des">DES</option>
-                <option value="3des">3DES</option>
-                <option value="blowfish">Blowfish</option>
-                <option value="cast128">CAST128</option>
-                <option value="aes">AES</option>
-                <option value="aes_256">AES 256</option>
-            </select>
+            <input name="services_ipsec_tunnel_p1_encryption_alg_des" type="checkbox" id="services_ipsec_tunnel_p1_encryption_alg_des" value="true"/>
+            <label for="services_ipsec_tunnel_p1_encryption_alg_des">DES</label>
+            <input name="services_ipsec_tunnel_p1_encryption_alg_3des" type="checkbox" id="services_ipsec_tunnel_p1_encryption_alg_3des" value="true"/>
+            <label for="services_ipsec_tunnel_p1_encryption_alg_3des">3DES</label>
+            <input name="services_ipsec_tunnel_p1_encryption_alg_blowfish" type="checkbox" id="services_ipsec_tunnel_p1_encryption_alg_blowfish" value="true"/>
+            <label for="services_ipsec_tunnel_p1_encryption_alg_blowfish">Blowfish</label>
+            <input name="services_ipsec_tunnel_p1_encryption_alg_cast128" type="checkbox" id="services_ipsec_tunnel_p1_encryption_alg_cast128" value="true"/>
+            <label for="services_ipsec_tunnel_p1_encryption_alg_cast128">CAST128</label>
+            <input name="services_ipsec_tunnel_p1_encryption_alg_aes" type="checkbox" id="services_ipsec_tunnel_p1_encryption_alg_aes" value="true"/>
+            <label for="services_ipsec_tunnel_p1_encryption_alg_aes">AES</label>
+            <input name="services_ipsec_tunnel_p1_encryption_alg_aes256" type="checkbox" id="services_ipsec_tunnel_p1_encryption_alg_aes256" value="true"/>
+            <label for="services_ipsec_tunnel_p1_encryption_alg_aes256">AES 256</label>
         </dd>
 
         <dt><label for="services_ipsec_tunnel_p1_hash_alg">Hashing algorithm</label></dt>
         <dd>
-            <select name="services_ipsec_tunnel_p1_hash_alg" id="services_ipsec_tunnel_p1_hash_alg">
-                <option value="sha1">SHA1</option>
-                <option value="md5">MD5</option>
-            </select>
+            <input name="services_ipsec_tunnel_p1_hashing_alg_sha1" type="checkbox" id="services_ipsec_tunnel_p1_hashing_alg_sha1" value="true"/>
+            <label for="services_ipsec_tunnel_p1_hashing_alg_sha1">SHA1</label>
+            <input name="services_ipsec_tunnel_p1_hashing_alg_md5" type="checkbox" id="services_ipsec_tunnel_p1_hashing_alg_md5" value="true"/>
+            <label for="services_ipsec_tunnel_p1_hashing_alg_md5">MD5</label>
         </dd>
 
         <dt><label for="services_ipsec_tunnel_p1_dh_keygroup">DH key group</label></dt>
@@ -205,32 +209,24 @@
             <select name="services_ipsec_tunnel_p2_protocol" id="services_ipsec_tunnel_p2_protocol">
                 <option value="esp">ESP</option>
                 <option value="ah">AH</option>
-				<option value="esp_ah">ESP &amp; AH</option>
+                <option value="esp_ah">ESP &amp; AH</option>
             </select>
         </dd>
 
-        <dt><label for="services_ipsec_tunnel_p2_encr_algs">Encryption algorithms</label></dt>
+        <dt><label for="services_ipsec_tunnel_p2_encrypt_algs">Encryption algorithms</label></dt>
         <dd>
-            <input name="services_ipsec_tunnel_p2_encr_alg_des" type="checkbox" id="services_ipsec_tunnel_p2_encr_alg_des" value="true"/>
-            <label for="services_ipsec_tunnel_p2_encr_alg_des">DES</label>
-            <input name="services_ipsec_tunnel_p2_encr_alg_3des" type="checkbox" id="services_ipsec_tunnel_p2_encr_alg_3des" value="true"/>
-            <label for="services_ipsec_tunnel_p2_encr_alg_3des">3DES</label>
-            <input name="services_ipsec_tunnel_p2_encr_alg_blowfish" type="checkbox" id="services_ipsec_tunnel_p2_encr_alg_blowfish" value="true"/>
-            <label for="services_ipsec_tunnel_p2_encr_alg_blowfish">Blowfish</label>
-            <input name="services_ipsec_tunnel_p2_encr_alg_cast128" type="checkbox" id="services_ipsec_tunnel_p2_encr_alg_cast128" value="true"/>
-            <label for="services_ipsec_tunnel_p2_encr_alg_cast128">CAST128</label>
-            <input name="services_ipsec_tunnel_p2_encr_alg_aes" type="checkbox" id="services_ipsec_tunnel_p2_encr_alg_aes" value="true"/>
-            <label for="services_ipsec_tunnel_p2_encr_alg_aes">AES</label>
-            <input name="services_ipsec_tunnel_p2_encr_alg_aes256" type="checkbox" id="services_ipsec_tunnel_p2_encr_alg_aes256" value="true"/>
-            <label for="services_ipsec_tunnel_p2_encr_alg_aes256">AES 256</label>
-        </dd>
-	
-        <dt><label for="services_ipsec_tunnel_p2_hashing_algs">Hashing algorithms</label></dt>
-        <dd>
-            <input name="services_ipsec_tunnel_p2_hashing_alg_sha1" type="checkbox" id="services_ipsec_tunnel_p2_hashing_alg_sha1" value="true"/>
-            <label for="services_ipsec_tunnel_p2_hashing_alg_sha1">SHA1</label>
-            <input name="services_ipsec_tunnel_p2_hashing_alg_md5" type="checkbox" id="services_ipsec_tunnel_p2_hashing_alg_md5" value="true"/>
-            <label for="services_ipsec_tunnel_p2_hashing_alg_md5">MD5</label>
+            <input name="services_ipsec_tunnel_p2_encryption_alg_des" type="checkbox" id="services_ipsec_tunnel_p2_encryption_alg_des" value="true"/>
+            <label for="services_ipsec_tunnel_p2_encryption_alg_des">DES</label>
+            <input name="services_ipsec_tunnel_p2_encryption_alg_3des" type="checkbox" id="services_ipsec_tunnel_p2_encryption_alg_3des" value="true"/>
+            <label for="services_ipsec_tunnel_p2_encryption_alg_3des">3DES</label>
+            <input name="services_ipsec_tunnel_p2_encryption_alg_blowfish" type="checkbox" id="services_ipsec_tunnel_p2_encryption_alg_blowfish" value="true"/>
+            <label for="services_ipsec_tunnel_p2_encryption_alg_blowfish">Blowfish</label>
+            <input name="services_ipsec_tunnel_p2_encryption_alg_cast128" type="checkbox" id="services_ipsec_tunnel_p2_encryption_alg_cast128" value="true"/>
+            <label for="services_ipsec_tunnel_p2_encryption_alg_cast128">CAST128</label>
+            <input name="services_ipsec_tunnel_p2_encryption_alg_aes" type="checkbox" id="services_ipsec_tunnel_p2_encryption_alg_aes" value="true"/>
+            <label for="services_ipsec_tunnel_p2_encryption_alg_aes">AES</label>
+            <input name="services_ipsec_tunnel_p2_encryption_alg_aes256" type="checkbox" id="services_ipsec_tunnel_p2_encryption_alg_aes256" value="true"/>
+            <label for="services_ipsec_tunnel_p2_encryption_alg_aes256">AES 256</label>
         </dd>
 
         <dt><label for="services_ipsec_tunnel_p2_pfs_keygroup">PFS key group</label></dt>
@@ -248,26 +244,18 @@
             <input name="services_ipsec_tunnel_p2_lifetime" type="text" size="2" id="services_ipsec_tunnel_p2_lifetime"/> seconds
         </dd>
 
-        <dt><label for="services_ipsec_tunnel_p2_auth_method">Authentication method</label></dt>
+        <dt><label for="services_ipsec_tunnel_p2_auth_alg">Authentication algorithm</label></dt>
         <dd>
-            <select name="services_ipsec_tunnel_p2_auth_method" id="services_ipsec_tunnel_p2_auth_method">
-                <option value="psk">Pre-shared key</option>
-                <option value="rsasig">RSA signature</option>
-            </select>
+            <input name="services_ipsec_tunnel_p2_auth_alg_des" type="checkbox" id="services_ipsec_tunnel_p2_auth_alg_des" value="true"/>
+            <label for="services_ipsec_tunnel_p2_auth_alg_des">DES</label>
+            <input name="services_ipsec_tunnel_p2_auth_alg_3des" type="checkbox" id="services_ipsec_tunnel_p2_auth_alg_3des" value="true"/>
+            <label for="services_ipsec_tunnel_p2_auth_alg_3des">3DES</label>
+            <input name="services_ipsec_tunnel_p2_auth_alg_md5" type="checkbox" id="services_ipsec_tunnel_p2_auth_alg_md5" value="true"/>
+            <label for="services_ipsec_tunnel_p2_auth_alg_md5">MD5</label>
+            <input name="services_ipsec_tunnel_p2_auth_alg_sha1" type="checkbox" id="services_ipsec_tunnel_p2_auth_alg_sha1" value="true"/>
+            <label for="services_ipsec_tunnel_p2_auth_alg_sha1">SHA1</label>
         </dd>
-
-        <dt class="services_ipsec_tunnel_p2_preshared_key"><label for="services_ipsec_tunnel_p2_preshared_key">Pre-shared key</label></dt>
-        <dd class="services_ipsec_tunnel_p2_preshared_key">
-            <select name="services_ipsec_tunnel_p2_preshared_key" id="services_ipsec_tunnel_p2_preshared_key">
-            </select>
-        </dd>
-
-        <dt class="services_ipsec_tunnel_p2_rsa_sig"><label for="services_ipsec_tunnel_p2_rsa_sig">RSA signature</label></dt>
-        <dd class="services_ipsec_tunnel_p2_rsa_sig">
-            <select name="services_ipsec_tunnel_p2_rsa_sig" id="services_ipsec_tunnel_p2_rsa_sig">
-            </select>
-        </dd>
-
+        
         <dt><input type="submit" value="Add tunnel" id="services_ipsec_tunnel_submit" class="submitbutton"/></dt>
     </dl>
 
@@ -351,8 +339,45 @@
         $('#services_ipsec_tunnel_p1_negotiation_mode').val(rule.phase1.mode.toLowerCase());
         $('#services_ipsec_tunnel_p1_id_type').val(rule.phase1.identifier.type.toLowerCase());
         $('#services_ipsec_tunnel_p1_id').val(rule.phase1.identifier);
-        $('#services_ipsec_tunnel_p1_encryption_alg').val(rule.phase1.encryption_algorithm);
-        $('#services_ipsec_tunnel_p1_hash_alg').val(rule.phase1.hash_algorithm);
+        
+        if (rule.phase1.encryption_algorithm) {
+            var enc = rule.phase1.encryption_algorithm.split('|');
+            for (var i = 0; i < enc.length; i++) {
+                enc[i] = enc[i].trim().toLowerCase();
+            }
+            if (enc.indexOf('des') >= 0) {
+                $('#services_ipsec_tunnel_p1_encryption_alg_des').attr('checked', 'checked');
+            }
+            if (enc.indexOf('3des') >= 0) {
+                $('#services_ipsec_tunnel_p1_encryption_alg_3des').attr('checked', 'checked');
+            }
+            if (enc.indexOf('blowfish') >= 0) {
+                $('#services_ipsec_tunnel_p1_encryption_alg_blowfish').attr('checked', 'checked');
+            }
+            if (enc.indexOf('cast128') >= 0) {
+                $('#services_ipsec_tunnel_p1_encryption_alg_cast128').attr('checked', 'checked');
+            }
+            if (enc.indexOf('aes') >= 0) {
+                $('#services_ipsec_tunnel_p1_encryption_alg_aes').attr('checked', 'checked');
+            }
+            if (enc.indexOf('aes256') >= 0) {
+                $('#services_ipsec_tunnel_p1_encryption_alg_aes256').attr('checked', 'checked');
+            }
+        }
+        
+        if (rule.phase1.hash_algorithm) {
+            var hash = rule.phase1.hash_algorithm.split('|');
+            for (var i = 0; i < hash.length; i++) {
+                hash[i] = hash[i].trim().toLowerCase();
+            }
+            if (hash.indexOf('sha1') >= 0) {
+                $('#services_ipsec_tunnel_p1_hashing_alg_sha1').attr('checked', 'checked');
+            }
+            if (hash.indexOf('md5') >= 0) {
+                $('#services_ipsec_tunnel_p1_hashing_alg_md5').attr('checked', 'checked');
+            }
+        }
+
         $('#services_ipsec_tunnel_p1_dh_keygroup').val(rule.phase1.dhgroup);
         $('#services_ipsec_tunnel_p1_lifetime').val(rule.phase1.lifetime);
         $('#services_ipsec_tunnel_p1_auth_method').val(rule.phase1.authentication_method.type).trigger('change');
@@ -370,44 +395,44 @@
                 enc[i] = enc[i].trim().toLowerCase();
             }
             if (enc.indexOf('des') >= 0) {
-                $('#services_ipsec_tunnel_p2_encr_alg_des').attr('checked', 'checked');
+                $('#services_ipsec_tunnel_p2_encryption_alg_des').attr('checked', 'checked');
             }
             if (enc.indexOf('3des') >= 0) {
-                $('#services_ipsec_tunnel_p2_encr_alg_3des').attr('checked', 'checked');
+                $('#services_ipsec_tunnel_p2_encryption_alg_3des').attr('checked', 'checked');
             }
             if (enc.indexOf('blowfish') >= 0) {
-                $('#services_ipsec_tunnel_p2_encr_alg_blowfish').attr('checked', 'checked');
+                $('#services_ipsec_tunnel_p2_encryption_alg_blowfish').attr('checked', 'checked');
             }
             if (enc.indexOf('cast128') >= 0) {
-                $('#services_ipsec_tunnel_p2_encr_alg_cast128').attr('checked', 'checked');
+                $('#services_ipsec_tunnel_p2_encryption_alg_cast128').attr('checked', 'checked');
             }
             if (enc.indexOf('aes') >= 0) {
-                $('#services_ipsec_tunnel_p2_encr_alg_aes').attr('checked', 'checked');
+                $('#services_ipsec_tunnel_p2_encryption_alg_aes').attr('checked', 'checked');
             }
             if (enc.indexOf('aes256') >= 0) {
-                $('#services_ipsec_tunnel_p2_encr_alg_aes256').attr('checked', 'checked');
-            }
-        }
-        if (rule.phase2.hash_algorithm) {
-            var hash = rule.phase2.hash_algorithm.split('|');
-            for (var i = 0; i < hash.length; i++) {
-                hash[i] = hash[i].trim().toLowerCase();
-            }
-            if (hash.indexOf('sha1') >= 0) {
-                $('#services_ipsec_tunnel_p2_hashing_alg_sha1').attr('checked', 'checked');
-            }
-            if (hash.indexOf('md5') >= 0) {
-                $('#services_ipsec_tunnel_p2_hashing_alg_md5').attr('checked', 'checked');
+                $('#services_ipsec_tunnel_p2_encryption_alg_aes256').attr('checked', 'checked');
             }
         }
         $('#services_ipsec_tunnel_p2_pfs_keygroup').val(rule.phase2.pfsgroup);
         $('#services_ipsec_tunnel_p2_lifetime').val(rule.phase2.lifetime);
-        $('#services_ipsec_tunnel_p2_auth_method').val(rule.phase2.authentication_method.type).trigger('change');
-        if (rule.phase2.authentication_method.type == 'rsasig') {
-            // .text is needed here because the xml2json class creates weird json here.
-            $('#services_ipsec_tunnel_p2_rsa_sig').val(rule.phase2.authentication_method.text);
-        } else {
-            $('#services_ipsec_tunnel_p2_preshared_key').val(rule.phase2.authentication_method.text);
+
+        if (rule.phase2.authentication_algorithm) {
+            var enc = rule.phase2.authentication_algorithm.split('|');
+            for (var i = 0; i < enc.length; i++) {
+                enc[i] = enc[i].trim().toLowerCase();
+            }
+            if (enc.indexOf('des') >= 0) {
+                $('#services_ipsec_tunnel_p2_auth_alg_des').attr('checked', 'checked');
+            }
+            if (enc.indexOf('3des') >= 0) {
+                $('#services_ipsec_tunnel_p2_auth_alg_3des').attr('checked', 'checked');
+            }
+            if (enc.indexOf('hmac_md5') >= 0) {
+                $('#services_ipsec_tunnel_p2_auth_alg_md5').attr('checked', 'checked');
+            }
+            if (enc.indexOf('hmac_sha1') >= 0) {
+                $('#services_ipsec_tunnel_p2_auth_alg_sha1').attr('checked', 'checked');
+            }
         }
     };
 
@@ -556,23 +581,6 @@
                     $('#services_ipsec_tunnel_p1_rsa_sig').removeAttr('disabled');
                     $('.services_ipsec_tunnel_p1_preshared_key').hide();
                     $('.services_ipsec_tunnel_p1_rsa_sig').fadeIn();
-                    break;
-            }
-        });
-
-        $('#services_ipsec_tunnel_p2_auth_method').change(function(){
-            switch (this.value) {
-                case 'psk':
-                    $('#services_ipsec_tunnel_p2_preshared_key').removeAttr('disabled');
-                    $('#services_ipsec_tunnel_p2_rsa_sig').attr('disabled', 'disabled');
-                    $('.services_ipsec_tunnel_p2_rsa_sig').hide();
-                    $('.services_ipsec_tunnel_p2_preshared_key').fadeIn();
-                    break;
-                case 'rsasig':
-                    $('#services_ipsec_tunnel_p2_preshared_key').attr('disabled', 'disabled');
-                    $('#services_ipsec_tunnel_p2_rsa_sig').removeAttr('disabled');
-                    $('.services_ipsec_tunnel_p2_preshared_key').hide();
-                    $('.services_ipsec_tunnel_p2_rsa_sig').fadeIn();
                     break;
             }
         });
