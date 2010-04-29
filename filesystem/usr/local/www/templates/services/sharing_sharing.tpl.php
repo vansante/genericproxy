@@ -103,12 +103,12 @@
 
     <h3 class="help_anchor"><label for="services_sharing_schedule_table">Schedule:</label></h3>
     <dl>
-        <dt><label for="services_sharing_schedule_configs">Predefined configurations</label></dt>
+        <dt><label for="services_sharing_schedule_configs">Predefined preset</label></dt>
         <dd>
             <select id="services_sharing_schedule_configs">
             </select>
-            <a class="icon_add" href="#services_sharing" id="services_sharing_save_config_link">Save schedule</a>
-            <a class="icon_add" href="#services_sharing" id="services_sharing_delete_config_link">Delete</a>
+            <a class="icon_add" href="#services_sharing" id="services_sharing_save_config_link">Save preset</a>
+            <a class="icon_add" href="#services_sharing" id="services_sharing_delete_config_link">Delete preset</a>
         </dd>
     </dl>
     <p style="clear: both;"></p>

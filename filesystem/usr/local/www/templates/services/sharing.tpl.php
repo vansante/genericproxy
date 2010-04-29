@@ -69,15 +69,15 @@
     };
 
     gp.services.sharing.loadDefinedSchedules = function() {
-        var options = '<option value=""> -- Select configuration -- </option>';
+        var options = '<option value=""> -- Select preset -- </option>';
 
-        options += '<optgroup label="Saved configurations">';
+        options += '<optgroup label="Saved presets">';
         $.each(gp.data.sharing_usr_def, function(i, usrdef){
             options += '<option value="usrdef_'+usrdef.name+'">'+usrdef.name+'</option>';
         });
         options += '</optgroup>';
 
-        options += '<optgroup label="Predefined configurations">';
+        options += '<optgroup label="Predefined presets">';
         $.each(gp.data.sharing_pre_def, function(i, predef){
             options += '<option value="predef_'+predef.name+'">'+predef.name+'</option>';
         });
