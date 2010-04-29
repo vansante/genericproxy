@@ -2,11 +2,6 @@
 
 <p class="intro">This page allows you to restore a backup configuration XML file or make a backup of the current XML configuration file.</p>
 
-<div class="note">
-    <h3>Note:</h3>
-    <p>The device will reboot after restoring the configuration.</p>
-</div>
-
 <h3>Backup configuration</h3>
 
 <form id="system_backrest_backup_form" action="ajaxserver.php" method="post">

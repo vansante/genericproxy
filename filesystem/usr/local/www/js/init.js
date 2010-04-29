@@ -14,7 +14,8 @@ $(function() {
     // Initialize the accordion for the menu
     $('#menu').accordion({
         autoHeight: false,
-        collapsible: true
+        collapsible: true,
+        active: false
     });
 
     //Initilize the click handlers to make the menu work.
@@ -57,7 +58,8 @@ $(function() {
             contentpart.show();
             contentpart.parent().show();
 
-            $('#menu').accordion('activate' , '#'+urlStr[0]);
+            $('#menu').accordion('activate', '#'+urlStr[0]);
+            
         } else if (gp.status) {
             gp.showHomepage();
         }

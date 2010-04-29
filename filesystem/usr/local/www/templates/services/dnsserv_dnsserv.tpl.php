@@ -1,5 +1,7 @@
 <h2 class="help_anchor"><a class="open_all_help" rel="cp_services_dnsserv_dnsserv"></a>DNS server</h2>
 
+<p class="intro">Here you can enter the settings for the MaraDNS server. You can also manually fetch the dns zones. Please note that this will take a while and completes without feedback.</p>
+
 <form id="services_dnsserv_form" action="ajaxserver.php" method="post">
     <div class="form-error" id="services_dnsserv_form_error">
     </div>

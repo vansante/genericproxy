@@ -1,6 +1,6 @@
 <h2>Services</h2>
 
-<p class="intro">Overview of the system settings.</p>
+<p class="intro">Overview of the system services.</p>
 
 <div class="form-error" id="status_services_table_error">
 </div>

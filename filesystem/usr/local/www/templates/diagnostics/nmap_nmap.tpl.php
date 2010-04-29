@@ -1,5 +1,7 @@
 <h2>Network mapper</h2>
 
+<p class="intro">You can use Nmap here. Nmap is a network security scanner.</p>
+
 <div class="note">
     <h3>Note:</h3>
     <p>Nmap may take a while to complete.</p>
