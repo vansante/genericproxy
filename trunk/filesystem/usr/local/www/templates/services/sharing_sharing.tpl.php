@@ -118,6 +118,8 @@
         <tbody></tbody>
     </table>
 
+    <h3>Legend</h3>
+
     <table id="services_sharing_schedule_legend" cellpadding="0" cellspacing="0">
         <tbody>
             <tr>
