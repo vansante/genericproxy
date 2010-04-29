@@ -34,6 +34,11 @@
             <input name="diagnostics_tracert_use_icmp" type="checkbox" id="diagnostics_tracert_use_icmp" value="true" />
         </dd>
 
+        <dt><label for="diagnostics_tracert_use_dns">Use DNS resolving</label></dt>
+        <dd>
+            <input name="diagnostics_tracert_use_dns" type="checkbox" id="diagnostics_tracert_use_dns" value="true" />
+        </dd>
+
         <dt><input type="submit" value="Trace route" id="diagnostics_tracert_submit" class="submitbutton"/></dt>
     </dl>
 

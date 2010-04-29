@@ -1,5 +1,7 @@
 <h2>DHCP leases</h2>
 
+<!-- TODO: text -->
+
 <div class="form-error" id="status_dhcp_table_error">
 </div>
 

@@ -480,18 +480,22 @@ form dl.form_sub dd, dl.form dl.form_sub dd {
     border: 1px solid #D9D9D9;
 }
 
-#services_sharing_schedule_legend {
+#services_sharing_schedule_legend, table.status_traffic_legend {
     width: 200px;
     background: #f8f8f8;
     border-collapse: separate;
 }
-#services_sharing_schedule_legend th {
+#services_sharing_schedule_legend th, table.status_traffic_legend th {
     width: 16px;
     height: 16px;
     border: 2px solid #f8f8f8;
 }
-#services_sharing_schedule_legend td {
+#services_sharing_schedule_legend td, table.status_traffic_legend td {
     padding-left: 10px;
+}
+
+.services_sharing_standard {
+    background: #0b1;
 }
 .services_sharing_standard {
     background: #0b1;
@@ -503,6 +507,13 @@ form dl.form_sub dd, dl.form dl.form_sub dd {
     background: #c10;
 }
 
+.status_traffic_legend_out {
+    background: #0000FF;
+}
+
+.status_traffic_legend_in {
+    background: #00CC00;
+}
 #services_sharing_standard_download_speed div.ui-slider-range, #services_sharing_standard_upload_speed div.ui-slider-range {
     background: #0b1;
 }
