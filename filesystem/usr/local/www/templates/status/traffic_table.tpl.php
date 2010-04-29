@@ -1,7 +1,11 @@
+
+<!-- TODO: Intro: incoming on interface, not appliance -->
+
 <p>
     <a class="icon_add status_traffic_refresh_link" href="#status_traffic" rel="<?=$this->status_traffic_id?>">Refresh</a>
 </p>
 
+<h3>Legend</h3>
 <table class="status_traffic_legend" cellpadding="0" cellspacing="0">
     <tbody>
         <tr>
@@ -14,8 +18,6 @@
         </tr>
     </tbody>
 </table>
-
-<!-- TODO: Legend & incoming on interface, not appliance -->
 
 <h3>Daily graph (5 minute average)</h3>
 
