@@ -3,6 +3,11 @@
  * @author Paul van Santen, Douwe Kasemier
  */
 
+/*
+ * Debug setting, when set to true the login session var will be set automaticly
+ * and the AJAX requests will go to dummy data located in the testxml folder.
+ * Needs to be set to false before deploying to the appliance.
+ */
 $debug = true;
 
 session_start();

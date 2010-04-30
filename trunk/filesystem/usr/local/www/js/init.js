@@ -313,9 +313,12 @@ gp.processReply = function(data, error_element, successFn, errorFn) {
                 gp.markFieldInvalid(json.formfield.id);
             }
         }
+        if (!json.message && !json.formfield) {
+            gp.displayError('<p>An unknown error occured! Action failed.</p>', 'Unknown error', error_element);
+        }
     }
-    if (!json || (!json.message && !json.formfield)) {
-        gp.displayError('<p>An unknown error occured!</p><p>Server response:</p><br><pre><code class="parse-error-output">'+$('<div/>').text(data).html()+'</code></pre>', 'Unknown error', error_element);
+    if (!json) {
+        gp.displayError('<p>An unknown error occured!</p><p>Server response:</p><pre><code class="parse-error-output">'+$('<div/>').text(data).html()+'</code></pre>', 'Unknown error', error_element);
     }
     if (errorFn) {
         errorFn();
