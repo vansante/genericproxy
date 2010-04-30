@@ -14,9 +14,9 @@ addMenu('system', array(
                     )
                 )
             ),
-            'upgrade' => array(
-                'name' => 'Firmware upgrade',
-                'key' => 'upgrade',
+            'update' => array(
+                'name' => 'Firmware update',
+                'key' => 'update',
                 'tabs' => array(
                     'auto' => array(
                         'name' => 'Automatic',
@@ -57,7 +57,7 @@ addMenu('system', array(
                         'key' => 'backrest',
                     )
                 )
-            ),
+            )
         )
     )
 );
