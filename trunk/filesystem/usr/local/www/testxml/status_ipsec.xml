@@ -1,0 +1,14 @@
+<reply action="ok">
+	<ipsec_status>
+		<tunnel online="true">
+			<name>Tunnel 1</name>
+			<policy>Policy 1</policy>
+			<encryption>aes256</encryption>
+		</tunnel>
+		<tunnel online="false">
+			<name>Tunnel 2</name>
+			<policy>Policy 2</policy>
+			<encryption>3des</encryption>
+		</tunnel>
+	</ipsec_status>
+</reply>

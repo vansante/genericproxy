@@ -1,6 +1,6 @@
 <h2>DHCP leases</h2>
 
-<!-- TODO: text -->
+<p class="intro">Here you can see the DHCP leases that are currently active.</p>
 
 <div class="form-error" id="status_dhcp_table_error">
 </div>

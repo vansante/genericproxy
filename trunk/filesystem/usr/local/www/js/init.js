@@ -5,8 +5,6 @@
  * @desc Initialisatie van javascript
  */
 
-gp.debug = true;
-
 /* Initialize tabset */
 $(function() {
     $('.tabset').tabs();
@@ -187,9 +185,6 @@ gp.doAction = function(opts) {
                 gp.hideAjaxLoader(opts.content_id);
             }
             gp.handleRequestError(request, textStatus, opts.error_element, opts.errorFn);
-            if (opts.errorFn) {
-                opts.errorFn();
-            }
         },
         success: function(data, textStatus, request) {
             if (opts.content_id) {
@@ -280,52 +275,52 @@ gp.displayError = function(message, title, error_element) {
 gp.processReply = function(data, error_element, successFn, errorFn) {
     var json = $.xml2json(data);
 
-    if (!json || !json.action || json.action.toLowerCase() != 'ok') {
-        if (json && json.action && json.action.toLowerCase() == 'login-error') {
-            gp.alert('Session timeout', json.message+'<br>You will be redirected to the login page.');
-            window.setTimeout("window.location.reload(true);", 3000);
-        } else {
-            if (json) {
-                if (json.message) {
-                    if ($.isArray(json.message)) {
-                        var msg = '<ul>'
-                        $.each(json.message, function(i, message){
-                            msg += '<li>'+message.text[0]+'</li>';
-                        });
-                        msg += '</ul>';
-                        gp.displayError(msg, 'An exception occurred', error_element);
-                    } else {
-                        gp.displayError(json.message.text[0], 'An exception occurred', error_element);
-                    }
-                } else {
-                    gp.displayError('An unknown error occured! Action failed.', 'Unknown error', error_element);
-                }
-                if (json.formfield) {
-                    if ($.isArray(json.formfield)) {
-                        $.each(json.formfield, function(i, formfield){
-                            gp.markFieldInvalid(formfield.id);
-                        });
-                    } else {
-                        gp.markFieldInvalid(json.formfield.id);
-                    }
-                }
-            } else {
-                gp.displayError('An unknown error occured! Action failed.', 'Unknown error', error_element);
-            }
-        }
-        if (errorFn) {
-            errorFn();
-        }
-        return false;
-    } else {
+    if (json && json.action && json.action.toLowerCase() == 'ok') {
         if (json.message) {
             gp.alert('Server notice', json.message);
         }
         if (successFn) {
             successFn(json);
         }
+        return true;
+    } else if (json) {
+        if (json.action && json.action.toLowerCase() == 'login-error') {
+            gp.alert('Session timeout', json.message+'<br>You will be redirected to the login page.');
+            window.setTimeout("window.location.reload(true);", 3000);
+            if (errorFn) {
+                errorFn();
+            }
+            return false;
+        }
+        if (json.message) {
+            if ($.isArray(json.message)) {
+                var msg = '<ul>'
+                $.each(json.message, function(i, message){
+                    msg += '<li>'+message.text[0]+'</li>';
+                });
+                msg += '</ul>';
+                gp.displayError(msg, 'An exception occurred', error_element);
+            } else {
+                gp.displayError(json.message.text[0], 'An exception occurred', error_element);
+            }
+        }
+        if (json.formfield) {
+            if ($.isArray(json.formfield)) {
+                $.each(json.formfield, function(i, formfield){
+                    gp.markFieldInvalid(formfield.id);
+                });
+            } else {
+                gp.markFieldInvalid(json.formfield.id);
+            }
+        }
     }
-    return true;
+    if (!json || (!json.message && !json.formfield)) {
+        gp.displayError('<p>An unknown error occured!</p><p>Server response:</p><br><pre><code class="parse-error-output">'+$('<div/>').text(data).html()+'</code></pre>', 'Unknown error', error_element);
+    }
+    if (errorFn) {
+        errorFn();
+    }
+    return false;
 };
 gp.markFieldInvalid = function(field_id) {
     $('#'+field_id).addClass('formfield-error');

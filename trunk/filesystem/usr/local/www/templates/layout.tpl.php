@@ -14,6 +14,7 @@
             //Bouw js namespace structuur op basis van menu,
             //gp.firewall.nat, gp.status.dhcp etc.
             gp = <?=$this->namespace ?>;
+            gp.debug = <?=$this->debug ? 'true' : 'false'?>;
         </script>
 
         <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
