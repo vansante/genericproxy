@@ -3,6 +3,8 @@
  * @author Paul van Santen, Douwe Kasemier
  */
 
+$debug = true;
+
 session_start();
 
 require_once('json_encode.php');
@@ -15,11 +17,11 @@ $tpl->setPath('template', 'templates');
 // Login tonen
 if (empty($_SESSION['uid'])) {
     $tpl->display('login.tpl.php');
-    /*
-     * DEBUG, REMOVE LATER !!!!!!!!!
-     */
-    $_SESSION['uid'] = 1;
-    $_SESSION['group'] = 'ROOT';
+
+    if ($debug) {
+        $_SESSION['uid'] = 1;
+        $_SESSION['group'] = 'ROOT';
+    }
 } else {
     if (!in_array($_SESSION['group'], array('ROOT','USR','OP'))) {
         die('Unknown group!');
@@ -62,6 +64,7 @@ if (empty($_SESSION['uid'])) {
     $data['data'] = array();
     $tpl->modules = $menu;
     $tpl->namespace = json_encode_custom($data, true);
+    $tpl->debug = $debug;
 
     $tpl->display('layout.tpl.php');
 }

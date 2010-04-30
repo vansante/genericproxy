@@ -1,13 +1,13 @@
 <reply action="ok">
 	<dhcp_status>
-		<lease online="true">
+		<lease>
 			<ip>192.1.1.1</ip>
 			<mac>ma:ca:dd:re:ss</mac>
 			<hostname>hostname</hostname>
 			<start>start</start>
 			<end>end</end>
 		</lease>
-		<lease online="false">
+		<lease>
 			<ip>192.1.1.1</ip>
 			<mac>ma:ca:dd:re:ss</mac>
 			<hostname>hostname</hostname>
