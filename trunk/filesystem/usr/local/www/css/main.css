@@ -544,7 +544,7 @@ form dl.form_sub dd, dl.form dl.form_sub dd {
     display: none;
 }
 
-#system_upgrade_auto_warning, #system_upgrade_auto_no_update, #system_upgrade_auto_form {
+#system_update_auto_warning, #system_update_auto_no_update, #system_update_auto_form {
     display: none;
 }
 

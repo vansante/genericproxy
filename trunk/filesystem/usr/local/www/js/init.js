@@ -127,8 +127,8 @@ $(function() {
     // Hide arrow for logout option...
     .prev('.ui-icon-triangle-1-e').hide();
     
-    if (gp.system && gp.system.upgrade && gp.system.upgrade.auto) {
-        gp.system.upgrade.auto.checkUpdates(true);
+    if (gp.system && gp.system.update && gp.system.update.auto) {
+        gp.system.update.auto.checkUpdates(true);
     }
 });
 
