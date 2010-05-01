@@ -18,9 +18,7 @@
         </script>
 
         <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="js/jquery-ui-1.8rc3.custom.min.js"></script>
         <script type="text/javascript" src="js/bundle.js"></script>
-        <script type="text/javascript" src="js/jquery-form-plugin.js"></script>
         <script type="text/javascript" src="js/init.js"></script>
     </head>
     <body>

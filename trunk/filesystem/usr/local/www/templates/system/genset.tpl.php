@@ -46,6 +46,7 @@
         //Handler for submitting the form
         $('#system_genset_form').submit(function() {
             gp.doFormAction({
+                url: 'testxml/system.xml',
                 form_id: 'system_genset_form',
                 error_element: $('#system_genset_form_error'),
                 successFn: function(json) {
