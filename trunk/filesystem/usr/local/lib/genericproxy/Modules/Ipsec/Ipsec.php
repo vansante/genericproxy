@@ -28,9 +28,7 @@
 
 /**
  * IPsec server plugin
- * //TODO: Check XML return messages.
- * //TODO: Check if all logging is placed everywhere.
- * @author Sebastiaan Gibbon
+ * 
  * @version 0.0
  */
 
@@ -90,7 +88,7 @@ class Ipsec implements Plugin {
 	 * 
 	 * @var string
 	 */
-	const PKS_PATH = '/var/etc/pks.txt';
+	const PKS_PATH = '/var/etc/psk';
 	
 	/**
 	 * Path to where certificates are stored
@@ -180,8 +178,12 @@ class Ipsec implements Plugin {
 			Logger::getRootLogger ()->info ( "Removing interface {$interface}" );
 		}
 		
-		//TODO: Get this setting from XML somewhere
-		$nat_traversal = "off";
+		if((string)$this->data['nat_traversal'] == 'true'){
+			$nat_traversal = 'on'; 
+		}
+		else{
+			$nat_traversal = 'off';
+		}
 		
 		//Pre shared key file
 		$pksKeys = "";
@@ -229,51 +231,27 @@ EOD;
 				continue; //not enabled, go to next tunnel.
 			}
 			
-			//TODO: Not all options work/are available as are defined in the mockup.
-			//Currently this bit only does network to network tunnels.
-
 			$local = $this->getlocal ( $tunnel );
 			$remote = $this->getremote ( $tunnel );
-			//TODO: Get type.
-			//$local[public-ip] and $remote[public-ip] should always be set.
-			//for P2P we only need the two public-ips
-			//for N2N we need public-ips and private-ips
-			//What about a tunnel that goes from local[private-ip] to remote[public-ip]  
-			$type = "N2N";
 			
 			if (empty ( $local ) || empty ( $remote )) {
 				Logger::getRootLogger ()->info ( "Aborting tunnel {$tunnel ['id']} creation due invalid IP." );
 				continue;
 			}
 			
-			if ($type == 'N2N') { // network to network
-				$gif = "gif" . $gif_counter;
-				Logger::getRootLogger ()->info ( "Creating interface {$gif} for tunnel ID {$tunnel['id']}" );
-				Functions::shellCommand ( "/sbin/ifconfig {$gif} create" );
-				Functions::shellCommand ( "/sbin/ifconfig {$gif} {$local['private-ip']} {$remote['private-ip']}" );
-				Functions::shellCommand ( "/sbin/ifconfig {$gif} tunnel {$local['public-ip']} {$remote['public-ip']}" );
-				$gif_counter ++;
-				Logger::getRootLogger ()->info ( "Adding Routing for tunnel ID {$tunnel['id']}" );
-				//Functions::shellCommand ( "/sbin/route {$remote['private-subnetid']} {$remote['private-ip']} {$remote['private-subnet']}" );
-				Functions::shellCommand ( "/sbin/route add -net {$remote['private-subnetid']} {$remote['private-ip']} {$remote['private-subnet']}" );
-				
-				Logger::getRootLogger ()->info ( "Adding spd for tunnel ID {$tunnel['id']}" );
-				$setkey .= "spdadd {$local['private-subnetid']}/{$local['private-subnetnr']} {$remote['private-subnetid']}/{$remote['private-subnetnr']} any -P out ipsec esp/tunnel/{$local['public-ip']}-{$remote['public-ip']}/use;\n";
-				$setkey .= "spdadd {$remote['private-subnetid']}/{$remote['private-subnetnr']} {$local['private-subnetid']}/{$local['private-subnetnr']} any -P in ipsec esp/tunnel/{$remote['public-ip']}-{$local['public-ip']}/use;\n";
-			} elseif ($type == 'P2P') { //Point to point
-				$setkey .= "spdadd {$local['public-ip']}/32 {$remote['public-ip']}/32 any -P out ipsec esp/tunnel/{$local['public-ip']}-{$remote['public-ip']}/use;\n";
-				$setkey .= "spdadd {$remote['public-ip']}/32 {$local['public-ip']}/32 any -P in ipsec esp/tunnel/{$remote['public-ip']}-{$local['public-ip']}/use;\n";
-				//TODO;Route needed?
-				//TODO: From pfsense:
-				//do once: $spdconf .= "spdadd {$lansa}/{$lansn} {$lanip}/32 any -P in none;\n";
-				//do once: $spdconf .= "spdadd {$lanip}/32 {$lansa}/{$lansn} any -P out none;\n";
-				///var/db/ipsecpinghosts
-				//mwexec("/sbin/ifconfig gif" . $number_of_gifs . " tunnel" . $curwanip . " " . $tunnel['remote-gateway']);
-				//mwexec ( "/sbin/ifconfig gif" . $number_of_gifs . " {$lansa}/{$lansn} {$lanip}/32" );
-				//$spdconf .= "spdadd {$sa}/{$sn} " . "{$tunnel['remote-subnet']} any -P out ipsec " . "{$tunnel['p2']['protocol']}/tunnel/{$ep}-" . "{$tunnel['remote-gateway']}/unique;\n";			
-				//$spdconf .= "spdadd {$tunnel['remote-subnet']} " . "{$sa}/{$sn} any -P in ipsec " . "{$tunnel['p2']['protocol']}/tunnel/{$tunnel['remote-gateway']}-" . "{$ep}/unique;\n";
-				//there 's more relating to 'mobile clients' on vpn.inc line 478 using 'remote anonymous' and 'sainfo anonymous'
-			}
+			$gif = "gif" . $gif_counter;
+			Logger::getRootLogger ()->info ( "Creating interface {$gif} for tunnel ID {$tunnel['id']}" );
+			Functions::shellCommand ( "/sbin/ifconfig {$gif} create" );
+			Functions::shellCommand ( "/sbin/ifconfig {$gif} {$local['private-ip']} {$remote['private-ip']}" );
+			Functions::shellCommand ( "/sbin/ifconfig {$gif} tunnel {$local['public-ip']} {$remote['public-ip']}" );
+			$gif_counter ++;
+			Logger::getRootLogger ()->info ( "Adding Routing for tunnel ID {$tunnel['id']}" );
+			//Functions::shellCommand ( "/sbin/route {$remote['private-subnetid']} {$remote['private-ip']} {$remote['private-subnet']}" );
+			Functions::shellCommand ( "/sbin/route add -net {$remote['private-subnetid']} {$remote['private-ip']} {$remote['private-subnet']}" );
+			
+			Logger::getRootLogger ()->info ( "Adding spd for tunnel ID {$tunnel['id']}" );
+			$setkey .= "spdadd {$local['private-subnetid']}/{$local['private-subnetnr']} {$remote['private-subnetid']}/{$remote['private-subnetnr']} any -P out ipsec esp/tunnel/{$local['public-ip']}-{$remote['public-ip']}/use;\n";
+			$setkey .= "spdadd {$remote['private-subnetid']}/{$remote['private-subnetnr']} {$local['private-subnetid']}/{$local['private-subnetnr']} any -P in ipsec esp/tunnel/{$remote['public-ip']}-{$local['public-ip']}/use;\n";
 			
 			//Get key or certificate, depending on authentication-method
 			if ($tunnel->phase1->{'authentication-method'} ['type'] == 'pre_shared_key') {
@@ -399,6 +377,7 @@ EOD;
 	
 	/**
 	 * Gets the local IP tunnel information from settings. private-ip may be empty?
+	 * 
 	 * @param SimpleXMLElement $tunnel Tunnel information
 	 * @return array array with IP adresses and submasks. Returns null on error.
 	 */
@@ -419,6 +398,7 @@ EOD;
 	
 	/**
 	 * Gets the remote IP tunnel information from settings. private-ip may be empty.
+	 * 
 	 * @param SimpleXMLElement $tunnel Tunnel information
 	 * @return array array with IP adresses and submasks. Returns null on error.
 	 */
