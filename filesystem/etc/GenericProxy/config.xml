@@ -802,7 +802,7 @@
 		</rootqueue>
 	</shaper>
 
-	<ipsec enable="true">
+	<ipsec enable="true" nat_traversal="true">
 		<tunnels>
 			<tunnel enable="false" id="1">
 				<description></description>
@@ -833,8 +833,7 @@
 					<pfsgroup></pfsgroup>
 					<lifetime></lifetime>
 					<encryption_algorithm>des|3des|blowfish|cast128|aes|aes256</encryption_algorithm>
-					<hash_algorithm>md5|sha1|sha256|sha384|sha512</hash_algorithm>
-					<authentication-method type="psk|rsasig">identifier</authentication-method>
+					<authentication-algorithm>hmac_md5</authentication-algorithm>
 				</phase2>
 			</tunnel>
 		</tunnels>
