@@ -303,20 +303,18 @@ class Update implements Plugin{
 			$cur_version = explode('.',PluginFramework::VERSION);
 			$string = explode('.',$version);
 			
-			if(count($cur_version) < count($string)){
-				//	new version has more keys, so probably an appendum of a minor or major version
-				return true;
-			}
-			else{
-				$i = 0;
-				while($i < count($cur_version)){
-					if($cur_version[$i] < $string[$i]){
-						//	Higher number than the current version means something updated
-						return true;	
-					}
+			$i = 0;
+			while($i < count($cur_version)){
+				if(!isset($cur_version[$i])){
+					//	Longer version string, minor version increase
+					return true;
 				}
-				return false;
+				elseif($cur_version[$i] < $string[$i]){
+					//	Higher number than the current version means something updated
+					return true;	
+				}
 			}
+			return false;
 		}
 		else{
 			return false;

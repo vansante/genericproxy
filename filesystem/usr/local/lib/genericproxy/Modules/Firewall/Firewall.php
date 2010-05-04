@@ -762,6 +762,7 @@ class Firewall implements Plugin {
 		 */
 
 		$rules_buffer = '';
+		$log = '';
 
 		foreach ( $this->data->rule as $rule ) {
 			if (( string ) $rule['enable'] == "true") {
