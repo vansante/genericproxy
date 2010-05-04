@@ -490,6 +490,8 @@ class System implements Plugin {
 			return 1;
 		}
 		
+		Functions::shellCommand("ntpdate ".(string)$this->data->ntp->timeservers[0]);
+		
 		//Only update time when time-update-interval is bigger then 0.
 		if (( int ) $this->data->ntp->{'time-update-interval'} < 1) {
 			if (isset ( $this->data->ntp['cronid'] )) {
