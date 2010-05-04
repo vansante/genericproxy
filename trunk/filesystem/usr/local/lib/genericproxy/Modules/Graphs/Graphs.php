@@ -188,6 +188,7 @@ class Graphs implements Plugin{
 		
 		foreach($interfaces as $interface){
 			$module = $this->framework->getPlugin($interface);
+			$interface = strtolower($interface);
 			if($module != null){
 				$if = $module->getInterfaceName();
 				$ip = $module->getIpAddress();
@@ -197,9 +198,9 @@ class Graphs implements Plugin{
 		
 ### Interface 1 >> Descr: '{$if}' | Name: '' | Ip: '{$ip}' | Eth: '{$mac}' ###
 
-Target[wan]: \{$if}:public@localhost:
-SetEnv[wan]: MRTG_INT_IP="{$ip}" MRTG_INT_DESCR="{$if}"
-MaxBytes[wan]: 12500000
+Target[{$interface}]: \{$if}:public@localhost:
+SetEnv[{$interface}]: MRTG_INT_IP="{$ip}" MRTG_INT_DESCR="{$if}"
+MaxBytes[{$interface}]: 12500000
 
 EOD;
 			}
