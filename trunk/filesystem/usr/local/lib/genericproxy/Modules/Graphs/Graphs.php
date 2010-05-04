@@ -198,7 +198,7 @@ class Graphs implements Plugin{
 		
 ### Interface 1 >> Descr: '{$if}' | Name: '' | Ip: '{$ip}' | Eth: '{$mac}' ###
 
-Target[{$interface}]: \{$if}:public@localhost:
+Target[{$interface}]: \\{$if}:public@localhost:
 SetEnv[{$interface}]: MRTG_INT_IP="{$ip}" MRTG_INT_DESCR="{$if}"
 MaxBytes[{$interface}]: 12500000
 Title[{$interface}]: Traffic for interface {$interface}
