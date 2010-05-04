@@ -177,7 +177,7 @@ class Graphs implements Plugin{
 	 * Configure the MRTG daemon
 	 */
 	public function configure() {
-		$config = file_get_contents('/usr/local/lib/genericproxy/Graphs/mrtg.cfg');
+		$config = file_get_contents('/usr/local/lib/genericproxy/Modules/Graphs/mrtg.cfg');
 
 		if(!is_dir('/tmp/mrtg')){
 			mkdir('/tmp/mrtg');
@@ -190,7 +190,7 @@ class Graphs implements Plugin{
 			$module = $this->framework->getPlugin($interface);
 			$interface = strtolower($interface);
 			if($module != null){
-				$if = $module->getInterfaceName();
+				$if = $module->getRealInterfaceName();
 				$ip = $module->getIpAddress();
 				$mac = $module->getMacAddress();
 				
