@@ -313,6 +313,7 @@ class Update implements Plugin{
 					//	Higher number than the current version means something updated
 					return true;	
 				}
+				$i++;
 			}
 			return false;
 		}
