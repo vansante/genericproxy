@@ -177,11 +177,14 @@ class Graphs implements Plugin{
 	 * Configure the MRTG daemon
 	 */
 	public function configure() {
+		if(!is_dir('/tmp/mrtg')){
+			mkdir('/tmp/mrtg');
+		}
+		
 		$config = "RunAsDaemon: Yes
 LogDir: /var/log
 ImageDir: /tmp/mrtg
 Interval: 10
-MaxBytes[_]: 500
 		";
 		
 		//	Find targets
