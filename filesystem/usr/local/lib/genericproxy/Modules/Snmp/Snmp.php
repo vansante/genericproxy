@@ -118,7 +118,7 @@ class Snmp implements Plugin{
 			# System contact information
 			
 			sysLocation Somewhere in or near Leiden
-			sysContact Stichting Wireless Leiden <beheer@wirelessleiden.nl> / +31 71 5139817
+			sysContact Stichting Wireless Leiden
 			
 			# Process checks.
 			
@@ -223,7 +223,7 @@ class Snmp implements Plugin{
 			Logger::getRootLogger()->info('Snmpd already running?');
 		}
 		else{
-			Functions::shellCommand('/usr/local/sbin/snmpd -c '.self::CONFIG_FILE.' -p /var/run/snmpd.pid');
+			Functions::shellCommand('/usr/local/sbin/snmpd -Ln -c '.self::CONFIG_FILE.' -p /var/run/snmpd.pid');
 		}
 	}
 
