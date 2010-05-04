@@ -177,30 +177,32 @@ class Graphs implements Plugin{
 	 * Configure the MRTG daemon
 	 */
 	public function configure() {
+		$config = file_get_contents('/usr/local/lib/genericproxy/Graphs/mrtg.cfg');
+
 		if(!is_dir('/tmp/mrtg')){
 			mkdir('/tmp/mrtg');
 		}
 		
-		$config = "RunAsDaemon: Yes
-LogDir: /var/log
-ImageDir: /tmp/mrtg
-Interval: 10
-		";
+		//	Interfaces to loop over
+		$interfaces = array('Lan','Wan','Ext');
 		
-		//	Find targets
-		$wan = $this->framework->getPlugin('Wan');
-		if($wan != null){
-			$config .= "Target[wan]: \\".$wan->getRealInterfaceName().":public@localhost\n";	
-		}
+		foreach($interfaces as $interface){
+			$module = $this->framework->getPlugin($interface);
+			if($module != null){
+				$if = $module->getInterfaceName();
+				$ip = $module->getIpAddress();
+				$mac = $module->getMacAddress();
+				
+				$config .= <<<EOD
 		
-		$lan = $this->framework->getPlugin('Lan');
-		if($lan != null){
-			$config .= "Target[lan]: \\".$lan->getRealInterfaceName().":public@localhost\n";
-		}
-		
-		$ext = $this->framework->getPlugin('Ext');
-		if($ext != null){
-			$config .= "Target[ext]: \\".$ext->getRealInterfaceName(1).":public@localhost\n";
+### Interface 1 >> Descr: '{$if}' | Name: '' | Ip: '{$ip}' | Eth: '{$mac}' ###
+
+Target[wan]: \{$if}:public@localhost:
+SetEnv[wan]: MRTG_INT_IP="{$ip}" MRTG_INT_DESCR="{$if}"
+MaxBytes[wan]: 12500000
+
+EOD;
+			}
 		}
 		
 		$fp = fopen(self::CONFIG_FILE,'w');
