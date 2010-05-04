@@ -201,6 +201,7 @@ class Graphs implements Plugin{
 Target[{$interface}]: \{$if}:public@localhost:
 SetEnv[{$interface}]: MRTG_INT_IP="{$ip}" MRTG_INT_DESCR="{$if}"
 MaxBytes[{$interface}]: 12500000
+Title[{$interface}]: Traffic for interface {$interface}
 
 EOD;
 			}
