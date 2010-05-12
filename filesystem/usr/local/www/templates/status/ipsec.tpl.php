@@ -51,15 +51,4 @@
             '</tr>';
         $('#status_ipsec_tbody').append(tblstring);
     };
-
-    gp.status.services.addRule = function(rule) {
-        var stat_icon;
-
-        var tblstring = '<tr>'+
-            '<td>'+rule.name+'</td>'+
-            '<td><img src="images/icons/'+stat_icon+'.png" alt="'+rule.status+'" title="'+rule.status+'"/></td>'+
-            '<td>'+rule.status+'</td>'+
-            '</tr>';
-        $('#status_services_tbody').append(tblstring);
-    };
 </script>
