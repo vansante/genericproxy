@@ -84,6 +84,23 @@ class Functions {
 		$ip = str_replace ( "\n", "", $tmp );
 		return $ip;
 	}
+	
+	/**
+	 * 	Validate an URL
+	 * 
+	 *	@static
+	 *	@access public
+	 *	@param String	$url	URL or domain (e.g. google.com)
+	 *	@return Bool
+	 */
+	public static function isUrl($url){
+		if(preg_match ("/^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{2,4})+$/i", $url)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 
 	/**
 	 * Validate hostname
