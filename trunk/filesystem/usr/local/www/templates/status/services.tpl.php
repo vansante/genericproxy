@@ -43,6 +43,7 @@
     //Add a rule to the table
     gp.status.services.addRule = function(rule) {
         var stat_icon;
+
         switch(rule.status.toLowerCase()) {
             case 'started':
                 stat_icon = 'enabled';
