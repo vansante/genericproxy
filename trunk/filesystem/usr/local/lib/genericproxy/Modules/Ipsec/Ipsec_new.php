@@ -124,7 +124,11 @@ class Ipsec implements Plugin{
 	 * 	@return boolean
 	 */
 	public function stop() {
-		
+		Logger::getRootLogger ()->info ( "Stopping IPsec" );
+		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
+		if ($pid > 0) {
+			Functions::shellCommand ( "/bin/kill {$pid}" );
+		}
 	}
 
 	/**
@@ -134,13 +138,29 @@ class Ipsec implements Plugin{
 	 * @return boolean
 	 */
 	public function start() {
+		if (! file_exists ( self::CONFIG_PATH )) {
+			Logger::getRootLogger ()->error ( 'Config file not found. Aborting IPSec startup.' );
+			return false;
+		}
 		
+		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
+		if ($pid > 0) {
+			Logger::getRootLogger ()->info ( 'Reloading IPSec conifg' );
+			Functions::shellCommand ( "/usr/local/sbin/racoonctl reload-config" );
+			return true;
+		}
+		
+		Logger::getRootLogger ()->info ( "Starting IPSec" );
+		Functions::shellCommand ( "/usr/local/sbin/racoon -f " . self::CONFIG_PATH );
+		return true;
 	}
 
 	/**
 	 * 	Commands to run at shutdown
 	 */
-	public function shutdown() {}
+	public function shutdown() {
+		$this->stop();
+	}
 
 	/**
 	 * 	Commands to run at boot time
@@ -191,7 +211,33 @@ class Ipsec implements Plugin{
 	 *	Passthrough function for AJAX webGUI 
 	 */
 	public function getPage() {
+		switch($_POST['page']){
+			case 'addkey':
+				$this->addPresharedkey();
+		}
+	}
+	
+	/**
+	 * 	Add a pre-shared key to the configuration
+	 */
+	private function addPresharedkey(){
+		if(!isset($_POST['services_ipsec_key_pskey'])){
+			ErrorHandler::addError('formerror','services_ipsec_key_pskey');
+		}
 		
+		if(ErrorHandler::errorCount() > 0){
+			throw new Exception('There is invalid form input');
+		}
+		
+		
+		$newkey = $this->data->keys->addChild('key');
+		$newkey->addAttribute('id',time());
+		$newkey->addAttribute('description', htmlentities($_POST['services_ipsec_key_descr']));
+		$newkey->addChild('content','<[!CDATA['.$_POST['services_ipsec_key_pskey'].']]>');
+		
+		$this->config->saveConfig();
+		
+		echo $this->config->asXML();
 	}
 
 	/**
@@ -201,6 +247,7 @@ class Ipsec implements Plugin{
 
 	/**
 	 * 
+	 * TODO: Finish
 	 */
 	public function configure() {
 		Logger::getRootLogger()->info('Configuring IPSec');
