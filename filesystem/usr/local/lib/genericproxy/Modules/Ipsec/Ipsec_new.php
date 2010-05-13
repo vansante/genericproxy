@@ -212,15 +212,40 @@ class Ipsec implements Plugin{
 	 */
 	public function getPage() {
 		switch($_POST['page']){
+			case 'getconfig':
+				$this->returnConfig();
 			case 'addkey':
 				$this->addPresharedkey();
+			case 'editkey':
+				$this->editPreSharedkey();
 		}
 	}
 	
 	/**
-	 * 	Add a pre-shared key to the configuration
+	 * Return the XML configuration
 	 */
-	private function addPresharedkey(){
+	private function returnConfig(){
+		echo '<reply action="ok">';
+		echo $this->data->asXML();
+		echo '</reply>';
+	}
+	
+	/**
+	 * Save global IPSEC settings
+	 */
+	private function save(){
+		if(!isset($_POST['services_ipsec_settings_enabled'])){
+			$this->data['enable'] = 'false';
+		}
+		elseif($_POST['services_ipsec_settings_enabled'] == 'true'){
+			$this->data['enable'] = 'true';
+		}
+		
+		$this->config->saveConfig();
+		$this->returnConfig();
+	}
+	
+	private function checkPresharedkeyForm(){
 		if(!isset($_POST['services_ipsec_key_pskey'])){
 			ErrorHandler::addError('formerror','services_ipsec_key_pskey');
 		}
@@ -228,16 +253,85 @@ class Ipsec implements Plugin{
 		if(ErrorHandler::errorCount() > 0){
 			throw new Exception('There is invalid form input');
 		}
+	}
+	
+	private function removePresharedkey(){
+		if(isset($_POST['services_ipsec_key_id']) && is_numeric($_POST['services_ipsec_key_id'])){
+			//	Find and remove the key in question
+			$removed = false;
+			foreach($this->data->keys->key as $key){
+				if((string)$key['id'] == $_POST['services_ipsec_key_id']){
+					$this->config->deleteElement($key);
+					$removed = true;
+					break;
+				}
+			}
+			
+			if($removed){
+				//	Check if it was in use by any tunnels
+				foreach($this->data->tunnels->tunnel as $tunnel){
+					if((string)$tunnel->{'authentication-method'}['type'] == 'psk' && (string)$tunnel->{'authentication-method'} == $_POST['services_ipsec_key_id']){
+						$warning = true;
+						$tunnel->{'authentication-method'} = '';
+					}
+				}
+								
+				echo '<reply action="ok">';
+				if($warning){
+					echo '<message>The key you just removed was still in use by one or more tunnels. It has been removed from their configuration.</message>';
+				}
+				echo '</reply>';
+				
+				$this->config->saveConfig();
+			}
+			else{
+				throw new Error('The specified key does not exist');
+			}
+		}
+		else{
+			throw new Error('Invalid key identifier specified');
+		}
+	}
+	
+	/**
+	 * Edit a pre-shared key in the configuration
+	 */
+	private function editPresharedkey(){
+		$this->checkPresharedkeyForm();
 		
-		
+		if(isset($_POST['services_ipsec_key_id']) && is_numeric($_POST['services_ipsec_key_id'])){
+			foreach($this->data->keys->key as $key){
+				if((string)$key['id'] == $_POST['services_ipsec_key_id']){
+					$key['descr'] = htmlentities($_POST['services_ipsec_key_descr']);
+					$key->content = '<[!CDATA['.$_POST['services_ipsec_key_pskey'].']]>';
+					
+					$this->saveConfig();
+					echo '<reply action="ok"><ipsec><keys>';
+					echo $key->asXML();
+					echo '</keys></ipsec></reply>';
+					break;
+				}
+			}
+		}
+		else{
+			throw new Error('Invalid key identifier specified');
+		}
+	}
+	
+	/**
+	 * 	Add a pre-shared key to the configuration
+	 */
+	private function addPresharedkey(){
+		$this->checkPresharedkeyForm();
 		$newkey = $this->data->keys->addChild('key');
 		$newkey->addAttribute('id',time());
 		$newkey->addAttribute('description', htmlentities($_POST['services_ipsec_key_descr']));
 		$newkey->addChild('content','<[!CDATA['.$_POST['services_ipsec_key_pskey'].']]>');
 		
-		$this->config->saveConfig();
-		
-		echo $this->config->asXML();
+		echo '<reply action="ok"><ipsec><keys>';
+		$newkey->asXML();
+		echo '</keys></ipsec></reply>';
+		$this->returnConfig();
 	}
 
 	/**
