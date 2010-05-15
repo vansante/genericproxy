@@ -2,7 +2,7 @@
 
 <p class="intro">Current status of all the IPsec tunnels.</p>
 
-<div class="form-error" id="status_dhcp_table_error">
+<div class="form-error" id="status_ipsec_table_error">
 </div>
 
 <table id="status_ipsec_table">

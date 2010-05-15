@@ -12,7 +12,7 @@
 
         //Handle XML loading
         gp.doAction({
-            url: 'testxml/test.xml',
+            url: 'testxml/nat.xml',
             module: 'Nat',
             page: 'getconfig',
             error_element: [
