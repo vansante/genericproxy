@@ -38,6 +38,9 @@
     $(function(){
         //Handler for submitting the form
         $('#firewall_nat_outbound_enable_form').submit(function() {
+            if (!gp.data.nat_outbound_settings.enable) {
+                return false;
+            }
             var checked = $('#firewall_nat_outbound_adv_enable').attr('checked');
             if ((gp.data.nat_outbound_settings.enable.toLowerCase() == 'true' && checked)
                 || (gp.data.nat_outbound_settings.enable.toLowerCase() == 'false' && !checked)) {
