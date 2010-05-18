@@ -817,7 +817,7 @@
 					<type>ipaddr | network</type>
 					<private_ip></private_ip>
 					<private_subnet></private_subnet>
-					<protocol></protocol>
+					<keepalive enable="true"></keepalive>
 				</remote>
 				
 				<phase1>
