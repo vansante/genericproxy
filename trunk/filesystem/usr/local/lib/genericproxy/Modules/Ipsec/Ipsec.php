@@ -384,7 +384,111 @@ class Ipsec implements Plugin{
 	}
 	
 	private function addTunnel(){
+		$this->validateTunnelForm();
 		
+		$newtunnel = $this->data->tunnels->addChild('tunnel');
+		$newtunnel->addAttribute('id',time());
+		$newtunnel->addAttribute('enable','true');
+		$newtunnel->addChild('description',htmlentities($_POST['services_ipsec_tunnel_descr']));
+		$local = $newtunnel->addChild('local');
+		$local->addChild('public_ip',$_POST['services_ipsec_tunnel_local_gateway']);
+		$local->addChild('type',$_POST['services_ipsec_tunnel_local_subnet_type']);
+		if($_POST['services_ipsec_tunnel_local_subnet_type'] == 'ipaddr' 
+			|| $_POST['services_ipsec_tunnel_local_subnet_type'] == 'network'){
+			$local->addChild('private_ip',$_POST['services_ipsec_tunnel_local_subnet_ipaddr']);
+		}
+		
+		if($_POST['services_ipsec_tunnel_local_subnet_type'] == 'network'){
+			$local->addChild('private_subnet',$_POST['services_ipsec_tunnel_local_subnet_subnet']);
+		}
+		
+		$remote = $newtunnel->addChild('remote');
+		$remote->addChild('public_ip',$_POST['services_ipsec_tunnel_remote_gateway']);
+		$remote->addChild('type',$_POST['services_ipsec_tunnel_remote_subnet_type']);
+		if($_POST['services_ipsec_tunnel_remote_subnet_type'] == 'ipaddr' 
+			|| $_POST['services_ipsec_tunnel_remote_subnet_type'] == 'network'){
+			$remote->addChild('private_ip',$_POST['services_ipsec_tunnel_remote_subnet_ipaddr']);
+		}
+		
+		if($_POST['services_ipsec_tunnel_remote_subnet_type'] == 'network'){
+			$remote->addChild('private_subnet',$_POST['services_ipsec_tunnel_remote_subnet_subnet']);
+		}
+		
+		$keepalive = $remote->addChild('keepalive');
+		$keepalive->addAttribute('enable','false');
+		if($_POST['services_ipsec_tunnel_send_keepalive'] == 'true'){
+			$keepalive = $_POST['services_ipsec_tunnel_keepalive_ipaddr'];
+			$keepalive['enable'] = 'true';	
+		}
+		
+		$phase1 = $newtunnel->addChild('phase1');
+		$phase1->addChild('mode',$_POST['services_ipsec_tunnel_phase1_negotiation_mode']);
+		$identifier = $phase1->addChild('identifier');
+		$identifier->addAttribute('type',$_POST['services_ipsec_tunnel_p1_id_type']);
+		$identifier = $_POST['services_ipsec_tunnel_p1_id'];
+		
+		//	Create array with all supported encryption algorithms
+		$algs = array('des','3des','blowfish','cast128','aes','aes256');
+		foreach($algs as $alg){
+			if($_POST['services_ipsec_tunnel_p1_encryption_alg_'.$alg] == 'true'){
+				$encryption_array[] = $alg;
+			}	
+		}
+		
+		// 	Create array with all supported hash algorithms
+		$hash_algs = array('md5','sha1');
+		foreach($hash_algs as $alg){
+			if($_POST['services_ipsec_tunnel_p1_hashing_alg_'.$alg] == 'true'){
+				$hash_array[] = $alg;
+			}
+		}
+		
+		//	implode the two arrays into a single string and dump into the XML
+		$phase1->addChild('encryption-algorithm',implode('|',$encryption_array));
+		$phase1->addChild('hash-algorithm',implode('|',$hash_array));
+		
+		$phase1->addChild('dhgroup',$_POST['services_ipsec_tunnel_p1_dh_keygroup']);
+		$phase1->addChild('lifetime',$_POST['services_ipsec_tunnel_p1_lifetime']);
+		
+		$auth_method = $phase1->addChild('authentication-method');
+		$auth_method->addAttribute('type',$_POST['services_ipsec_tunnel_p1_auth_method']);
+		if($_POST['services_ipsec_tunnel_p1_auth_method'] == 'psk'){
+			$auth_method = $_POST['services_ipsec_tunnel_p1_preshared_key'];
+		}
+		elseif($_POST['services_ipsec_tunnel_p1_auth_method'] == 'rsasig'){
+			$auth_method = $_POST['services_ipsec_tunnel_p1_rsa_sig'];
+		}
+		
+		$phase2 = $newtunnel->addChild('phase2');
+		$phase2->addChild('protocol',$_POST['services_ipsec_tunnel_p2_protocol']);
+		
+		//	Create array with all supported encryption algorithms
+		$algs = array('des','3des','blowfish','cast128','aes','aes256');
+		foreach($algs as $alg){
+			if($_POST['services_ipsec_tunnel_p2_encryption_alg_'.$alg] == 'true'){
+				$encryption_array[] = $alg;
+			}	
+		}
+		
+		// 	Create array with all supported authentication algorithms
+		$auth_algs = array('des','3des','md5','sha1');
+		foreach($auth_algs as $alg){
+			if($_POST['services_ipsec_tunnel_p2_hashing_alg_'.$alg] == 'true'){
+				$auth_array[] = $alg;
+			}
+		}
+		
+		//	implode the two arrays into a single string and dump into the XML
+		$phase2->addChild('encryption-algorithm',implode('|',$encryption_array));
+		$phase2->addChild('authentication-algorithm',implode('|',$auth_array));
+		$phase2->addChild('lifetime',$_POST['services_ipsec_tunnel_p2_lifetime']);
+		$phase2->addChild('pfsgroup',$_POST['services_ipsec_tunnel_p2_pfs_keygroup']);
+		
+		
+		$this->config->saveConfig();
+		echo '<reply action="ok"><ipsec><tunnels>';
+		echo $newtunnel->asXML();
+		echo '</tunnels></ipsec></reply>';
 	}
 	
 	/**
@@ -396,9 +500,103 @@ class Ipsec implements Plugin{
 		if(is_numeric($_POST['services_ipsec_tunnel_id'])){
 			foreach($this->data->tunnels->tunnel as $tunnel){
 				if($tunnel['id'] == $_POST['services_ipsec_tunnel_id']){
+					$this->validateTunnelForm();
+					
+					$tunnel['description'] = htmlentities($_POST['services_ipsec_tunnel_descr']);
+					$tunnel->local->public_ip = $_POST['services_ipsec_tunnel_local_gateway'];
+					$tunnel->local->type = $_POST['services_ipsec_tunnel_local_subnet_type'];
+					
+					if($_POST['services_ipsec_tunnel_local_subnet_type'] == 'ipaddr' 
+						|| $_POST['services_ipsec_tunnel_local_subnet_type'] == 'network'){
+						$tunnel->local->private_ip = $_POST['services_ipsec_tunnel_local_subnet_ipaddr'];
+					}
+					
+					if($_POST['services_ipsec_tunnel_local_subnet_type'] == 'network'){
+						$tunnel->local->private_subnet = $_POST['services_ipsec_tunnel_local_subnet_subnet'];
+					}
+					
+					$tunnel->remote->public_ip = $_POST['services_ipsec_tunnel_remote_gateway'];
+					$tunnel->remote->type = $_POST['services_ipsec_tunnel_remote_subnet_type'];
+					if($_POST['services_ipsec_tunnel_remote_subnet_type'] == 'ipaddr' 
+						|| $_POST['services_ipsec_tunnel_remote_subnet_type'] == 'network'){
+						$tunnel->remote->private_ip = $_POST['services_ipsec_tunnel_remote_subnet_ipaddr'];
+					}
+					
+					if($_POST['services_ipsec_tunnel_remote_subnet_type'] == 'network'){
+						$tunnel->remote->private_subnet = $_POST['services_ipsec_tunnel_remote_subnet_subnet'];
+					}
+					
+					if($_POST['services_ipsec_tunnel_send_keepalive'] == 'true'){
+						$tunnel->remote->keepalive['enable'] = 'true';
+						$tunnel->remote->keepalive = $_POST['services_ipsec_tunnel_keepalive_ipaddr'];
+					}
+					else{
+						$tunnel->remote->keepalive['enable'] = 'false';
+					}
+					
+					$tunnel->phase1->mode = $_POST['services_ipsec_tunnel_p1_negotiation_mode'];
+					$tunnel->phase1->identifier['type'] = $_POST['services_ipsec_tunnel_p1_id_type'];
+					$tunnel->phase1->identifier = $_POST['services_ipsec_tunnel_p1_id'];
 
-					echo '<reply action="ok">';
-					echo '</reply>';
+					$algs = array('des','3des','blowfish','cast128','aes','aes256');
+					foreach($algs as $alg){
+						if($_POST['services_ipsec_tunnel_p1_encryption_alg_'.$alg] == 'true'){
+							$encryption_array[] = $alg;
+						}	
+					}
+					
+					// 	Create array with all supported hash algorithms
+					$hash_algs = array('md5','sha1');
+					foreach($hash_algs as $alg){
+						if($_POST['services_ipsec_tunnel_p1_hashing_alg_'.$alg] == 'true'){
+							$hash_array[] = $alg;
+						}
+					}
+					
+					//	implode the two arrays into a single string and dump into the XML
+					$tunnel->phase1->{'encryption-algorithm'} = implode('|',$encryption_array);
+					$tunnel->phase1->{'hash-algorithm'} = implode('|',$hash_array);
+					
+					$tunnel->phase1->dhgroup = $_POST['services_ipsec_tunnel_p1_dh_keygroup'];
+					$tunnel->phase1->lifetime = $_POST['services_ipsec_tunnel_p1_lifetime'];
+					
+					$tunnel->phase1->{'authentication-method'}->type = $_POST['services_ipsec_tunnel_p1_auth_method'];
+					if($_POST['services_ipsec_tunnel_p1_auth_method'] == 'psk'){
+						$tunnel->phase1->{'authentication-method'} = $_POST['services_ipsec_tunnel_p1_preshared_key'];
+					}
+					elseif($_POST['services_ipsec_tunnel_p1_auth_method'] == 'rsasig'){
+						$tunnel->phase1->{'authentication-method'} = $_POST['services_ipsec_tunnel_p1_rsa_sig'];
+					}
+					
+					$tunnel->phase2->protocol = $_POST['services_ipsec_tunnel_p2_protocol'];
+					
+					//	Create array with all supported encryption algorithms
+					$algs = array('des','3des','blowfish','cast128','aes','aes256');
+					foreach($algs as $alg){
+						if($_POST['services_ipsec_tunnel_p2_encryption_alg_'.$alg] == 'true'){
+							$encryption_array[] = $alg;
+						}	
+					}
+					
+					// 	Create array with all supported authentication algorithms
+					$auth_algs = array('des','3des','md5','sha1');
+					foreach($auth_algs as $alg){
+						if($_POST['services_ipsec_tunnel_p2_hashing_alg_'.$alg] == 'true'){
+							$auth_array[] = $alg;
+						}
+					}
+					
+					//	implode the two arrays into a single string and dump into the XML
+					$tunnel->phase2->{'encryption-algorithm'} = implode('|',$encryption_array);
+					$tunnel->phase2->{'authentication-algorithm'} = implode('|',$auth_array);
+					$tunnel->phase2->lifetime = $_POST['services_ipsec_tunnel_p2_lifetime'];
+					$tunnel->phase2->pfsgroup = $_POST['services_ipsec_tunnel_p2_pfs_keygroup'];
+					
+					$this->config->saveConfig();
+					
+					echo '<reply action="ok"><ipsec><tunnels>';
+					echo $tunnel->asXML();
+					echo '</tunnels></ipsec></reply>';
 					return 1;
 				}
 			}
