@@ -93,7 +93,7 @@ class Functions {
 	 *	@param String	$url	URL or domain (e.g. google.com)
 	 *	@return Bool
 	 */
-	public static function isUrl($url){
+	public static function is_Url($url){
 		if(preg_match ("/^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{2,4})+$/i", $url)){
 			return true;
 		}
