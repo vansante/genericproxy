@@ -253,9 +253,11 @@ class Ipsec implements Plugin{
 			case 'edittunnel':
 				$this->editTunnel();
 				break;
-			case 'removetunnel':
+			case 'deletetunnel':
 				$this->removeTunnel();
 				break;
+			case 'toggletunnel':
+				$this->toggleTunnel();
 		}
 	}
 	
@@ -336,7 +338,7 @@ class Ipsec implements Plugin{
 		}
 		
 		$dh_keygroups = array('1','2','5');
-		if(!in_array($_POST['services_ipsec_tunnel_p1_dh_keygroup'])){
+		if(!in_array($_POST['services_ipsec_tunnel_p1_dh_keygroup'],$dh_keygroups)){
 			ErrorHandler::addError('formerror','services_ipsec_tunnel_p1_dh_keygroup');
 		}
 		
@@ -345,7 +347,7 @@ class Ipsec implements Plugin{
 		}
 		
 		$auth_method = array('psk','rsasig');
-		if(!in_array($_POST['services_ipsec_tunnel_p1_auth_method'])){
+		if(!in_array($_POST['services_ipsec_tunnel_p1_auth_method'],$auth_method)){
 			ErrorHandler::addError('formerror','services_ipsec_tunnel_p1_auth_method');
 		}
 		
@@ -391,6 +393,35 @@ class Ipsec implements Plugin{
 		
 		if(ErrorHandler::errorCount() > 0){
 			throw new Exception('There is invalid form input');
+		}
+	}
+	
+	/**
+	 * 	Toggle a tunnel's enabled state
+	 * 
+	 * @throws Exception
+	 */
+	private function toggleTunnel(){
+		if(isset($_POST['tunnelid']) && is_numeric($_POST['tunnelid'])){
+			foreach($this->data->tunnels->tunnel as $tunnel){
+				if((string)$tunnel['id'] == $_POST['tunnelid']){
+					
+					if((string)$tunnel['enable'] == 'true'){
+						$tunnel['enable'] = 'false';
+					}
+					else{
+						$tunnel['enable'] = 'true';
+					}
+					
+					echo '<reply action="ok"/>';
+					return true;	
+				}
+				
+				throw new Exception('The specified tunnel could not be found');
+			}
+		}
+		else{
+			throw new Exception('An invalid tunnel identifier was submitted');
 		}
 	}
 	
@@ -629,9 +660,9 @@ class Ipsec implements Plugin{
 	 * @throws Exception
 	 */
 	private function removeTunnel(){
-		if(is_numeric($_POST['services_ipsec_tunnel_id'])){
+		if(is_numeric($_POST['tunnelid'])){
 			foreach($this->data->tunnels->tunnel as $tunnel){
-				if($tunnel['id'] == $_POST['services_ipsec_tunnel_id']){
+				if($tunnel['id'] == $_POST['tunnelid']){
 					$this->config->deleteElement($tunnel);
 					$this->config->saveConfig();
 					echo '<reply action="ok" />';
@@ -680,7 +711,7 @@ class Ipsec implements Plugin{
 			Functions::shellCommand('cp '.self::PERSIST_CERT_PATH.'/'.$_FILES['services_ipsec_certif_public_certificate']['name'].' '.self::CERT_PATH.'/'.$_FILES['services_ipsec_certif_public_certificate']['name']);
 			
 			Functions::mountFilesystem('unmount');
-			
+			$this->config->saveConfig();
 			echo '<reply action="ok"><ipsec><certificates>';
 			echo $newcert->asXML();
 			echo '</certificates></ipsec></reply>';
@@ -697,9 +728,9 @@ class Ipsec implements Plugin{
 	 * @throws Exception
 	 */
 	private function editCertificate(){
-		if(is_numeric($_POST['services_ipsec_certif_keyid'])){
+		if(is_numeric($_POST['services_ipsec_certif_id'])){
 			foreach($this->data->certificates->certificate as $cert){
-				if($cert['id'] == $_POST['services_ipsec_certif_keyid']){
+				if($cert['id'] == $_POST['services_ipsec_certif_id']){
 					
 					if(filesize($_FILES['services_ipsec_certif_private_certificate']['tmp_name']) > 0){
 						//	We have a new private cert, remove the old one
@@ -793,7 +824,7 @@ class Ipsec implements Plugin{
 	/**
 	 * Save global IPSEC settings
 	 */
-	private function save(){
+	private function saveConfig(){
 		if(!isset($_POST['services_ipsec_settings_enabled'])){
 			$this->data['enable'] = 'false';
 		}
@@ -828,11 +859,11 @@ class Ipsec implements Plugin{
 	 * @throws Exception
 	 */
 	private function removePresharedkey(){
-		if(isset($_POST['services_ipsec_key_id']) && is_numeric($_POST['services_ipsec_key_id'])){
+		if(isset($_POST['keyid']) && is_numeric($_POST['keyid'])){
 			//	Find and remove the key in question
 			$removed = false;
 			foreach($this->data->keys->key as $key){
-				if((string)$key['id'] == $_POST['services_ipsec_key_id']){
+				if((string)$key['id'] == $_POST['keyid']){
 					$this->config->deleteElement($key);
 					$removed = true;
 					break;
@@ -842,7 +873,7 @@ class Ipsec implements Plugin{
 			if($removed){
 				//	Check if it was in use by any tunnels
 				foreach($this->data->tunnels->tunnel as $tunnel){
-					if((string)$tunnel->{'authentication-method'}['type'] == 'psk' && (string)$tunnel->{'authentication-method'} == $_POST['services_ipsec_key_id']){
+					if((string)$tunnel->{'authentication-method'}['type'] == 'psk' && (string)$tunnel->{'authentication-method'} == $_POST['keyid']){
 						$warning = true;
 						$tunnel->{'authentication-method'} = '';
 					}
@@ -879,7 +910,7 @@ class Ipsec implements Plugin{
 					$key['descr'] = htmlentities($_POST['services_ipsec_key_descr']);
 					$key->content = '<[!CDATA['.$_POST['services_ipsec_key_pskey'].']]>';
 					
-					$this->saveConfig();
+					$this->config->saveConfig();
 					echo '<reply action="ok"><ipsec><keys>';
 					echo $key->asXML();
 					echo '</keys></ipsec></reply>';
@@ -903,8 +934,9 @@ class Ipsec implements Plugin{
 		$newkey->addAttribute('description', htmlentities($_POST['services_ipsec_key_descr']));
 		$newkey->addChild('content','<[!CDATA['.$_POST['services_ipsec_key_pskey'].']]>');
 		
+		$this->config->saveConfig();
 		echo '<reply action="ok"><ipsec><keys>';
-		$newkey->asXML();
+		echo $newkey->asXML();
 		echo '</keys></ipsec></reply>';
 		$this->returnConfig();
 	}
@@ -1085,9 +1117,11 @@ EOD;
 				$ipsec .= "sainfo  (address {$local['network']}/{$local['subnet']} any address ".$tunnel->remote->{'private_ip'}."/".$tunnel->remote->{'private_subnet'}." any)";
 				$ipsec .= <<<EOD
 {
-        pfs_group                {$tunnel->phase2->pfsgroup};
-        lifetime time            {$tunnel->phase2->lifetime};
+		lifetime time            {$tunnel->phase2->lifetime};
 EOD;
+				if((string)$tunnel->phase2->pfsgroup != 'off' && (string)$tunnel->phase2->pfsgroup != ''){
+					$ipsec .= "        pfs_group                ".(string)$tunnel->phase2->pfsgroup;
+				}
 				$ipsec .= "        encryption_algorithm     ".str_replace('|',', ',$tunnel->phase2->{'encryption-algorithm'}).";\n";
 				$ipsec .= "        authentication_algorithm ".$tunnel->phase2->{'authentication-algorithm'}.";\n";
 				$ipsec .= <<<EOD
