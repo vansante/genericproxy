@@ -294,7 +294,7 @@ class Ipsec implements Plugin{
 		
 		if($_POST['services_ipsec_tunnel_remote_subnet_type'] == 'ipaddr'){
 			//		validate remote IP address
-			if(!Functions::is_ipAddr($_POST['services_ipsec_remote_subnet_ipaddr'])){
+			if(!Functions::is_ipAddr($_POST['services_ipsec_tunnel_remote_subnet_ipaddr'])){
 				ErrorHandler::addError('formerror','services_ipsec_tunnel_remote_subnet_ipaddr');
 			}
 		}
@@ -383,7 +383,7 @@ class Ipsec implements Plugin{
 			ErrorHandler::addError('formerror','services_ipsec_tunnel_p2_protocol');
 		}
 		
-		if(!in_array($_POST['services_ipsec_tunnel_p2_pfs_keygroup'],$dh_keygroups)){
+		if($_POST['services_ipsec_tunnel_p2_pfs_keygroup'] != 'off' && !in_array($_POST['services_ipsec_tunnel_p2_pfs_keygroup'],$dh_keygroups)){
 			ErrorHandler::addError('formerror','services_ipsec_tunnel_p2_pfs_keygroup');
 		}
 		
@@ -413,6 +413,7 @@ class Ipsec implements Plugin{
 						$tunnel['enable'] = 'true';
 					}
 					
+					$this->config->saveConfig();
 					echo '<reply action="ok"/>';
 					return true;	
 				}
