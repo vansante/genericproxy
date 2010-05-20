@@ -238,6 +238,7 @@ class Ipsec implements Plugin{
 				break;
 			case 'deletekey':
 				$this->removePresharedkey();
+				break;
 			case 'addcertificate':
 				$this->addCertificate();
 				break;
