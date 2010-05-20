@@ -70,6 +70,7 @@
                     gp.alert('Rules loading', 'The rules are being reloaded.')
                 }
             });
+            return false;
         });
     });
 </script>

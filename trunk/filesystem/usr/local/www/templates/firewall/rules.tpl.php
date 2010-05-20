@@ -158,6 +158,7 @@ include $this->template('firewall/forms/rules.tpl.php');
             $('#firewall_rules_submit').val('Add rule');
             $('#firewall_rules_form').dialog('option', 'title', 'Add new rule');
             $('#firewall_rules_form').dialog('open');
+            return false;
         });
 
         //Click handler for applying changes
@@ -172,6 +173,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                     gp.alert('Rules loading', 'The rules are being reloaded.')
                 }
             });
+            return false;
         });
 
         //Click handler(s) for editing
@@ -180,6 +182,7 @@ include $this->template('firewall/forms/rules.tpl.php');
             var rule = gp.data.firewall_rules[$(this).attr('rel')];
             gp.firewall.rules.formLoadRule(rule);
             $('#firewall_rules_form').dialog('open');
+            return false;
         });
 
         //Click handler for toggling rule on/off
@@ -200,6 +203,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                     gp.firewall.rules.buildTable();
                 }
             });
+            return false;
         });
 
         //Click handler for deleting rule
@@ -221,6 +225,7 @@ include $this->template('firewall/forms/rules.tpl.php');
                     }
                 });
             });
+            return false;
         });
 
         //Click handler for promoting rule
@@ -237,9 +242,10 @@ include $this->template('firewall/forms/rules.tpl.php');
             });
             if (!id2) {
                 gp.displayError('Cannot move this rule any higher.', 'An exception occurred', $('#firewall_rules_'+cur_rule['interface'].toLowerCase()+'_table_error'));
-                return;
+                return false;
             }
             gp.firewall.rules.swapRules(id1, id2);
+            return false;
         });
 
         //Click handler for demoting rule
@@ -256,9 +262,10 @@ include $this->template('firewall/forms/rules.tpl.php');
             });
             if (!id2) {
                 gp.displayError('Cannot move this rule any lower.', 'An exception occurred', $('#firewall_rules_'+cur_rule['interface'].toLowerCase()+'_table_error'));
-                return;
+                return false;
             }
             gp.firewall.rules.swapRules(id1, id2);
+            return false;
         });
 
         //Handler for submitting the form

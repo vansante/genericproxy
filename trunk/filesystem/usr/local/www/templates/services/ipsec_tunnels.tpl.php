@@ -450,6 +450,7 @@
             $('#services_ipsec_tunnel_submit').val('Add tunnel');
             $('#services_ipsec_tunnel_form').dialog('option', 'title', 'Add new tunnel');
             $('#services_ipsec_tunnel_form').dialog('open');
+            return false;
         });
 
         //Handler for submitting the form
@@ -474,6 +475,7 @@
             $('#services_ipsec_tunnel_submit').val('Edit tunnel');
             $('#services_ipsec_tunnel_form').dialog('option', 'title', 'Edit tunnel');
             $('#services_ipsec_tunnel_form').dialog('open');
+            return false;
         });
 
         //Click handler for toggling rule on/off
@@ -494,6 +496,7 @@
                     gp.services.ipsec.tunnels.buildTable();
                 }
             });
+            return false;
         });
 
         //Click handler for deleting rule
@@ -515,6 +518,7 @@
                     }
                 });
             });
+            return false;
         });
 
         $('#services_ipsec_tunnel_send_keepalive').click(function(){

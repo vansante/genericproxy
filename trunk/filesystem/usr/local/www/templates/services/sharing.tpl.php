@@ -211,6 +211,7 @@
             days = days.join(':');
             $('#services_sharing_config_schedule').val(days);
             $('#services_sharing_config_form').dialog('open');
+            return false;
         });
 
         $('#services_sharing_delete_config_link').click(function(){
@@ -241,6 +242,7 @@
                     }
                 });
             });
+            return false;
         });
 
         $('#services_sharing_config_form').submit(function() {

@@ -109,6 +109,7 @@
             $('#services_dnsf_override_submit').val('Add override');
             $('#services_dnsf_override_form').dialog('option', 'title', 'Add new override');
             $('#services_dnsf_override_form').dialog('open');
+            return false;
         });
 
         //Handler for submitting the form
@@ -134,6 +135,7 @@
             $('#services_dnsf_override_submit').val('Edit override');
             $('#services_dnsf_override_form').dialog('option', 'title', 'Edit override');
             $('#services_dnsf_override_form').dialog('open');
+            return false;
         });
 
         //Click handler for deleting rule
@@ -155,6 +157,7 @@
                     }
                 });
             });
+            return false;
         });
     });
 </script>

@@ -99,6 +99,7 @@
             $('#services_proxy_port_submit').val('Add port');
             $('#services_proxy_port_form').dialog('option', 'title', 'Add new port');
             $('#services_proxy_port_form').dialog('open');
+            return false;
         });
 
         //Click handler(s) for editing
@@ -107,6 +108,7 @@
             var rule = gp.data.proxy_ports[$(this).attr('rel')];
             gp.services.proxy.ports.formLoadRule(rule);
             $('#services_proxy_port_form').dialog('open');
+            return false;
         });
 
         //Click handler for deleting rule
@@ -128,6 +130,7 @@
                     }
                 });
             });
+            return false;
         });
 
         //Handler for submitting the form
