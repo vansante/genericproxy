@@ -276,6 +276,7 @@
             $('#firewall_nat_outbound_submit').val('Add rule');
             $('#firewall_nat_outbound_form').dialog('option', 'title', 'Add new rule');
             $('#firewall_nat_outbound_form').dialog('open');
+            return false;
         });
 
         //Handler for submitting the form
@@ -300,6 +301,7 @@
             $('#firewall_nat_outbound_submit').val('Edit rule');
             $('#firewall_nat_outbound_form').dialog('option', 'title', 'Edit rule');
             $('#firewall_nat_outbound_form').dialog('open');
+            return false;
         });
 
         //Click handler for deleting rule
@@ -321,6 +323,7 @@
                     }
                 });
             });
+            return false;
         });
     });
 </script>

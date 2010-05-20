@@ -117,6 +117,7 @@
             $('#services_dnsf_mask_submit').val('Add mask');
             $('#services_dnsf_mask_form').dialog('option', 'title', 'Add new mask');
             $('#services_dnsf_mask_form').dialog('open');
+            return false;
         });
 
         //Handler for submitting the form
@@ -142,6 +143,7 @@
             $('#services_dnsf_mask_submit').val('Edit mask');
             $('#services_dnsf_mask_form').dialog('option', 'title', 'Edit mask');
             $('#services_dnsf_mask_form').dialog('open');
+            return false;
         });
 
         //Click handler for deleting rule
@@ -163,6 +165,7 @@
                     }
                 });
             });
+            return false;
         });
     });
 </script>

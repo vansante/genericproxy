@@ -99,6 +99,7 @@
             $('#services_ipsec_certif_submit').val('Add certificate');
             $('#services_ipsec_certif_form').dialog('option', 'title', 'Add new certificate');
             $('#services_ipsec_certif_form').dialog('open');
+            return false;
         });
 
         //Handler for submitting the form
@@ -123,6 +124,7 @@
             $('#services_ipsec_certif_submit').val('Edit certificate');
             $('#services_ipsec_certif_form').dialog('option', 'title', 'Edit certificate');
             $('#services_ipsec_certif_form').dialog('open');
+            return false;
         });
 
         //Click handler for deleting rule
@@ -144,6 +146,7 @@
                     }
                 });
             });
+            return false;
         });
     });
 </script>

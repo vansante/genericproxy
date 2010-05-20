@@ -120,6 +120,7 @@
             $('#services_dhcpd_rule_submit').val('Add rule');
             $('#services_dhcpd_rule_form').dialog('option', 'title', 'Add new mapping');
             $('#services_dhcpd_rule_form').dialog('open');
+            return false;
         });
 
         //Handler for submitting the form
@@ -144,6 +145,7 @@
             $('#services_dhcpd_rule_submit').val('Edit mapping');
             $('#services_dhcpd_rule_form').dialog('option', 'title', 'Edit mapping');
             $('#services_dhcpd_rule_form').dialog('open');
+            return false;
         });
 
         //Click handler for deleting rule
@@ -165,6 +167,7 @@
                     }
                 });
             });
+            return false;
         });
     });
 </script>

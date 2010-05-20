@@ -97,6 +97,7 @@
             $('#services_ipsec_key_submit').val('Add key');
             $('#services_ipsec_key_form').dialog('option', 'title', 'Add new key');
             $('#services_ipsec_key_form').dialog('open');
+            return false;
         });
 
         //Handler for submitting the form
@@ -121,6 +122,7 @@
             $('#services_ipsec_key_submit').val('Edit key');
             $('#services_ipsec_key_form').dialog('option', 'title', 'Edit key');
             $('#services_ipsec_key_form').dialog('open');
+            return false;
         });
 
         //Click handler for deleting rule
@@ -142,6 +144,7 @@
                     }
                 });
             });
+            return false;
         });
     });
 </script>
