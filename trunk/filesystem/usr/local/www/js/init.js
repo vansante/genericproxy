@@ -206,6 +206,7 @@ gp.doAction = function(opts) {
  */
 gp.doFormAction = function(opts) {
     $('#'+opts.form_id+' input[type=submit]').attr('disabled', 'disabled');
+    $('#'+opts.form_id+' input.formfield-error').removeClass('formfield-error');
     gp.showAjaxLoader(opts.form_id);
     if (opts.error_element) {
         if ($.isArray(opts.error_element)) {
@@ -327,7 +328,7 @@ gp.processReply = function(data, error_element, successFn, errorFn) {
 };
 gp.markFieldInvalid = function(field_id) {
     $('#'+field_id).addClass('formfield-error');
-}
+};
 gp.resetForm = function(form_id) {
     $('#'+form_id+'_error').hide();
     $('#'+form_id+' input').each(function(i, input){
