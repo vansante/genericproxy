@@ -322,8 +322,8 @@
         $('#services_ipsec_tunnel_local_subnet_subnet').val(rule.local.private_subnet);
 
         $('#services_ipsec_tunnel_remote_subnet_type').val(rule.remote.type.toLowerCase());
-        $('#services_ipsec_tunnel_remote_subnet_ipaddr').val(rule.private_ip);
-        $('#services_ipsec_tunnel_remote_subnet_subnet').val(rule.private_subnet);
+        $('#services_ipsec_tunnel_remote_subnet_ipaddr').val(rule.remote.private_ip);
+        $('#services_ipsec_tunnel_remote_subnet_subnet').val(rule.remote.private_subnet);
 
         $('#services_ipsec_tunnel_local_gateway').val(rule.local.public_ip);
         $('#services_ipsec_tunnel_remote_gateway').val(rule.remote.public_ip);
