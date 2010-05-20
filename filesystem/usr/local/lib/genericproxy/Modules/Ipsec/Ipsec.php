@@ -939,7 +939,6 @@ class Ipsec implements Plugin{
 		echo '<reply action="ok"><ipsec><keys>';
 		echo $newkey->asXML();
 		echo '</keys></ipsec></reply>';
-		$this->returnConfig();
 	}
 
 	/**
