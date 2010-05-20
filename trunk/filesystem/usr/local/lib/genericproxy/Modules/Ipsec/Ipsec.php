@@ -139,10 +139,21 @@ class Ipsec implements Plugin{
 	 * @return boolean
 	 */
 	public function start() {
+		//fastforwarding is not compatible with ipsec tunnels, so disable it
+		Functions::shellCommand ( "/sbin/sysctl net.inet.ip.fastforwarding=0" );
+		
 		if (! file_exists ( self::CONFIG_PATH )) {
 			Logger::getRootLogger ()->error ( 'Config file not found. Aborting IPSec startup.' );
 			return false;
 		}
+
+		if(! file_exists(self::SETKEY_PATH)){
+			Logger::getRootLogger()->error( 'Setkey config file not found. Aborting IPSec startup');
+			return false;	
+		}
+		
+		Logger::getRootLogger ()->info ( "Running setkey." );
+		Functions::shellCommand ( "/sbin/setkey -f " . self::SETKEY_PATH );
 		
 		$pid = file_exists ( self::PID_PATH ) ? Functions::shellCommand ( "pgrep -F " . self::PID_PATH ) : 0;
 		if ($pid > 0) {
@@ -383,6 +394,10 @@ class Ipsec implements Plugin{
 		}
 	}
 	
+	/**
+	 * Add a new tunnel to the XML configuration
+	 * 
+	 */
 	private function addTunnel(){
 		$this->validateTunnelForm();
 		
@@ -682,7 +697,7 @@ class Ipsec implements Plugin{
 	 * @throws Exception
 	 */
 	private function editCertificate(){
-		if(is_numerical($_POST['services_ipsec_certif_keyid'])){
+		if(is_numeric($_POST['services_ipsec_certif_keyid'])){
 			foreach($this->data->certificates->certificate as $cert){
 				if($cert['id'] == $_POST['services_ipsec_certif_keyid']){
 					
@@ -739,7 +754,7 @@ class Ipsec implements Plugin{
 	 * @throws Exception
 	 */
 	private function removeCertificate(){
-		if(is_numerical($_POST['services_ipsec_certif_keyid'])){
+		if(is_numeric($_POST['services_ipsec_certif_keyid'])){
 			foreach($this->data->certificates->certificate as $cert){
 				if($cert['id'] == $_POST['services_ipsec_certif_keyid']){
 					unlink(self::CERT_PATH.'/'.$cert->private);
@@ -900,6 +915,10 @@ class Ipsec implements Plugin{
 	public function getDependency() {}
 
 	/**
+	 * Write out all the IPSEC configuration files
+	 * 
+	 * writes out setkey and racoon configuration files
+	 * self::SETKEY_FILE, self::CONFIG_PATH, self::PSK_PATH
 	 * 
 	 * TODO: Finish
 	 */
@@ -1003,12 +1022,22 @@ EOD;
 					}
 				}
 				elseif((string)$tunnel->local->type == 'ipaddr'){
-					$local['network'] = (string)$tunnel->local->{'private-ip'};
+					$local['network'] = (string)$tunnel->local->{'private_ip'};
 					$local['subnet'] = '32';
 				}
 				elseif((string)$tunnel->local->type == 'network'){
-					$local['network'] = (string)$tunnel->local->{'private-ip'};
+					$local['network'] = (string)$tunnel->local->{'private_ip'};
 					$local['subnet'] = (string)$tunnel->local->{'private_subnet'};
+				}
+				
+				//	Parse remote part
+				if((string)$tunnel->remote->type == 'ipaddr'){
+					$remote['network'] = (string)$tunnel->remote->{'private_ip'};
+					$remote['subnet'] = '32';
+				}
+				elseif((string)$tunnel->remote->type == 'network'){
+					$remote['network'] = (string)$tunnel->remote->{'private_ip'};
+					$remote['subnet'] = (string)$tunnel->remote->{'private_subnet'};	
 				}
 				
 				$ipsec .= <<<EOD
@@ -1032,6 +1061,7 @@ EOD;
 	        	
 	        	if($tunnel->phase1->{'authentication-method'}['type'] == 'psk'){
 	        		$authentication_method = 'pre_shared_key';
+	        		$psk .= (string)$tunnel->remote->{'public-ip'}."\t".(string)$tunnel->phase1->{'authentication-method'}."\n";
 	        	}
 	        	elseif($tunnel->phase1->{'authentication-method'}['type'] == 'rsasig'){
 	        		$authentication_method = 'rsasig';
@@ -1052,7 +1082,7 @@ EOD;
 				$ipsec .= "\t}\n}\n";
 				
 				//Create sainfo
-				$ipsec .= "sainfo  (address {$local['network']}/{$local['subnet']} any address ".$tunnel->remote->{'private-ip'}."/".$tunnel->remote->{'private_subnet'}." any)";
+				$ipsec .= "sainfo  (address {$local['network']}/{$local['subnet']} any address ".$tunnel->remote->{'private_ip'}."/".$tunnel->remote->{'private_subnet'}." any)";
 				$ipsec .= <<<EOD
 {
         pfs_group                {$tunnel->phase2->pfsgroup};
@@ -1065,8 +1095,40 @@ EOD;
 }
 
 EOD;
-				
+				//	Setkey config
+				$setkey .= "spdadd {$local['network']}/{$local['subnet']} {$remote['network']}/{$remote['subnet']} any -P out ipsec esp/tunnel/{$local['public-ip']}-{$remote['public-ip']}/use;\n";
+				$setkey .= "spdadd {$remote['network']}/{$remote['subnet']} {$local['network']}/{$local['subnet']} any -P in ipsec esp/tunnel/{$remote['public-ip']}-{$local['public-ip']}/use;\n";
 			}
+			
+			//	Write out racoon and IPSEC config
+			//Save setkey
+			$fd = fopen ( self::SETKEY_PATH, "w" );
+			if (! $fd) {
+				Logger::getRootLogger ()->error ( "Error: Could not write setkey conifg to " . self::SETKEY_PATH );
+				return 2;
+			}
+			fwrite ( $fd, $setkey );
+			fclose ( $fd );
+			
+			//Save IPsec config
+			$fd = fopen ( self::CONFIG_PATH, "w" );
+			if (! $fd) {
+				Logger::getRootLogger ()->error ( "Error: Could not write IPsec conifg to " . self::CONFIG_PATH );
+				return false;
+			}
+			fwrite ( $fd, $ipsec );
+			fclose ( $fd );
+			
+			//Save pre shared key file
+			$fd = fopen ( self::PKS_PATH, "w" );
+			if (! $fd) {
+				Logger::getRootLogger ()->error ( "Error: Could not write IPsec PKS to " . self::PKS_PATH );
+				return false;
+			}
+			fwrite ( $fd, $psk);
+			fclose ( $fd );
+			chmod ( self::PKS_PATH, 0600 );
+			
 			return true;
         }
         else{
@@ -1074,8 +1136,6 @@ EOD;
         	return false;
         }
 	}
-
-	
 	
 }
 ?>
