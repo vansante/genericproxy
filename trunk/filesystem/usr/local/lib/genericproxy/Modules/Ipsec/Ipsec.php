@@ -909,7 +909,7 @@ class Ipsec implements Plugin{
 			foreach($this->data->keys->key as $key){
 				if((string)$key['id'] == $_POST['services_ipsec_key_id']){
 					$key['descr'] = htmlentities($_POST['services_ipsec_key_descr']);
-					$key->content = '<[!CDATA['.$_POST['services_ipsec_key_pskey'].']]>';
+					$key->content = htmlentities($_POST['services_ipsec_key_pskey']);
 					
 					$this->config->saveConfig();
 					echo '<reply action="ok"><ipsec><keys>';
@@ -933,7 +933,7 @@ class Ipsec implements Plugin{
 		$newkey = $this->data->keys->addChild('key');
 		$newkey->addAttribute('id',time());
 		$newkey->addAttribute('description', htmlentities($_POST['services_ipsec_key_descr']));
-		$newkey->addChild('content','<[!CDATA['.$_POST['services_ipsec_key_pskey'].']]>');
+		$newkey->addChild('content',htmlentities($_POST['services_ipsec_key_pskey']));
 		
 		$this->config->saveConfig();
 		echo '<reply action="ok"><ipsec><keys>';
@@ -1094,7 +1094,12 @@ EOD;
 	        	
 	        	if($tunnel->phase1->{'authentication-method'}['type'] == 'psk'){
 	        		$authentication_method = 'pre_shared_key';
-	        		$psk .= (string)$tunnel->remote->{'public-ip'}."\t".(string)$tunnel->phase1->{'authentication-method'}."\n";
+	        		foreach($this->keys->key as $key){
+	        			if($key['id'] == (string)$tunnel->phase1->{'authentication-method'}){
+	        				break;
+	        			}
+	        		}
+	        		$psk .= (string)$tunnel->remote->{'public-ip'}."\t".html_entity_decode((string)$key->content)."\n";
 	        	}
 	        	elseif($tunnel->phase1->{'authentication-method'}['type'] == 'rsasig'){
 	        		$authentication_method = 'rsasig';
