@@ -1111,6 +1111,13 @@ EOD;
 				//Add certificate information to the proposal
 				if ($tunnel->phase1->{'authentication-method'}['type'] == 'rsasig') {
 					//		TODO: Add x509 certificate type
+					
+					//	Find correct certificate
+					foreach($this->data->certificates->certificate as $certificate){
+						if($certificate['id'] == $tunnel->phase1->{'authentication-method'}){
+							break;
+						}
+					}
 					$ipsec .= "                certificate_type plain_rsa \"{$certificate->private}\"\n";
 					$ipsec .= "                peers_certfile plain_rsa \"{$certificate->public}\"\n";
 				}
