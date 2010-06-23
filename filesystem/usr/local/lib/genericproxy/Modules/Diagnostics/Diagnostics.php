@@ -199,7 +199,7 @@ class Diagnostics implements Plugin{
 	 * @throws Exception
 	 */
 	private function doTraceRoute(){
-		if(!Functions::is_ipAddr($_POST['diagnostics_tracert_host']) && !Functions::is_Url($_POST['diagnostics_ping_host'])){
+		if(!Functions::is_ipAddr($_POST['diagnostics_tracert_host']) && !Functions::is_Url($_POST['diagnostics_tracert_host'])){
 			ErrorHandler::addError('formerror','diagnostics_tracert_host');
 		}
 		if(!is_numeric($_POST['diagnostics_tracert_maxhops'])){
