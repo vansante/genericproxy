@@ -303,6 +303,8 @@ class Ext extends Interfaces {
 	private function getConfig($iface = 1) {
 		echo '<reply action="ok">';
 		foreach($this->data as $interface){
+			//	First EXT interface does not have a numeric identifier attached, clear it
+			if($iface == 1){$iface = '';}
 			if($interface['type'] == 'Ext'.$iface){
 				echo $interface->asXML();	
 			}
