@@ -4,4 +4,5 @@ $data = fread($fp);
 
 $menu = unserialize($data);
 
+fclose($fp);
 ?>
